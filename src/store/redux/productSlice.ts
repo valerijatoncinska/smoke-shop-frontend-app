@@ -16,14 +16,14 @@ const initialState: ProductsState = {
   products: [],
 }
 
-// export const fetchProducts = createAsyncThunk<
-//   {data: Product[]},
-//   void,
-//   { state: RootState }
-// >("products/fetchProducts", async () => {
-//   const response = await axios.get<{data: Product[]}>("/api/products")
-//   return response.data
-// })
+export const fetchProducts = createAsyncThunk<
+  {data: Product[]},
+  void,
+  { state: RootState }
+>("products/fetchProducts", async () => {
+  const response = await axios.get<{data: Product[]}>("/api/products")
+  return response.data
+})
 
 const productSlice = createSlice({
   name: "products",
