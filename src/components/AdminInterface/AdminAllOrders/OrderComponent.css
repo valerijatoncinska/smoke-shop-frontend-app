@@ -1,0 +1,4 @@
+.d-flex p {
+  background-color: transparent; /* Прозрачный фон для параграфов */
+  color: white;
+}

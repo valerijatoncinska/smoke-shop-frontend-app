@@ -1,0 +1,38 @@
+.vertical-navbar {
+  position: fixed; /* Fix the navbar to the left */
+  top: 0;
+  left: 0;
+  height: 100%; /* Full height */
+  width: 10%; /* Navbar width */
+  background-color: #fdf6f4; /* Bootstrap light background */
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; Center the items vertically */
+}
+
+.vertical-navbar .nav-link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit; /* Link color */
+  padding: 0.75rem 1.25rem; /* Padding for the links */
+  text-align: left; /* Center text */
+  width: 100%; /* Ensure the link takes full width */
+}
+
+.vertical-navbar .nav-item {
+  width: 100%; /* Ensure the nav-item takes full width */
+}
+
+.button {
+  height: 46px;
+  width: 80%;
+  background-color: #090908;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  position: absolute;
+  top: 90%;
+}

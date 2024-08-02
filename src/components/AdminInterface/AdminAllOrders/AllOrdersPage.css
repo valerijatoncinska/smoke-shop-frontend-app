@@ -1,0 +1,60 @@
+.order-summary {
+  position: relative;
+  top: 70px;
+}
+
+.order-table-container {
+  padding: 1rem; /* Adjusted padding to match other values */
+  width: 100%;
+  height: 2000px;
+  margin: auto;
+  padding: 20px;
+  padding-top: 3%; 
+  background-color: #181716;
+  border-radius: 5px;
+}
+
+h2, h5, p {
+  color: #fff;
+}
+
+.data {
+  max-height: calc(
+    8 * 3rem
+  ); /* Assuming each order row is approximately 3rem high */
+  overflow-y: auto;
+  border: 2px solid #ddd; /* Optional: for visual separation */
+  scrollbar-width: thin;
+}
+
+.data::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.data::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 0.25rem;
+}
+
+.data::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.table-header h5 {
+  flex: 1;
+  text-align: center;
+}
+
+.tableContainer {
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 0%;
+  margin-left: auto;
+  margin-right: auto;
+}
