@@ -10,10 +10,7 @@ const HomePage: React.FC = () => {
         className={styles.backgroundImage}
       />
       <p className={styles.p}>
-        Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco
-        Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco
-        Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco Tabacco
-        Tabacco Tabacco Tabacco
+        Welcome to Tabacco!
       </p>
       <div className={styles["button-container"]}>
         <button className={styles.button}>

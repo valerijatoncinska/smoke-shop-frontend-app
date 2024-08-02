@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-attachment: fixed;
   height: calc(100vh - 130px); 
   margin-top: 3%; 
   margin-bottom: 3%;
@@ -17,11 +18,16 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 40px;
   background-color: #e4cabf;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
   text-align: center;
   margin-bottom: 10px;
+  color: #000;
+  font-size: 24px;
 }
 
 .formGroup {
@@ -90,24 +96,26 @@
 
 .goHomeContainer {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
+  width: 100%;
+  padding: 0 20px;
+  margin-top: 10px;
 }
 
 .goHomeButton {
-  height: 30px; 
-  width: 100px; 
-  background-color: #e4cabf; 
-  color: #000; 
+  height: 30px;
+  width: 100px;
+  background-color: #e4cabf;
+  color: #000;
   border: none;
-  border-radius: 10px; 
-  font-size: 12px; 
+  border-radius: 10px;
+  font-size: 12px;
   cursor: pointer;
 }
 
 .goHomeButton:hover {
-  background-color: #d2b59e; 
+  background-color: #d2b59e;
 }
-
 .error {
   margin-bottom: 20px;
   font-size: 16px;
