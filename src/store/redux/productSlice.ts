@@ -38,14 +38,14 @@ const productSlice = createSlice({
       )
     },
   },
-  // extraReducers: builder => {
-  //   builder.addCase(
-  //     fetchProducts.fulfilled,
-  //     (state, action: PayloadAction<{data: Product[]}>) => {
-  //       state.products = action.payload.data
-  //     },
-  //   )
-  // },
+  extraReducers: builder => {
+    builder.addCase(
+      fetchProducts.fulfilled,
+      (state, action: PayloadAction<{data: Product[]}>) => {
+        state.products = action.payload.data
+      },
+    )
+  },
 })
 
 export const { addProduct, removeProduct } = productSlice.actions
