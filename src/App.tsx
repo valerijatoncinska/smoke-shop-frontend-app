@@ -24,7 +24,7 @@ const App: React.FC = () => {
     <div className="App">
       <header className="App-header"></header>
       <Routes>
-        <Route path="/" element={<Layout />} />
+        <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/register" element={<RegisterPage />} />
@@ -43,6 +43,7 @@ const App: React.FC = () => {
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+          </Route>
       </Routes>
     </div>
   )

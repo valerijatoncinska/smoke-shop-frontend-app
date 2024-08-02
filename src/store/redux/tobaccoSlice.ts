@@ -4,7 +4,7 @@ import { RootState } from "store/store";
 
 export interface ITobacco {
   id: number;
-  name: string;
+  title: string;
   price: number;
   image?: string;
 }
