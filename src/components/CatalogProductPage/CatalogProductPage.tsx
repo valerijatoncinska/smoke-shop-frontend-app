@@ -4,7 +4,7 @@ import styles from "./CatalogProductPage.module.css"
 import { sortByPriceAsc, sortByPriceDesc } from "../../store/redux/tobaccoSlice"
 import { AppDispatch, RootState } from "../../store/store"
 import ProductCardPage from "./ProductCardPage"
-import productSlice, { fetchProducts } from "../../store/redux/productSlice"
+// import productSlice, { fetchProducts } from "../../store/redux/productSlice"
 import { useAppDispatch } from "../../app/hook"
 
 const CatalogProductPage: React.FC = () => {
@@ -12,7 +12,7 @@ const CatalogProductPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const tobacco = useSelector((state: RootState) => state.tobacco.items)
   const status = useSelector((state: RootState) => state.tobacco.status)
-  const { products } = useSelector((state: RootState) => state.product)
+  // const { products } = useSelector((state: RootState) => state.product)
 
   // const handleSearch = () => {
 
@@ -26,15 +26,15 @@ const CatalogProductPage: React.FC = () => {
     dispatch(sortByPriceDesc())
   }
 
-  useEffect(() => {dispatch(fetchProducts())}, [])
+  // useEffect(() => {dispatch(fetchProducts())}, [])
 
   return (
     <div className={styles.containerCatalog}>
-      <ul>
+      {/* <ul>
         {products.map(product => (
           <li key={product.id}> {product.title}</li>
         ))}
-      </ul>
+      </ul> */}
       <div className={styles.searchContainer}>
         <div className={styles.searchInput}>
           <input type="text" name="name" placeholder="Search product by name" />
