@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styles from "../../../components/CatalogProductPage/CatalogProductPage.module.css"
-import styles1 from "./AdminCatalogProductPage.module.css"
+import styles1 from "./AdminArchivatedProductsPage.module.css"
 import {
   sortByPriceAsc,
   sortByPriceDesc,
@@ -11,7 +11,7 @@ import ProductCardPage from "./ProductCardPage"
 import { setIsAddedTrue } from "../../../store/redux/openAddProductFormSlice"
 import AddProductForm from "../../../components/AddProductForm/AddProductForm"
 
-const AdminCatalogProductPage: React.FC = () => {
+const AdminArchivatedProductsPage: React.FC = () => {
   const dispatch = useDispatch()
   const tobacco = useSelector((state: RootState) => state.tobacco.items)
   const status = useSelector((state: RootState) => state.tobacco.status)
@@ -38,7 +38,7 @@ const AdminCatalogProductPage: React.FC = () => {
       </div>
 
       <div className={`mt-0 ${styles.containerCatalog}`}>
-        <div className={styles.searchContainer}>
+        {/* <div className={styles.searchContainer}>
           <div className={styles.searchInput}>
             <input
               type="text"
@@ -56,10 +56,10 @@ const AdminCatalogProductPage: React.FC = () => {
           <button onClick={handleAddProductClick}>
             Add product to catalog
           </button>
-        </div>
+        </div> */}
 
-        <div className={styles1.catalogContainer}>
-          <h3 className={` ${styles.catalogTitle}`}>Product Catalog</h3>
+        <div className={`${styles1.catalogContainer} text-center`}>
+          <h3 className={` ${styles1.catalogTitle}`}>Archived Products</h3>
           <div className={styles.separator}></div>
           {status === "loading" && (
             <div className="text-center">
@@ -79,4 +79,4 @@ const AdminCatalogProductPage: React.FC = () => {
   )
 }
 
-export default AdminCatalogProductPage
+export default AdminArchivatedProductsPage
