@@ -1,5 +1,5 @@
 import React from "react";
-import { ITobacco } from "store/redux/tobaccoSlice";
+import { ITobacco } from "../../store/redux/tobaccoSlice";
 
 interface ITobaccoProps {
   tobacco: ITobacco;
