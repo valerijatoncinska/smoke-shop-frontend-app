@@ -7,6 +7,7 @@ export interface ITobacco {
   title: string;
   price: number;
   image?: string;
+  isActive?: boolean;
 }
 
 export interface ITobaccoState {

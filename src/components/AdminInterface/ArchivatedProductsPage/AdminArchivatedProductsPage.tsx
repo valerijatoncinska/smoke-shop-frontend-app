@@ -69,7 +69,7 @@ const AdminArchivatedProductsPage: React.FC = () => {
             </div>
           )}
           {status === "success" &&
-            tobacco.map(item => (
+            tobacco.filter(item => !item.isActive).map(item => (
               <ProductCardPage key={item.id} tobacco={item} />
             ))}
           {status === "error" && <>Error!</>}
