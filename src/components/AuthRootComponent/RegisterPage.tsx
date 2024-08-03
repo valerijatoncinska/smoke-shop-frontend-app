@@ -45,7 +45,7 @@ const RegisterPage: React.FC = () => {
     try {
       const userData = { email, password }
       const response = await axios.post(
-        "/author/reg",
+        "/api/author/reg",
         userData,
         {
           headers: {
