@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import AddProductItem from "./AddProductItem"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "store/store"
+import { AppDispatch, RootState } from '../../store/store'   // Свойство объявлено, но его значение не было прочитано.
 import { setIsAddedFalse } from "../../store/redux/addNewProductSlice"
 
 const AddProductForm: React.FC = () => {
@@ -9,7 +9,7 @@ const AddProductForm: React.FC = () => {
   const [price, setPrice] = useState(0)
   const dispatch = useDispatch()
   const { isAdded } = useSelector(
-    (state: RootState) => state.addNewProductSlice,
+    (state: RootState) => state.addNewProduct,
   )
 
   const handleSubmit = (e: React.FormEvent) => {

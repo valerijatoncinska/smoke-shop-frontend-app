@@ -5,6 +5,7 @@ import userReducer from './redux/userSlice';
 import orderHistoryReducer from './redux/orderHistorySlice';
 import tobaccoReducer from './redux/tobaccoSlice';
 import addNewProductReducer from './redux/addNewProductSlice';
+import cartReducer from './redux/cartSlice';
 
 const store = configureStore({
   reducer: {
@@ -13,12 +14,12 @@ const store = configureStore({
     user: userReducer,
     orderHistory: orderHistoryReducer,
     tobacco: tobaccoReducer,
-    addNewProductSlice: addNewProductReducer,
+    addNewProduct: addNewProductReducer,
+    cart: cartReducer, // Добавляем редьюсер корзины
   },
 });
 
-export default store;
-
 export type RootState = ReturnType<typeof store.getState>;
-
 export type AppDispatch = typeof store.dispatch;
+
+export default store;
