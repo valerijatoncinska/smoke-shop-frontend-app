@@ -4,28 +4,35 @@
   align-items: center;
   background-attachment: fixed;
   height: calc(100vh - 130px);
-  margin-top: 2%; 
-  padding: 0 20px; 
-  z-index: 1; 
+  margin-top: 2%;
+  padding: 0 20px;
+  z-index: 1;
+  text-align: center; 
 }
 
 .card {
   width: 100%;
-  max-width: 600px;
+  max-width: 550px;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 40px;
   background-color: #e4cabf;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
-  text-align: center;
+  color: #000;
+  font-size: 24px;
   margin-bottom: 20px;
 }
 
 .formGroup {
+  width: 100%; 
   margin-bottom: 16px;
+  text-align: left; 
 }
 
 .label {
@@ -74,12 +81,15 @@
 .goHomeContainer {
   display: flex;
   justify-content: flex-end;
+  width: 100%;
+  padding: 0 20px;
+  margin-top: 10px;
 }
 
 .goHomeButton {
-  height: 30px; 
-  width: 100px; 
-  background-color: #e4cabf; 
+  height: 30px;
+  width: 100px;
+  background-color: #e4cabf;
   color: #000;
   border: none;
   border-radius: 10px;
@@ -120,7 +130,7 @@
   }
 
   .input {
-    height: 36px;
+    height: 40px;
     font-size: 14px;
   }
 
@@ -136,7 +146,7 @@
   }
 
   .input {
-    height: 34px;
+    height: 36px;
     font-size: 12px;
   }
 

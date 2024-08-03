@@ -1,52 +1,52 @@
 import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import styles from "./styles/LoginPage.module.css"
 import { useAppDispatch } from "../../app/hook"
 import { login } from "../../store/redux/userSlice"
 
 const LoginPage: React.FC = () => {
-
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
-  const navigate = useNavigate() 
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   // Функция для обработки отправки формы
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault() // Предотвращаем стандартное поведение формы
+    e.preventDefault()
     setLoading(true)
     setError(null)
 
-    // Проверка валидности email
     const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!email || !emailValidation.test(email)) {
-      setError("Invalid email address") // Устанавливаем ошибку, если email некорректен
-      setLoading(false) 
-      return
-    }
-
-    // Проверка валидности пароля
     const passwordValidation =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/
+
+
+    if (!email || !emailValidation.test(email)) {
+      setError("Invalid email address")
+      setLoading(false)
+      return
+    }
+    
     if (!password || !passwordValidation.test(password)) {
       setError(
         "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character",
-      ) // Устанавливаем ошибку, если пароль не соответствует требованиям
+      )
       setLoading(false)
       return
     }
 
     try {
-      const userData = { email, password } // Данные пользователя для отправки на сервер
-      const response = await axios.post(
-        "",
-        userData,
-      )
+      const userData = { email, password }
+      const response = await axios.post("/api/author/login", userData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       dispatch(login(response.data))
       navigate("/")
     } catch (error) {
@@ -56,7 +56,6 @@ const LoginPage: React.FC = () => {
     }
   }
 
-  // Функция для перехода на домашнюю страницу
   const handleGoHome = () => {
     navigate("/")
   }
@@ -87,7 +86,7 @@ const LoginPage: React.FC = () => {
           </div>
         )}
         {error && <div className={styles.error}>{error}</div>}
-        
+
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
@@ -108,7 +107,7 @@ const LoginPage: React.FC = () => {
             </label>
             <div className={styles.passwordContainer}>
               <input
-                type={showPassword ? "text" : "password"} // Переключение между текстом и паролем
+                type={showPassword ? "text" : "password"}
                 className={styles.input}
                 onChange={e => setPassword(e.target.value)}
                 id="password"
@@ -118,20 +117,14 @@ const LoginPage: React.FC = () => {
               <button
                 type="button"
                 className={styles.togglePasswordButton}
-                onClick={() => setShowPassword(!showPassword)} // Изменение видимости пароля
+                onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
           </div>
-          <div>
-            If you are a new user, click{" "}
-            <a
-              href="http://localhost:5173/auth/register"
-              className={styles.registerLink}
-            >
-              here
-            </a>{" "}
+          <div className={styles.registerLink}>
+            If you are a new user, click <Link to="/auth/register">here</Link>{" "}
             to register.
           </div>
           <button type="submit" className={styles.button}>
