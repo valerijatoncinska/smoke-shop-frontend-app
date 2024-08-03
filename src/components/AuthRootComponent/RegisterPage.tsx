@@ -6,82 +6,63 @@ import { useAppDispatch } from "../../app/hook"
 import { login } from "../../store/redux/userSlice"
 
 const RegisterPage: React.FC = () => {
-  const [name, setName] = useState<string>("")
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [repeatPassword, setRepeatPassword] = useState<string>("")
-  const [isAdult, setIsAdult] = useState<boolean>(false)
-  const [subscribe, setSubscribe] = useState<boolean>(false)
   const [showPassword, setShowPassword] = useState<boolean>(false)
-
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
-  // Функция для обработки отправки формы
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setLoading(true)
-    setError(null)
 
-    // Регулярные выражения для валидации
     const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const passwordValidation =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/
-    const nameValidation = /^[A-Za-z\s]{1,50}$/
 
-    // Проверка имени
-    if (!name || !nameValidation.test(name)) {
-      setError(
-        "Name is required and must be between 1 and 50 characters long, containing only letters and spaces.",
-      ) // Устанавливаем ошибку, если имя некорректно
-      setLoading(false)
-      return
-    }
-
-    // Проверка электронной почты
     if (!email || !emailValidation.test(email)) {
-      setError("Invalid email address") // Устанавливаем ошибку, если email некорректен
-      setLoading(false)
+      setError("Invalid email address")
       return
     }
 
-    // Проверка пароля
     if (!password || !passwordValidation.test(password)) {
-      setError(
-        "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character",
-      ) // Устанавливаем ошибку, если пароль не соответствует требованиям
-      setLoading(false)
+      setError("Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character")
       return
     }
 
-    // Проверка повторного ввода пароля
     if (password !== repeatPassword) {
-      setError("Passwords do not match") // Устанавливаем ошибку, если пароли не совпадают
-      setLoading(false)
+      setError("Passwords do not match")
       return
     }
 
-    // Выполнение регистрации
+    setLoading(true)
+    setError(null)
+
     try {
-      const userData = { name, email, password, isAdult, subscribe } // Данные пользователя для отправки на сервер
+      const userData = { email, password }
       const response = await axios.post(
-        "http://localhost:8080/author/register",
+        "/author/reg",
         userData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       )
       dispatch(login(response.data))
       navigate("/")
     } catch (error) {
-      setError("An unknown error has occurred. Please try again.") // Обработка ошибок запроса
+      console.log("Ошибка регистрации:", error)
+      setError("An unknown error has occurred. Please try again.")
     } finally {
       setLoading(false)
     }
   }
 
-  // Функция для перехода на домашнюю страницу
   const handleGoHome = () => {
     navigate("/")
   }
@@ -104,6 +85,7 @@ const RegisterPage: React.FC = () => {
           </button>
         </div>
         <h2 className={styles.title}>Registration</h2>
+
         {loading && (
           <div className="text-center">
             <div className="spinner-border text-black" role="status">
@@ -111,22 +93,10 @@ const RegisterPage: React.FC = () => {
             </div>
           </div>
         )}
+
         {error && <div className={styles.error}>{error}</div>}
         
         <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label htmlFor="name" className={styles.label}>
-              Name:
-            </label>
-            <input
-              type="text"
-              className={styles.input}
-              onChange={e => setName(e.target.value)}
-              id="name"
-              placeholder="Enter your name..."
-              required
-            />
-          </div>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
               Email:
@@ -183,29 +153,6 @@ const RegisterPage: React.FC = () => {
                 {showConfirmPassword ? "Hide" : "Show"}
               </button>
             </div>
-          </div>
-          <div className={styles.formGroupCheckbox}>
-            <input
-              type="checkbox"
-              id="age"
-              checked={isAdult}
-              onChange={e => setIsAdult(e.target.checked)}
-              required
-            />
-            <label htmlFor="age" className={styles.checkboxLabel}>
-              I am 18 years old or older
-            </label>
-          </div>
-          <div className={styles.formGroupCheckbox}>
-            <input
-              type="checkbox"
-              id="subscribe"
-              checked={subscribe}
-              onChange={e => setSubscribe(e.target.checked)}
-            />
-            <label htmlFor="subscribe" className={styles.checkboxLabel}>
-              Subscribe to newsletter
-            </label>
           </div>
           <button type="submit" className={styles.button}>
             Register
