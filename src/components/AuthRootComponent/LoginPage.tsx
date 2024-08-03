@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
 
     try {
       const userData = { email, password }
-      const response = await axios.post("/author/login", userData, {
+      const response = await axios.post("/api/author/login", userData, {
         headers: {
           "Content-Type": "application/json",
         },
