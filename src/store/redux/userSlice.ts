@@ -45,13 +45,16 @@ export const registerUser = createAsyncThunk<User, { email: string; password: st
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue('An error has occurred. Try again.');
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          return rejectWithValue('User already exists. Please try a different email.');
+        }
+        return rejectWithValue(error.response?.data.message || 'An error has occurred. Try again.');
+      }
+      return rejectWithValue('An unexpected error has occurred. Try again.');
     }
   }
 );
-
-
-
 
 const userSlice = createSlice({
   name: 'user',

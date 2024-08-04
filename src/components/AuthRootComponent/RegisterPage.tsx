@@ -79,7 +79,7 @@ const RegisterPage: React.FC = () => {
           </div>
         )}
 
-        {status === "error" && <div className={styles.error}>{error}</div>}
+        {status === 'error' && <div className={styles.error}>{error || 'An unexpected error occurred.'}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
