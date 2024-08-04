@@ -10,21 +10,25 @@ const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [emailError, setEmailError] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [generalError, setGeneralError] = useState<string | null>(null);
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { status, error } = useAppSelector(state => state.user)
+  const { status } = useAppSelector(state => state.user)
 
   useEffect(() => {
     dispatch(clearError())
+    setGeneralError(null);
   }, [dispatch])
 
   useEffect(() => {
     setEmailError(null);
+    setGeneralError(null);
   }, [email]);
 
   useEffect(() => {
     setPasswordError(null);
+    setGeneralError(null);
   }, [password]);
 
   // Функция для обработки отправки формы
@@ -54,7 +58,14 @@ const LoginPage: React.FC = () => {
       await dispatch(loginUser({ email, password })).unwrap()
       navigate("/")
     } catch (error) {
-      console.log("Ошибка входа:", error)
+      if (error === 'Email not registered') {
+        setEmailError("Email is not registered");
+      } else if (error === 'Incorrect password') {
+        setPasswordError("Incorrect password");
+      } else {
+        setGeneralError("An unexpected error occurred.");
+      }
+      console.log("Ошибка входа:", error);
     }
   }
 
@@ -62,7 +73,21 @@ const LoginPage: React.FC = () => {
     navigate("/")
   }
 
+  const errors = [emailError, passwordError, generalError].filter(
+    (err) => err !== null
+  );
+
   return (
+    <>
+    {errors.length > 0 && (
+        <div className={styles.errorContainer}>
+          {errors.map((err, index) => (
+            <div key={index} className={styles.error}>
+              {err}
+            </div>
+          ))}
+        </div>
+      )}
     <div className={styles.container}>
       <img
         src="/img/unsplash_PzXqG8f2rrE.jpg"
@@ -88,12 +113,6 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
         )}
-
-        {status === "error" && <div className={styles.error}>{error}</div>}
-
-        {emailError && <div className={styles.error}>{emailError}</div>}
-
-        {passwordError && <div className={styles.error}>{passwordError}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
@@ -141,6 +160,7 @@ const LoginPage: React.FC = () => {
         </form>
       </div>
     </div>
+    </>
   )
 }
 

@@ -115,11 +115,6 @@
 .goHomeButton:hover {
   background-color: #d2b59e;
 }
-.error {
-  margin-bottom: 15px;
-  font-size: 13px;
-  color: rgb(255, 0, 0); 
-}
 
 .passwordContainer {
   position: relative;
@@ -135,6 +130,22 @@
   cursor: pointer;
   font-size: 14px;
   color: #007bff;
+}
+
+.errorContainer {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: rgb(211, 201, 201);
+  border-radius: 4px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.error {
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: rgb(255, 0, 0);
 }
 
 /* Медиазапросы для разных размеров экрана */
