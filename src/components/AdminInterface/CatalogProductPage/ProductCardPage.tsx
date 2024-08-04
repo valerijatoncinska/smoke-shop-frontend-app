@@ -1,26 +1,19 @@
 import React from "react";
-import { ITobacco } from "store/redux/tobaccoSlice";
+import { Product } from "store/redux/productSlice";
 
-interface ITobaccoProps {
-  tobacco: ITobacco;
+interface ProductCardPageProps {
+  product: Product;
 }
 
-const ProductCardPage: React.FC<ITobaccoProps> = ({ tobacco }) => {
+const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
   return (
     <div className="card mb-3">
       <div className="card-body">
         <div className="d-flex align-items-center">
           <div style={{ flexGrow: 1 }}>
-            <h5 className="card-title">{tobacco.title}</h5>
-            {tobacco.image && (
-              <img
-                src={tobacco.image}
-                alt={tobacco.title}
-                className="product-image"
-              />
-            )}
-            <h6 className="card-subtitle mb-2 text-muted">{tobacco.title}</h6>
-            <p className="card-text">{tobacco.price} $</p>
+            <h5 className="card-title">{product.title}</h5>
+            <h6 className="card-subtitle mb-2 text-muted">{product.title}</h6>
+            <p className="card-text">{product.price} $</p>
             <button className="btn btn-primary">View Details</button>
           </div>
         </div>

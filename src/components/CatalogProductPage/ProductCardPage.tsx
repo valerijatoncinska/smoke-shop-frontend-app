@@ -1,30 +1,20 @@
 import React from "react";
-import { ITobacco } from "../../store/redux/tobaccoSlice";
+import { Product } from "store/redux/productSlice";
+import styles from './ProductCardPage.module.css';
 
-interface ITobaccoProps {
-  tobacco: ITobacco;
+interface ProductCardPageProps {
+  product: Product;
 }
 
-
-
-const ProductCardPage: React.FC<ITobaccoProps> = ({ tobacco }) => {
+const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
   return (
-    <div className="card mb-3">
-      <div className="card-body">
-        <div className="d-flex align-items-center">
-          <div style={{ flexGrow: 1 }}>
-          {tobacco.image && (
-              <img
-                src={tobacco.image}
-                alt={tobacco.title}
-                className="product-image"
-              />
-            )}
-            <h5 className="card-title">{tobacco.title}</h5>
-            <p className="card-text">{tobacco.price} $</p>
-            <button className="btn btn-primary">View Details</button>
-          </div>
-        </div>
+    <div className={styles.card}>
+      <div className={styles.cardBody}>
+        <h5 className={styles.cardTitle}>{product.title}</h5>
+        <p className={styles.cardText}>{product.price} $</p>
+      </div>
+      <div className={styles.cardButton}>
+        <button className={styles.cardButtonText}>View Details</button>
       </div>
     </div>
   );
