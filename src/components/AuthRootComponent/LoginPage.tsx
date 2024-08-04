@@ -1,8 +1,8 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styles from "./styles/LoginPage.module.css"
 import { useAppDispatch, useAppSelector } from "../../app/hook"
-import { loginUser } from "../../store/redux/userSlice"
+import { clearError, loginUser } from "../../store/redux/userSlice"
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("")
@@ -12,6 +12,10 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { status, error } = useAppSelector(state => state.user)
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   // Функция для обработки отправки формы
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

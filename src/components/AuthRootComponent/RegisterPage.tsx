@@ -1,56 +1,67 @@
-import React, { useState } from "react"
-import styles from "./styles/RegisterPage.module.css"
-import { useNavigate } from "react-router-dom"
-import axios from "axios"
-import { useAppDispatch, useAppSelector } from "../../app/hook"
-import { login, registerUser } from "../../store/redux/userSlice"
+import React, { useEffect, useState } from "react";
+import styles from "./styles/RegisterPage.module.css";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
+import { clearError, registerUser } from "../../store/redux/userSlice";
 
 const RegisterPage: React.FC = () => {
-  const [email, setEmail] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
-  const [repeatPassword, setRepeatPassword] = useState<string>("")
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
-  const { status, error } = useAppSelector(state => state.user)
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [repeatPassword, setRepeatPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [repeatPasswordError, setRepeatPasswordError] = useState<string | null>(null);
+
+  const { status, error } = useAppSelector((state) => state.user);
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    const passwordValidation =
-      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/
+    const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordValidation = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/;
+
+    setEmailError(null);
+    setPasswordError(null);
+    setRepeatPasswordError(null);
 
     if (!email || !emailValidation.test(email)) {
-      alert("Invalid email address")
-      return
+      setEmailError("Invalid email address");
+      return;
     }
 
     if (!password || !passwordValidation.test(password)) {
-      alert(
-        "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character",
-      )
-      return
+      setPasswordError(
+        "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character"
+      );
+      return;
     }
 
     if (password !== repeatPassword) {
-      alert("Passwords do not match")
-      return
+      setRepeatPasswordError("Passwords do not match");
+      return;
     }
 
     try {
-      await dispatch(registerUser({ email, password })).unwrap()
-      navigate("/")
+      await dispatch(registerUser({ email, password })).unwrap();
+      navigate("/");
     } catch (error) {
-      console.log("Ошибка регистрации:", error)
+      console.log("Ошибка регистрации:", error);
     }
-  }
+  };
 
   const handleGoHome = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <div className={styles.container}>
@@ -79,7 +90,11 @@ const RegisterPage: React.FC = () => {
           </div>
         )}
 
-        {status === 'error' && <div className={styles.error}>{error || 'An unexpected error occurred.'}</div>}
+        {status === "error" && (
+          <div className={styles.error}>
+            {error || "An unexpected error occurred."}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
@@ -89,12 +104,14 @@ const RegisterPage: React.FC = () => {
             <input
               type="email"
               className={styles.input}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               id="email"
               placeholder="Enter your email..."
               required
             />
+            {emailError && <div className={styles.error}>{emailError}</div>}
           </div>
+
           <div className={styles.formGroup}>
             <label htmlFor="password" className={styles.label}>
               Password:
@@ -103,7 +120,7 @@ const RegisterPage: React.FC = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 className={styles.input}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 id="password"
                 placeholder="Enter your password..."
                 required
@@ -116,7 +133,9 @@ const RegisterPage: React.FC = () => {
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
+            {passwordError && <div className={styles.error}>{passwordError}</div>}
           </div>
+
           <div className={styles.formGroup}>
             <label htmlFor="confirmPassword" className={styles.label}>
               Confirm Password:
@@ -125,7 +144,7 @@ const RegisterPage: React.FC = () => {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 className={styles.input}
-                onChange={e => setRepeatPassword(e.target.value)}
+                onChange={(e) => setRepeatPassword(e.target.value)}
                 id="confirmPassword"
                 placeholder="Confirm your password..."
                 required
@@ -138,17 +157,16 @@ const RegisterPage: React.FC = () => {
                 {showConfirmPassword ? "Hide" : "Show"}
               </button>
             </div>
+            {repeatPasswordError && <div className={styles.error}>{repeatPasswordError}</div>}
           </div>
-          <button
-            type="submit"
-            className={styles.button}
-          >
+
+          <button type="submit" className={styles.button}>
             Register
           </button>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;
