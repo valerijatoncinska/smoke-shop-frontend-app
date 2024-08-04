@@ -19,6 +19,7 @@ import AdminCatalogProductPage from "./components/AdminInterface/CatalogProductP
 import LoginPage from "./components/AuthRootComponent/LoginPage"
 import RegisterPage from "./components/AuthRootComponent/RegisterPage"
 import AdminArchivatedProductsPage from "./components/AdminInterface/ArchivatedProductsPage/AdminArchivatedProductsPage"
+import ProductDetails from "./components/AdminInterface/CatalogProductPage/ProductDetails"
 
 const App: React.FC = () => {
   return (
@@ -39,6 +40,7 @@ const App: React.FC = () => {
           <Route path="/admin/view-orders" element={<AllOrdersPage />} />
           <Route path="/admin/catalog" element={<AdminCatalogProductPage />} />
           <Route path="/admin/archivated-products" element={<AdminArchivatedProductsPage />} />
+          <Route path="/admin/product/:id" element={<ProductDetails />} />
         </Route>
         <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:id" element={<ProductPage />} />

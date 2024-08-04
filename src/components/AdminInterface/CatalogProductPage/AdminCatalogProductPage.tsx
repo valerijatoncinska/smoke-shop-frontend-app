@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import styles from "../../../components/CatalogProductPage/CatalogProductPage.module.css"
 import styles1 from "./AdminCatalogProductPage.module.css"
 import {
+  Product,
   sortByPriceAsc,
   sortByPriceDesc,
 } from "../../../store/redux/productSlice"
@@ -12,7 +13,8 @@ import AddProductForm from "../../../components/AddProductForm/AddProductForm"
 
 const AdminCatalogProductPage: React.FC = () => {
   const dispatch = useDispatch()
-  const { products } = useSelector((state: RootState) => state.product)
+  // const { products } = useSelector((state: RootState) => state.product)
+  const products: Product[] = [{id: 1, title: "Apple", price: 300}, {id: 1, title: "Apple", price: 300}, {id: 1, title: "Apple", price: 300}, {id: 1, title: "Apple", price: 300}, {id: 1, title: "Apple", price: 300}]
   const status = useSelector((state: RootState) => state.user.status)
 
   // const handleSearch = () => {
@@ -69,14 +71,18 @@ const AdminCatalogProductPage: React.FC = () => {
             </div>
           )}
 
-          {status === "success" &&
-            // tobacco
-            //   .filter(item => item.isActive)
-            //   .map(item => <ProductCardPage key={item.id} tobacco={item} />)}
+            {/* tobacco
+              .filter(item => item.isActive)
+              .map(item => <ProductCardPage key={item.id} tobacco={item} />)} */}
 
-            products.map(product => (
+          {/* {status === "success" && */}
+            
+            <div className="d-flex flex-wrap justify-content-between">
+            {products.map(product => (
               <ProductCardPage key={product.id} product={product} />
             ))}
+            </div>
+            {/* } */}
             
           {status === "error" && <>Error!</>}
         </div>

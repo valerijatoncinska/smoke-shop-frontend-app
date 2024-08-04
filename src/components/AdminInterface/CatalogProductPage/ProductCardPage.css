@@ -1,0 +1,17 @@
+.productCard{
+    background-color: #e4cabf;
+    margin: 50px;
+    width: 17%;
+    height: 400px;
+  }
+.card-body{
+    
+    margin-top: 210px;
+    
+}
+
+.btn{
+    border: 1px solid #774136;
+    background-color: #774136;
+;
+}
