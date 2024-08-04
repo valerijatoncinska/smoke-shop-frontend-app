@@ -2,8 +2,8 @@ import React, { useState } from "react"
 import styles from "./styles/RegisterPage.module.css"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
-import { useAppDispatch } from "../../app/hook"
-import { login } from "../../store/redux/userSlice"
+import { useAppDispatch, useAppSelector } from "../../app/hook"
+import { login, registerUser } from "../../store/redux/userSlice"
 
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState<string>("")
@@ -11,8 +11,7 @@ const RegisterPage: React.FC = () => {
   const [repeatPassword, setRepeatPassword] = useState<string>("")
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
+  const { status, error } = useAppSelector(state => state.user)
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -25,41 +24,27 @@ const RegisterPage: React.FC = () => {
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/
 
     if (!email || !emailValidation.test(email)) {
-      setError("Invalid email address")
+      alert("Invalid email address")
       return
     }
 
     if (!password || !passwordValidation.test(password)) {
-      setError("Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character")
+      alert(
+        "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character",
+      )
       return
     }
 
     if (password !== repeatPassword) {
-      setError("Passwords do not match")
+      alert("Passwords do not match")
       return
     }
 
-    setLoading(true)
-    setError(null)
-
     try {
-      const userData = { email, password }
-      const response = await axios.post(
-        "/api/author/reg",
-        userData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      dispatch(login(response.data))
+      await dispatch(registerUser({ email, password })).unwrap()
       navigate("/")
     } catch (error) {
       console.log("Ошибка регистрации:", error)
-      setError("An unknown error has occurred. Please try again.")
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -86,7 +71,7 @@ const RegisterPage: React.FC = () => {
         </div>
         <h2 className={styles.title}>Registration</h2>
 
-        {loading && (
+        {status === "loading" && (
           <div className="text-center">
             <div className="spinner-border text-black" role="status">
               <span className="visually-hidden">Loading...</span>
@@ -94,8 +79,8 @@ const RegisterPage: React.FC = () => {
           </div>
         )}
 
-        {error && <div className={styles.error}>{error}</div>}
-        
+        {status === 'error' && <div className={styles.error}>{error || 'An unexpected error occurred.'}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
@@ -154,7 +139,10 @@ const RegisterPage: React.FC = () => {
               </button>
             </div>
           </div>
-          <button type="submit" className={styles.button}>
+          <button
+            type="submit"
+            className={styles.button}
+          >
             Register
           </button>
         </form>
