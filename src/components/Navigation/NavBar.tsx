@@ -10,10 +10,7 @@ const NavBar: React.FC = () => {
 
   return (
     <>
-      <div className={styles.blackHeader}>
-        <span>Number: 0000-00000-0000</span>
-        <span>Email: ooooo@gmail.com</span>
-      </div>
+      <div className={styles.blackHeader}></div>
       <header className={styles.header}>
         <nav className={styles.nav}>
           <div className={styles.navLeft}>
