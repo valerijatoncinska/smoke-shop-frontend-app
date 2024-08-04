@@ -8,14 +8,24 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [emailError, setEmailError] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { status, error } = useAppSelector(state => state.user)
 
   useEffect(() => {
-    dispatch(clearError());
-  }, [dispatch]);
+    dispatch(clearError())
+  }, [dispatch])
+
+  useEffect(() => {
+    setEmailError(null);
+  }, [email]);
+
+  useEffect(() => {
+    setPasswordError(null);
+  }, [password]);
 
   // Функция для обработки отправки формы
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,13 +35,16 @@ const LoginPage: React.FC = () => {
     const passwordValidation =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/
 
+    setEmailError(null)
+    setPasswordError(null)
+
     if (!email || !emailValidation.test(email)) {
-      alert("Invalid email address")
+      setEmailError("Invalid email address")
       return
     }
 
     if (!password || !passwordValidation.test(password)) {
-      alert(
+      setPasswordError(
         "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character",
       )
       return
@@ -77,6 +90,10 @@ const LoginPage: React.FC = () => {
         )}
 
         {status === "error" && <div className={styles.error}>{error}</div>}
+
+        {emailError && <div className={styles.error}>{emailError}</div>}
+
+        {passwordError && <div className={styles.error}>{passwordError}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
