@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import styles from "./styles/RegisterPage.module.css";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hook";
-import { clearError, registerUser } from "../../store/redux/userSlice";
+import React, { useEffect, useState } from "react"
+import styles from "./styles/RegisterPage.module.css"
+import { useNavigate } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../../app/hook"
+import { clearError, registerUser } from "../../store/redux/userSlice"
 
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -24,15 +24,23 @@ const RegisterPage: React.FC = () => {
     dispatch(clearError());
   }, [dispatch]);
 
+  useEffect(() => {
+    setEmailError(null);
+  }, [email]);
+
+  useEffect(() => {
+    setPasswordError(null);
+  }, [password]);
+
+  useEffect(() => {
+    setRepeatPasswordError(null);
+  }, [repeatPassword]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordValidation = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/;
-
-    setEmailError(null);
-    setPasswordError(null);
-    setRepeatPasswordError(null);
 
     if (!email || !emailValidation.test(email)) {
       setEmailError("Invalid email address");
@@ -96,6 +104,14 @@ const RegisterPage: React.FC = () => {
           </div>
         )}
 
+        {emailError && <div className={styles.error}>{emailError}</div>}
+
+        {passwordError && <div className={styles.error}>{passwordError}</div>}
+
+        {repeatPasswordError && (
+          <div className={styles.error}>{repeatPasswordError}</div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
@@ -104,12 +120,11 @@ const RegisterPage: React.FC = () => {
             <input
               type="email"
               className={styles.input}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               id="email"
               placeholder="Enter your email..."
               required
             />
-            {emailError && <div className={styles.error}>{emailError}</div>}
           </div>
 
           <div className={styles.formGroup}>
@@ -120,7 +135,7 @@ const RegisterPage: React.FC = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 className={styles.input}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 id="password"
                 placeholder="Enter your password..."
                 required
@@ -133,7 +148,6 @@ const RegisterPage: React.FC = () => {
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
-            {passwordError && <div className={styles.error}>{passwordError}</div>}
           </div>
 
           <div className={styles.formGroup}>
@@ -144,7 +158,7 @@ const RegisterPage: React.FC = () => {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 className={styles.input}
-                onChange={(e) => setRepeatPassword(e.target.value)}
+                onChange={e => setRepeatPassword(e.target.value)}
                 id="confirmPassword"
                 placeholder="Confirm your password..."
                 required
@@ -157,7 +171,6 @@ const RegisterPage: React.FC = () => {
                 {showConfirmPassword ? "Hide" : "Show"}
               </button>
             </div>
-            {repeatPasswordError && <div className={styles.error}>{repeatPasswordError}</div>}
           </div>
 
           <button type="submit" className={styles.button}>
@@ -166,7 +179,7 @@ const RegisterPage: React.FC = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage
