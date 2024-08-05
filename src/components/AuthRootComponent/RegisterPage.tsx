@@ -41,18 +41,21 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailValidation =
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
     const passwordValidation =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/
 
-    if (!email || !emailValidation.test(email)) {
-      setEmailError("Invalid email address")
+    if (!emailValidation.test(String(email).toLowerCase())) {
+      setEmailError(
+        "Email must be in a valid format. Example: user@example.com",
+      )
       return
     }
 
-    if (!password || !passwordValidation.test(password)) {
+    if (!passwordValidation.test(password)) {
       setPasswordError(
-        "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character",
+        "Password must be in a valid format."
       )
       return
     }
@@ -129,7 +132,6 @@ const RegisterPage: React.FC = () => {
                 required
               />
             </div>
-
             <div className={styles.formGroup}>
               <label htmlFor="password" className={styles.label}>
                 Password:
@@ -152,7 +154,6 @@ const RegisterPage: React.FC = () => {
                 </button>
               </div>
             </div>
-
             <div className={styles.formGroup}>
               <label htmlFor="confirmPassword" className={styles.label}>
                 Confirm Password:
@@ -175,7 +176,11 @@ const RegisterPage: React.FC = () => {
                 </button>
               </div>
             </div>
-
+            <p className={styles.p}>
+              Password must be at least 11 characters long, with at least one
+              number, one uppercase letter, and one special character (e.g., @,
+              #, $).
+            </p>
             <button type="submit" className={styles.button}>
               Register
             </button>

@@ -10,7 +10,8 @@ const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [emailError, setEmailError] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string | null>(null)
-  const [generalError, setGeneralError] = useState<string | null>(null);
+
+  const [generalError, setGeneralError] = useState<string | null>(null)
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -18,36 +19,36 @@ const LoginPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(clearError())
-    setGeneralError(null);
+    setGeneralError(null)
   }, [dispatch])
 
   useEffect(() => {
-    setEmailError(null);
-    setGeneralError(null);
-  }, [email]);
+    setEmailError(null)
+    setGeneralError(null)
+  }, [email])
 
   useEffect(() => {
-    setPasswordError(null);
-    setGeneralError(null);
-  }, [password]);
+    setPasswordError(null)
+    setGeneralError(null)
+  }, [password])
 
   // Функция для обработки отправки формы
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const emailValidation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailValidation = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
     const passwordValidation =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/
 
     setEmailError(null)
     setPasswordError(null)
 
-    if (!email || !emailValidation.test(email)) {
-      setEmailError("Invalid email address")
-      return
+    if (!emailValidation.test(String(email).toLowerCase())) {
+      setEmailError("Email must be in a valid format. Example: user@example.com")
+      return;
     }
 
-    if (!password || !passwordValidation.test(password)) {
+    if (!passwordValidation.test(String(password).toLowerCase())) {
       setPasswordError(
         "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character",
       )
@@ -58,14 +59,15 @@ const LoginPage: React.FC = () => {
       await dispatch(loginUser({ email, password })).unwrap()
       navigate("/")
     } catch (error) {
-      if (error === 'Email not registered') {
-        setEmailError("Email is not registered");
-      } else if (error === 'Incorrect password') {
-        setPasswordError("Incorrect password");
+      // Обработка ошибок от сервера
+      if (error === "Email not registered") {
+        setEmailError("Email is not registered")
+      } else if (error === "Incorrect email or password") {
+        setPasswordError("Incorrect password")
       } else {
-        setGeneralError("An unexpected error occurred.");
+        setGeneralError("An unexpected error occurred.")
       }
-      console.log("Ошибка входа:", error);
+      console.log("Ошибка входа:", error)
     }
   }
 
@@ -74,12 +76,12 @@ const LoginPage: React.FC = () => {
   }
 
   const errors = [emailError, passwordError, generalError].filter(
-    (err) => err !== null
-  );
+    err => err !== null,
+  )
 
   return (
     <>
-    {errors.length > 0 && (
+      {errors.length > 0 && (
         <div className={styles.errorContainer}>
           {errors.map((err, index) => (
             <div key={index} className={styles.error}>
@@ -88,78 +90,78 @@ const LoginPage: React.FC = () => {
           ))}
         </div>
       )}
-    <div className={styles.container}>
-      <img
-        src="/img/unsplash_PzXqG8f2rrE.jpg"
-        alt="Main Background"
-        className={styles.backgroundImage}
-      />
-      <div className={styles.card}>
-        <div className={styles.goHomeContainer}>
-          <button
-            type="button"
-            className={styles.goHomeButton}
-            onClick={handleGoHome}
-          >
-            Go to Home
-          </button>
-        </div>
-        <h2 className={styles.title}>Login</h2>
+      <div className={styles.container}>
+        <img
+          src="/img/unsplash_PzXqG8f2rrE.jpg"
+          alt="Main Background"
+          className={styles.backgroundImage}
+        />
+        <div className={styles.card}>
+          <div className={styles.goHomeContainer}>
+            <button
+              type="button"
+              className={styles.goHomeButton}
+              onClick={handleGoHome}
+            >
+              Go to Home
+            </button>
+          </div>
+          <h2 className={styles.title}>Login</h2>
 
-        {status === "loading" && (
-          <div className="text-center">
-            <div className="spinner-border text-black" role="status">
-              <span className="visually-hidden">Loading...</span>
+          {status === "loading" && (
+            <div className="text-center">
+              <div className="spinner-border text-black" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Email:
-            </label>
-            <input
-              type="email"
-              className={styles.input}
-              onChange={e => setEmail(e.target.value)}
-              id="email"
-              placeholder="Enter your email..."
-              required
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="password" className={styles.label}>
-              Password:
-            </label>
-            <div className={styles.passwordContainer}>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+              <label htmlFor="email" className={styles.label}>
+                Email:
+              </label>
               <input
-                type={showPassword ? "text" : "password"}
+                type="email"
                 className={styles.input}
-                onChange={e => setPassword(e.target.value)}
-                id="password"
-                placeholder="Enter your password..."
+                onChange={e => setEmail(e.target.value)}
+                id="email"
+                placeholder="Enter your email..."
                 required
               />
-              <button
-                type="button"
-                className={styles.togglePasswordButton}
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
             </div>
-          </div>
-          <div>
-            If you are a new user, click <Link to="/auth/register">here</Link>{" "}
-            to register.
-          </div>
-          <button type="submit" className={styles.button}>
-            Sign in
-          </button>
-        </form>
+            <div className={styles.formGroup}>
+              <label htmlFor="password" className={styles.label}>
+                Password:
+              </label>
+              <div className={styles.passwordContainer}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className={styles.input}
+                  onChange={e => setPassword(e.target.value)}
+                  id="password"
+                  placeholder="Enter your password..."
+                  required
+                />
+                <button
+                  type="button"
+                  className={styles.togglePasswordButton}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+            <div>
+              If you are a new user, click <Link to="/auth/register">here</Link>{" "}
+              to register.
+            </div>
+            <button type="submit" className={styles.button}>
+              Sign in
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
     </>
   )
 }

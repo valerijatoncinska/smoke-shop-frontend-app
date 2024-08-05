@@ -5,7 +5,7 @@ export interface NavItem {
 
 export const authNavItems = [
   { to: "/profile", label: "My profile" },
-  { to: "/logout", label: "Logout" },
+  { to: "/logout", label: "Logout", isButton: true },
   { to: "/cart", label: "Cart" },
   { to: "/orders", label: "My orders" },
 ]

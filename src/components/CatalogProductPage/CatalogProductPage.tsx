@@ -1,19 +1,35 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import styles from "./CatalogProductPage.module.css"
 import { RootState } from "../../store/store"
 import ProductCardPage from "./ProductCardPage"
 import { useAppDispatch } from "../../app/hook"
-import { fetchProducts, sortByPriceAsc, sortByPriceDesc } from "../../store/redux/productSlice"
+import {
+  fetchProducts,
+  filterProductsByName,
+  resetFilter,
+  sortByPriceAsc,
+  sortByPriceDesc,
+} from "../../store/redux/productSlice"
+import { useNavigate } from "react-router-dom"
 
 const CatalogProductPage: React.FC = () => {
   const dispatch = useAppDispatch()
-  const status = useSelector((state: RootState) => state.user.status)
-  const { products } = useSelector((state: RootState) => state.product)
+  const { status, filteredProducts } = useSelector(
+    (state: RootState) => state.product,
+  )
+  const [searchQuery, setSearchQuery] = useState<string>("")
+  const navigate = useNavigate()
 
-  // const handleSearch = () => {
-
-  // };
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.trim()
+    setSearchQuery(query)
+    if (query === "") {
+      dispatch(resetFilter()) // Сброс фильтра при пустом запросе
+    } else {
+      dispatch(filterProductsByName(query))
+    }
+  }
 
   const handleSortAsc = () => {
     dispatch(sortByPriceAsc())
@@ -23,15 +39,36 @@ const CatalogProductPage: React.FC = () => {
     dispatch(sortByPriceDesc())
   }
 
-  useEffect(() => {dispatch(fetchProducts())}, [])
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
+
+  const handleGoHome = () => {
+    navigate("/")
+  }
 
   return (
     <div className={styles.containerCatalog}>
       <div className={styles.searchContainer}>
         <div className={styles.searchInput}>
-          <input type="text" name="name" placeholder="Search product by name" />
-          <button>Search</button>
+          <input
+            type="text"
+            name="name"
+            placeholder="Search product by name"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+          <button onClick={() => dispatch(filterProductsByName(searchQuery))}>
+            Search
+          </button>
         </div>
+        <button
+          type="button"
+          className={styles.goHomeButton}
+          onClick={handleGoHome}
+        >
+          Go to Home
+        </button>
       </div>
       <div className={styles.sortButtons}>
         <button onClick={handleSortAsc}>Sort by Price Ascending</button>
@@ -49,10 +86,11 @@ const CatalogProductPage: React.FC = () => {
       )}
 
       {status === "success" &&
-        products.map(product => <ProductCardPage key={product.id} product={product} />)}
+        filteredProducts.map(product => (
+          <ProductCardPage key={product.id} product={product} />
+        ))}
 
       {status === "error" && <>Error!</>}
-      
     </div>
   )
 }
