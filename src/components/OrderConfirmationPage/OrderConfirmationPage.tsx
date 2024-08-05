@@ -8,7 +8,7 @@ const OrderConfirmationPage: React.FC = () => {
 
   useEffect(() => {
     if (!orderDetails) {
-      fetch('https://smoke-shop-68y5q.ondigitalocean.app/api/order/latest')
+      fetch('/api/order/latest')
         .then(response => response.json())
         .then(data => setOrderDetails(data))
         .catch(error => console.error('Error:', error));

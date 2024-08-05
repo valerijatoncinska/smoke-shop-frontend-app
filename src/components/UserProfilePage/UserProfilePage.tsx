@@ -17,7 +17,7 @@ const UserProfilePage: React.FC = () => {
 
   useEffect(() => {
     // Fetch user data from backend
-    fetch('https://smoke-shop-68y5q.ondigitalocean.app/api/user-profile')
+    fetch('/api/user-profile')
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(error => 
