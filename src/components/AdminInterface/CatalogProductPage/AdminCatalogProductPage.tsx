@@ -14,7 +14,7 @@ import AddProductForm from "../../../components/AddProductForm/AddProductForm"
 const AdminCatalogProductPage: React.FC = () => {
   const dispatch = useDispatch()
   // const { products } = useSelector((state: RootState) => state.product)
-  const products: Product[] = [{id: 1, title: "Apple", price: 300}, {id: 1, title: "Apple", price: 300}, {id: 1, title: "Apple", price: 300}, {id: 1, title: "Apple", price: 300}, {id: 1, title: "Apple", price: 300}]
+  const products: Product[] = [{id: 1, title: "Apple", price: 300, isActive: true}, {id: 1, title: "Banana", price: 400, isActive: false}, {id: 1, title: "Apple", price: 500, isActive: true}, {id: 1, title: "Apple", price: 600, isActive: true}, {id: 1, title: "Apple", price: 300, isActive: true}]
   const status = useSelector((state: RootState) => state.user.status)
 
   // const handleSearch = () => {
@@ -78,7 +78,7 @@ const AdminCatalogProductPage: React.FC = () => {
           {/* {status === "success" && */}
             
             <div className="d-flex flex-wrap justify-content-between">
-            {products.map(product => (
+            {products.filter(product => product.isActive).map(product => (
               <ProductCardPage key={product.id} product={product} />
             ))}
             </div>

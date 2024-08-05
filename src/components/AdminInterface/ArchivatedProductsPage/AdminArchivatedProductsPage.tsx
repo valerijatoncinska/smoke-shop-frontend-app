@@ -6,15 +6,23 @@ import {
   sortByPriceAsc,
   sortByPriceDesc,
 } from "../../../store/redux/tobaccoSlice"
-import { RootState } from "../../../store/store"
-import ProductCardPage from "./ProductCardPage"
+import { AppDispatch, RootState } from "../../../store/store"
+import ProductCardPage from "../CatalogProductPage/ProductCardPage"
 import { setIsAddedTrue } from "../../../store/redux/openAddProductFormSlice"
 import AddProductForm from "../../../components/AddProductForm/AddProductForm"
+import { Product } from "store/redux/productSlice"
 
 const AdminArchivatedProductsPage: React.FC = () => {
-  const dispatch = useDispatch()
-  const tobacco = useSelector((state: RootState) => state.tobacco.items)
-  const status = useSelector((state: RootState) => state.tobacco.status)
+  const dispatch: AppDispatch = useDispatch()
+  // const products = useSelector((state: RootState) => state.product.products)
+  const products: Product[] = [
+    { id: 1, title: "Apple", price: 300, isActive: true },
+    { id: 1, title: "Banana", price: 300, isActive: false },
+    { id: 1, title: "Apple", price: 300, isActive: true },
+    { id: 1, title: "Apple", price: 300, isActive: true },
+    { id: 1, title: "Apple", price: 300, isActive: true },
+  ]
+  const status = useSelector((state: RootState) => state.product.status)
   // const handleSearch = () => {
 
   // };
@@ -33,45 +41,24 @@ const AdminArchivatedProductsPage: React.FC = () => {
 
   return (
     <>
-      <div className={`z-1 container ${styles1.addProductContainer}`}>
-        <AddProductForm />
-      </div>
-
       <div className={`mt-0 ${styles.containerCatalog}`}>
-        {/* <div className={styles.searchContainer}>
-          <div className={styles.searchInput}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Search product by name"
-            />
-            <button>Search</button>
-          </div>
-        </div>
-        <div className={styles.sortButtons}>
-          <button onClick={handleSortAsc}>Sort by Price Ascending</button>
-          <button onClick={handleSortDesc}>Sort by Price Descending</button>
-        </div>
-        <div className={styles1.addButton}>
-          <button onClick={handleAddProductClick}>
-            Add product to catalog
-          </button>
-        </div> */}
-
         <div className={`${styles1.catalogContainer} text-center`}>
           <h3 className={` ${styles1.catalogTitle}`}>Archived Products</h3>
           <div className={styles.separator}></div>
-          {status === "loading" && (
+          {/* {status === "loading" && (
             <div className="text-center">
               <div className="spinner-border text-white" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          )}
-          {status === "success" &&
-            tobacco.filter(item => !item.isActive).map(item => (
-              <ProductCardPage key={item.id} tobacco={item} />
-            ))}
+          )} */}
+          <div className="d-flex flex-wrap justify-content-between">
+            {products
+              .filter(product => !product.isActive)
+              .map(product => (
+                <ProductCardPage key={product.id} product={product} />
+              ))}
+          </div>
           {status === "error" && <>Error!</>}
         </div>
       </div>
