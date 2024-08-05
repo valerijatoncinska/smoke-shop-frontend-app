@@ -2,8 +2,10 @@ import React, { useEffect } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./AllOrdersPage.css"
 import { useSelector } from "react-redux"
-import { RootState } from "store/store"
+import { RootState } from "../../../store/store"
 import OrderComponent from "./OrderComponent"
+import { useAppDispatch } from "../../../app/hook"
+import { fetchOrders } from "../../../store/redux/orderSlice"
 
 const AllOrdersPage = () => {
   // const orders = [
@@ -92,6 +94,10 @@ const AllOrdersPage = () => {
   // ]
 
   const { orders } = useSelector((state: RootState) => state.order)
+  // const status = useSelector((state: RootState) => state.user.status)
+  // const dispatch = useAppDispatch();
+
+  // useEffect(() => {dispatch(fetchOrders())}, [])
 
   const totalQuantity = orders.reduce((sum, order) => sum + order.quantity, 0)
   const totalCost = orders.reduce(

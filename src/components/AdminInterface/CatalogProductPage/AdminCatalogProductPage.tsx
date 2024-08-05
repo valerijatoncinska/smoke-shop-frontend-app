@@ -2,24 +2,44 @@ import { useDispatch, useSelector } from "react-redux"
 import styles from "../../../components/CatalogProductPage/CatalogProductPage.module.css"
 import styles1 from "./AdminCatalogProductPage.module.css"
 import {
+  fetchProducts,
   Product,
   sortByPriceAsc,
   sortByPriceDesc,
 } from "../../../store/redux/productSlice"
-import { RootState } from "../../../store/store"
+import { AppDispatch, RootState } from "../../../store/store"
 import ProductCardPage from "./ProductCardPage"
 import { setIsAddedTrue } from "../../../store/redux/openAddProductFormSlice"
 import AddProductForm from "../../../components/AddProductForm/AddProductForm"
+import React, { useEffect, useState } from "react"
 
 const AdminCatalogProductPage: React.FC = () => {
-  const dispatch = useDispatch()
-  // const { products } = useSelector((state: RootState) => state.product)
-  const products: Product[] = [{id: 1, title: "Apple", price: 300, isActive: true}, {id: 1, title: "Banana", price: 400, isActive: false}, {id: 1, title: "Apple", price: 500, isActive: true}, {id: 1, title: "Apple", price: 600, isActive: true}, {id: 1, title: "Apple", price: 300, isActive: true}]
+  const [searchQuery, setSearchQuery] = useState("")
+  const dispatch: AppDispatch = useDispatch()
+  const { products } = useSelector((state: RootState) => state.product)
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
+  // const products: Product[] = [{id: 1, title: "Apple", price: 300, isActive: true}, {id: 1, title: "Banana", price: 400, isActive: false}, {id: 1, title: "Apple", price: 500, isActive: true}, {id: 1, title: "Apple", price: 600, isActive: true}, {id: 1, title: "Apple", price: 300, isActive: true}]
   const status = useSelector((state: RootState) => state.user.status)
 
-  // const handleSearch = () => {
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [])
+  useEffect(() => {
+    setFilteredProducts(products) // Устанавливаем все продукты как изначально отображаемые
+  }, [products])
 
-  // };
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value)
+  }
+
+  const handleSearch = () => {
+    const results = products.filter(product =>
+      product.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+    setFilteredProducts(results)
+
+    setSearchQuery("")
+  }
 
   const handleSortAsc = () => {
     dispatch(sortByPriceAsc())
@@ -46,8 +66,10 @@ const AdminCatalogProductPage: React.FC = () => {
               type="text"
               name="name"
               placeholder="Search product by name"
+              onChange={handleInputChange}
+              value={searchQuery}
             />
-            <button>Search</button>
+            <button onClick={handleSearch}>Search</button>
           </div>
         </div>
         <div className={styles.sortButtons}>
@@ -71,19 +93,19 @@ const AdminCatalogProductPage: React.FC = () => {
             </div>
           )}
 
-            {/* tobacco
+          {/* tobacco
               .filter(item => item.isActive)
               .map(item => <ProductCardPage key={item.id} tobacco={item} />)} */}
 
           {/* {status === "success" && */}
-            
-            <div className="d-flex flex-wrap justify-content-between">
-            {products.filter(product => product.isActive).map(product => (
+
+          <div className="d-flex flex-wrap">
+            {filteredProducts.map(product => (
               <ProductCardPage key={product.id} product={product} />
             ))}
-            </div>
-            {/* } */}
-            
+          </div>
+          {/* } */}
+
           {status === "error" && <>Error!</>}
         </div>
       </div>

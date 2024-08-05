@@ -11,10 +11,9 @@ interface ProductCardPageProps {
 }
 
 const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
-
   const { products } = useSelector((state: RootState) => state.product)
-  const dispatch = useAppDispatch();
-  const productToAdd = products.filter(item => item.id === product.id);
+  const dispatch = useAppDispatch()
+  const productToAdd = products.filter(item => item.id === product.id)
 
   return (
     // <div className="card mb-3">
@@ -32,26 +31,50 @@ const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
     //   </div>
     // </div>
     <>
-      {!product.isActive ? (
-        <div className="productCard">
+      {/*     <div className={styles.card}>
+      <div className={styles.cardBody}>
+        <h5 className={styles.cardTitle}>{product.title}</h5>
+        <p className={styles.cardText}>{product.price} $</p>
+      </div>
+      <div className={styles.cardButton}>
+        <button className={styles.cardButtonText}>View Details</button>
+      </div>
+      <button
+              className="addButton"
+              onClick={() => dispatch(addProduct(productToAdd[0]))}
+            >
+              Add to catalog
+            </button>
+    </div> */}
+      {product.isActive ? (
+        <div className="archivedCard">
           <img src="..." className="card-img-top" alt="..." />
-          <div className="card-body text-center">
-            <h2 className="card-title">{product.title}</h2>
-            <h3 className="card-title my-2">{product.price}</h3>
+          <div className="cardBody">
+            <h5 className="cardTitle">{product.title}</h5>
+            <p className="cardText">{product.price} €</p>
+          </div>
+          <div className="cardButton">
             <NavLink to={`/admin/product/${product.id}`}>
-              <button className="btn btn-primary">View Details</button>
+              <button className="cardButtonText">View Details</button>
             </NavLink>
-            <button className="addButton" onClick={() => dispatch(addProduct(productToAdd[0]))}>Add to catalog</button>
+            <button
+              className="addButton"
+              onClick={() => dispatch(addProduct(productToAdd[0]))}
+            >
+              Add to catalog
+            </button>
           </div>
         </div>
       ) : (
-        <div className="productCard">
+        <div className="card mx-4">
           <img src="..." className="card-img-top" alt="..." />
-          <div className="card-body text-center">
-            <h2 className="card-title">{product.title}</h2>
-            <h3 className="card-title my-2">{product.price}</h3>
+          <div className="cardBody">
+            <h5 className="cardTitle">{product.title}</h5>
+            <p className="cardText">{product.price} €</p>
+          </div>
+          <div className="cardButton">
             <NavLink to={`/admin/product/${product.id}`}>
-              <button className="btn btn-primary p-3">View Details</button>
+              <button className="cardButtonText">View Details</button>
             </NavLink>
           </div>
         </div>

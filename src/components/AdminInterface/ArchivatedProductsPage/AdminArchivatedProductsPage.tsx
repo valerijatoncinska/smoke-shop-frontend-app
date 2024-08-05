@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styles from "../../../components/CatalogProductPage/CatalogProductPage.module.css"
 import styles1 from "./AdminArchivatedProductsPage.module.css"
@@ -10,22 +10,21 @@ import { AppDispatch, RootState } from "../../../store/store"
 import ProductCardPage from "../CatalogProductPage/ProductCardPage"
 import { setIsAddedTrue } from "../../../store/redux/openAddProductFormSlice"
 import AddProductForm from "../../../components/AddProductForm/AddProductForm"
-import { Product } from "store/redux/productSlice"
+import { fetchProducts, Product } from "../../../store/redux/productSlice"
 
 const AdminArchivatedProductsPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
-  // const products = useSelector((state: RootState) => state.product.products)
-  const products: Product[] = [
-    { id: 1, title: "Apple", price: 300, isActive: true },
-    { id: 1, title: "Banana", price: 300, isActive: false },
-    { id: 1, title: "Apple", price: 300, isActive: true },
-    { id: 1, title: "Apple", price: 300, isActive: true },
-    { id: 1, title: "Apple", price: 300, isActive: true },
-  ]
+  const products = useSelector((state: RootState) => state.product.products)
+  // const products: Product[] = [
+  //   { id: 1, title: "Apple", price: 300, isActive: true },
+  //   { id: 1, title: "Banana", price: 300, isActive: false },
+  //   { id: 1, title: "Apple", price: 300, isActive: true },
+  //   { id: 1, title: "Apple", price: 300, isActive: true },
+  //   { id: 1, title: "Apple", price: 300, isActive: true },
+  // ]
   const status = useSelector((state: RootState) => state.product.status)
-  // const handleSearch = () => {
 
-  // };
+  useEffect(() => {dispatch(fetchProducts())}, [])
 
   const handleSortAsc = () => {
     dispatch(sortByPriceAsc())
@@ -54,7 +53,7 @@ const AdminArchivatedProductsPage: React.FC = () => {
           )} */}
           <div className="d-flex flex-wrap justify-content-between">
             {products
-              .filter(product => !product.isActive)
+              .filter(product => product.isActive)
               .map(product => (
                 <ProductCardPage key={product.id} product={product} />
               ))}
