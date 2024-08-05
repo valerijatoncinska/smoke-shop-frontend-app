@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import AddProductItem from "./AddProductItem"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from '../../store/store'   // Свойство объявлено, но его значение не было прочитано.
-import { setIsAddedFalse } from "../../store/redux/addNewProductSlice"
+import { setIsAddedFalse } from "../../store/redux/openAddProductFormSlice"
 
 const AddProductForm: React.FC = () => {
   const [name, setName] = useState("")
