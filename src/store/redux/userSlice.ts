@@ -16,7 +16,7 @@ interface UserState {
 
 const initialState: UserState = {
   user: null,
-  isLoggedIn: true,
+  isLoggedIn: false,
   status: 'idle',
   error: null
 };
