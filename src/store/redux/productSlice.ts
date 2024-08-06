@@ -22,13 +22,14 @@ const initialState: ProductsState = {
   status: "idle",
 }
 
-export const fetchProducts = createAsyncThunk<Product[]>(
-  'products/fetchProducts',
-  async () => {
-    const response = await axios.get<Product[]>("/api/products");
-    return response.data;
-  }
-);
+export const fetchProducts = createAsyncThunk<
+  Product[],
+  void,
+  { state: RootState }
+>("products/fetchProducts", async () => {
+  const response = await axios.get<Product[]>("/api/products")
+  return response.data;
+})
 
 const productSlice = createSlice({
   name: "products",
