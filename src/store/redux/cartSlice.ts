@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-interface CartItem {
-    id: number;
-    product: string;
+export interface CartItem {
+    id: string;
+    title: string;
+    stock: number;
     quantity: number;
+    productId: string;
     price: number;
 }
 
@@ -20,22 +22,47 @@ const initialState: CartState = {
     error: null,
 };
 
-export const fetchCartItems = createAsyncThunk(
+export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: string }>(
     'cart/fetchCartItems',
-    async () => {
-        const response = await fetch('/api/cart');
-        if (!response.ok) {
-            throw new Error('Failed to fetch cart items');
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch('/api/cart');
+            if (!response.ok) {
+                throw new Error('Failed to fetch cart items');
+            }
+            const data: CartItem[] = await response.json();
+            return data;
+        } catch (error: any) {
+            return rejectWithValue(error.message);
         }
-        const data: CartItem[] = await response.json();
-        return data;
     }
 );
 
 const cartSlice = createSlice({
     name: 'cart',
     initialState,
-    reducers: {},
+    reducers: {
+        addItemToCart(state, action: PayloadAction<CartItem>) {
+            const existingItem = state.items.find(item => item.id === action.payload.id);
+            if (existingItem) {
+                existingItem.quantity += action.payload.quantity;
+            } else {
+                state.items.push(action.payload);
+            }
+        },
+        updateCartItem(state, action: PayloadAction<CartItem>) {
+            const index = state.items.findIndex(item => item.id === action.payload.id);
+            if (index !== -1) {
+                state.items[index] = action.payload;
+            }
+        },
+        removeItemFromCart(state, action: PayloadAction<string>) {
+            state.items = state.items.filter(item => item.id !== action.payload);
+        },
+        clearCart(state) {
+            state.items = [];
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchCartItems.pending, (state) => {
@@ -47,10 +74,12 @@ const cartSlice = createSlice({
             })
             .addCase(fetchCartItems.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message ?? 'Failed to fetch cart items';
+                state.error = action.payload as string;
             });
     },
 });
+
+export const { addItemToCart, updateCartItem, removeItemFromCart, clearCart } = cartSlice.actions;
 
 export const selectCart = (state: RootState) => state.cart;
 
