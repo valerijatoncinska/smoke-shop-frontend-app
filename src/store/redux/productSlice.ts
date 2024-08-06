@@ -6,6 +6,8 @@ export interface Product {
   id: number
   title: string
   price: number
+  image?: string
+  isActive?: boolean
 }
 
 export interface ProductsState {
@@ -41,11 +43,11 @@ const productSlice = createSlice({
         product => product.id !== action.payload,
       )
     },
-    sortByPriceAsc: (state) => {
-      state.products.sort((a, b) => a.price - b.price);
+    sortByPriceAsc: state => {
+      state.products.sort((a, b) => a.price - b.price)
     },
-    sortByPriceDesc: (state) => {
-      state.products.sort((a, b) => b.price - a.price);
+    sortByPriceDesc: state => {
+      state.products.sort((a, b) => b.price - a.price)
     },
     filterProductsByName(state, action: PayloadAction<string>) {
       const query = action.payload.toLowerCase()
@@ -77,5 +79,7 @@ const productSlice = createSlice({
   },
 })
 
+
 export const { addProduct, removeProduct, sortByPriceAsc, sortByPriceDesc, filterProductsByName, resetFilter } = productSlice.actions
+
 export default productSlice.reducer
