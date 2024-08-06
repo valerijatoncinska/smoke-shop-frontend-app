@@ -11,8 +11,9 @@ const RegisterPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
 
-  const [isAdult, setIsAdult] = useState<boolean>(false);
-  const [subscribe, setSubscribe] = useState<boolean>(false);
+  const [isAdult, setIsAdult] = useState<boolean>(false)
+  const [ageError, setAgeError] = useState<string | null>(null)
+  const [subscribe, setSubscribe] = useState<boolean>(false)
 
   const [emailError, setEmailError] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string | null>(null)
@@ -41,6 +42,10 @@ const RegisterPage: React.FC = () => {
     setRepeatPasswordError(null)
   }, [repeatPassword])
 
+  useEffect(() => {
+    setAgeError(null)
+  }, [ageError])
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -57,9 +62,7 @@ const RegisterPage: React.FC = () => {
     }
 
     if (!passwordValidation.test(password)) {
-      setPasswordError(
-        "Password must be in a valid format."
-      )
+      setPasswordError("Password must be in a valid format.")
       return
     }
 
@@ -69,12 +72,14 @@ const RegisterPage: React.FC = () => {
     }
 
     if (!isAdult) {
-      alert("You must be at least 18 years old to register.");
-      return;
+      setAgeError("You must be at least 18 years old to register.")
+      return
     }
 
     try {
-      await dispatch(registerUser({ email, password, isAdult, subscribe })).unwrap()
+      await dispatch(
+        registerUser({ email, password, isAdult, subscribe }),
+      ).unwrap()
       navigate("/")
     } catch (error) {
       console.log("Ошибка регистрации:", error)
@@ -100,6 +105,13 @@ const RegisterPage: React.FC = () => {
           ))}
         </div>
       )}
+
+      {ageError && (
+        <div className={styles.errorContainer}>
+          <div className={styles.error}>{ageError}</div>
+        </div>
+      )}
+
       <div className={styles.container}>
         <img
           src="/img/unsplash_PzXqG8f2rrE.jpg"
@@ -194,7 +206,7 @@ const RegisterPage: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={isAdult}
-                  onChange={(e) => setIsAdult(e.target.checked)}
+                  onChange={e => setIsAdult(e.target.checked)}
                   className={styles.checkbox}
                   required
                 />
@@ -206,8 +218,9 @@ const RegisterPage: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={subscribe}
-                  onChange={(e) => setSubscribe(e.target.checked)}
+                  onChange={e => setSubscribe(e.target.checked)}
                   className={styles.checkbox}
+                  required
                 />
                 Subscribe to the newsletter
               </label>

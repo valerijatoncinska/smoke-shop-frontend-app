@@ -3,7 +3,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   margin: 10px; 
-  width: 20rem; 
+  width: 18rem; 
   height: 22rem; 
   display: flex;
   flex-direction: column; 
@@ -19,10 +19,7 @@
 
 .cardBody {
   padding: 20px;
-  display: flex;
-  flex-direction: column;
   flex: 1;
-  justify-content: space-between;
 }
 
 .cardTitle {
@@ -31,6 +28,7 @@
   margin-top: 70%;
   margin-bottom: 10px;
   font-family: "Inria Serif", serif;
+  color: black;
 }
 
 .cardText {
@@ -38,6 +36,7 @@
   margin-bottom: 20%; 
   text-align: center;
   font-family: "Inria Serif", serif;
+  color: black;
 }
 
 .cardButton {
