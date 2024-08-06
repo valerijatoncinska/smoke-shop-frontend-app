@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import styles from "./CatalogProductPage.module.css"
-import { RootState } from "../../store/store"
 import ProductCardPage from "./ProductCardPage"
 import { useAppDispatch } from "../../app/hook"
 import {
@@ -12,12 +11,11 @@ import {
   sortByPriceDesc,
 } from "../../store/redux/productSlice"
 import { useNavigate } from "react-router-dom"
+import { RootState } from "store/store"
 
 const CatalogProductPage: React.FC = () => {
   const dispatch = useAppDispatch()
-  const { status, filteredProducts } = useSelector(
-    (state: RootState) => state.product,
-  )
+  const { status, filteredProducts } = useSelector((state: RootState) => state.products)
   const [searchQuery, setSearchQuery] = useState<string>("")
   const navigate = useNavigate()
 
