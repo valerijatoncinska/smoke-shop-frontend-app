@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    if (!passwordValidation.test(String(password).toLowerCase())) {
+    if (!passwordValidation.test(String(password))) {
       setPasswordError(
         "Password must be at least 11 characters long, contain at least one number, one uppercase letter, and one special character",
       )

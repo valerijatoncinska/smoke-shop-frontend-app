@@ -5,6 +5,8 @@ interface User {
   id: number;
   name: string;
   email: string;
+  isAdult: boolean;
+  subscribe: boolean;
 }
 
 interface UserState {
