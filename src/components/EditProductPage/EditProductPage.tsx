@@ -8,7 +8,7 @@ const EditProductPage: React.FC = () => {
     const [title, setTitle] = useState<string>('Product A');
     const [price, setPrice] = useState<number>(30);
     const dispatch: AppDispatch = useDispatch();
-    const products: Product[] = useSelector((state: RootState) => state.product.products);
+    const products: Product[] = useSelector((state: RootState) => state.products.products);
 
     const handleUpdate = () => {
         // Логика обновления продукта
