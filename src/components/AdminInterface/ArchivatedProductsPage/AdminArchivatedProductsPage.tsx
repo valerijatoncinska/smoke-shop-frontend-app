@@ -14,7 +14,7 @@ import { fetchProducts, Product } from "../../../store/redux/productSlice"
 
 const AdminArchivatedProductsPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
-  const products = useSelector((state: RootState) => state.product.products)
+  const products = useSelector((state: RootState) => state.products.products)
   // const products: Product[] = [
   //   { id: 1, title: "Apple", price: 300, isActive: true },
   //   { id: 1, title: "Banana", price: 300, isActive: false },
@@ -22,7 +22,7 @@ const AdminArchivatedProductsPage: React.FC = () => {
   //   { id: 1, title: "Apple", price: 300, isActive: true },
   //   { id: 1, title: "Apple", price: 300, isActive: true },
   // ]
-  const status = useSelector((state: RootState) => state.product.status)
+  const status = useSelector((state: RootState) => state.products.status)
 
   useEffect(() => {dispatch(fetchProducts())}, [])
 
