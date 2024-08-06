@@ -40,7 +40,7 @@ const AdminArchivatedProductsPage: React.FC = () => {
 
   return (
     <>
-      <div className={`mt-0 ${styles.containerCatalog}`}>
+      <div className={`mt-0 ${styles.containerCatalog} w-100`}>
         <div className={`${styles1.catalogContainer} text-center`}>
           <h3 className={` ${styles1.catalogTitle}`}>Archived Products</h3>
           <div className={styles.separator}></div>

@@ -59,7 +59,7 @@ const AdminCatalogProductPage: React.FC = () => {
         <AddProductForm />
       </div>
 
-      <div className={`mt-0 ${styles.containerCatalog}`}>
+      <div className={`mt-0 ${styles.containerCatalog} w-100`}>
         <div className={styles.searchContainer}>
           <div className={styles.searchInput}>
             <input

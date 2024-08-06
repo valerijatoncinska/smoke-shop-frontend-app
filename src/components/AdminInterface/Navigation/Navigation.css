@@ -7,6 +7,7 @@
   background-color: #fdf6f4; /* Bootstrap light background */
   display: flex;
   flex-direction: column;
+  z-index: 1000
   /* justify-content: center; Center the items vertically */
 }
 
