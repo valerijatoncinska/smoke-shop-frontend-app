@@ -38,7 +38,7 @@ export const fetchProducts = createAsyncThunk<
 //       { id: 1, title: "Product 1", price: 100 },
 //       { id: 2, title: "Product 2", price: 200 },
 //       { id: 2, title: "Product 3", price: 200 },
-//       { id: 2, title: "Product 4", price: 200 },
+//       { id: 2, title: "Product 4", price: 5 },
 //       { id: 2, title: "Product 5", price: 200 },
 //       { id: 2, title: "Product 6", price: 200 },
 //       { id: 2, title: "Product 7", price: 200 }
@@ -59,21 +59,20 @@ const productSlice = createSlice({
         product => product.id !== action.payload,
       )
     },
-    sortByPriceAsc: state => {
-      state.products.sort((a, b) => a.price - b.price)
+    sortByPriceAsc(state) {
+      state.filteredProducts = state.filteredProducts.slice().sort((a, b) => a.price - b.price);
     },
-    sortByPriceDesc: state => {
-      state.products.sort((a, b) => b.price - a.price)
+    sortByPriceDesc(state) {
+      state.filteredProducts = state.filteredProducts.slice().sort((a, b) => b.price - a.price);
     },
     filterProductsByName(state, action: PayloadAction<string>) {
-      const query = action.payload.toLowerCase()
+      const query = action.payload.toLowerCase();
       state.filteredProducts = state.products.filter(product =>
         product.title.toLowerCase().includes(query)
-      )
+      );
     },
-    // Reducer для сброса фильтра
     resetFilter(state) {
-      state.filteredProducts = state.products
+      state.filteredProducts = state.products;
     },
   },
   extraReducers: builder => {
