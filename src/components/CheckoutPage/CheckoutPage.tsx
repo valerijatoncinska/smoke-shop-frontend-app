@@ -26,11 +26,14 @@ const CheckoutPage: React.FC = () => {
       {status === 'failed' && <p className={styles.error}>Error: {error}</p>}
       <ul className={styles.itemList}>
         {items.map((item) => (
-          <CheckoutItem 
-            key={item.id} 
-            product={item.title} 
-            quantity={item.quantity} 
-            price={item.price} 
+          <CheckoutItem
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            stock={item.stock}
+            quantity={item.quantity}
+            productId={item.productId}
+            price={item.price}
           />
         ))}
       </ul>
