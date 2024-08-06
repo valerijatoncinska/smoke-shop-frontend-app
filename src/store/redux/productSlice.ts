@@ -22,14 +22,13 @@ const initialState: ProductsState = {
   status: "idle",
 }
 
-export const fetchProducts = createAsyncThunk<
-  { data: Product[] },
-  void,
-  { state: RootState }
->("products/fetchProducts", async () => {
-  const response = await axios.get<{ data: Product[] }>("/api/products")
-  return response.data;
-})
+export const fetchProducts = createAsyncThunk<Product[]>(
+  'products/fetchProducts',
+  async () => {
+    const response = await axios.get<Product[]>("/api/products");
+    return response.data;
+  }
+);
 
 const productSlice = createSlice({
   name: "products",
@@ -67,9 +66,9 @@ const productSlice = createSlice({
       })
       .addCase(
         fetchProducts.fulfilled,
-        (state, action: PayloadAction<{ data: Product[] }>) => {
-          state.products = action.payload.data
-          state.filteredProducts = action.payload.data
+        (state, action: PayloadAction<Product[]>) => {
+          state.products = action.payload
+          state.filteredProducts = action.payload
           state.status = "success"
         },
       )
