@@ -1,32 +1,90 @@
-.productCard{
-    background-color: #e4cabf;
-    margin: 50px;
-    width: 17%;
-    height: 400px;
-  }
-.card-body{
-    
-    margin-top: 210px;
-    
-}
-
-.btn{
-    width: 100%;
-    border: 1px solid black;
-    border-radius: 0;
-    background-color: #774136;
-;
-}
-
-
 .addButton {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid black;
-    background-color: #774136;
-    background-color: #1b8b57;
-    color: white;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
+  width: 100%;
+  padding: 15px;
+  font-size: 20px;
+  font-family: "Inria Serif", serif;
+  background-color: #1b8b57;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+}
+
+.archivedCard {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 10px;
+  width: 20rem;
+  height: 26rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #d9d9d9;
+  position: relative;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 10px;
+  width: 20rem;
+  height: 22rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #d9d9d9;
+  position: relative;
+}
+
+.cardImgTop {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.cardBody {
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.cardTitle {
+  font-size: 20px;
+  text-align: center;
+  margin-top: 70%;
+  margin-bottom: 10px;
+  font-family: "Inria Serif", serif;
+}
+
+.cardText {
+  font-size: 18px;
+  margin-bottom: 50%;
+  text-align: center;
+  font-family: "Inria Serif", serif;
+}
+
+.cardButton {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.cardButtonText {
+  width: 100%;
+  padding: 15px;
+  font-size: 20px;
+  font-family: "Inria Serif", serif;
+  background-color: #774136;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cardButtonText:hover, .addButton:hover {
+  background-color: #333;
+}

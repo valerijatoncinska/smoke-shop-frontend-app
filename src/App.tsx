@@ -8,12 +8,12 @@ import Layout from "./components/Navigation/Layout"
 import HomePage from "./components/HomePage/HomePage"
 import AdminLayout from "./components/AdminInterface/Layout/AdminLayout"
 import AllOrdersPage from "./components/AdminInterface/AdminAllOrders/AllOrdersPage"
-import OrderHistoryPage from './components/OrderHistoryPage/OrderHistoryPage';
-import CartPage from './components/CartPage/CartPage';
-import ProductPage from './components/ProductPage/ProductPage'; 
-import UserProfilePage from './components/UserProfilePage/UserProfilePage';
-import PaymentPage from './components/PaymentPage/PaymentPage';
-import OrderConfirmationPage from './components/OrderConfirmationPage/OrderConfirmationPage';
+import OrderHistoryPage from "./components/OrderHistoryPage/OrderHistoryPage"
+import CartPage from "./components/CartPage/CartPage"
+import ProductPage from "./components/ProductPage/ProductPage"
+import UserProfilePage from "./components/UserProfilePage/UserProfilePage"
+import PaymentPage from "./components/PaymentPage/PaymentPage"
+import OrderConfirmationPage from "./components/OrderConfirmationPage/OrderConfirmationPage"
 import CatalogProductPage from "./components/CatalogProductPage/CatalogProductPage"
 import AdminCatalogProductPage from "./components/AdminInterface/CatalogProductPage/AdminCatalogProductPage"
 import LoginPage from "./components/AuthRootComponent/LoginPage"
@@ -27,27 +27,34 @@ const App: React.FC = () => {
       <header className="App-header"></header>
       <Routes>
         <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="/auth/login" element={<LoginPage />} />
-        <Route path="/auth/register" element={<RegisterPage />} />
-        <Route path="/catalog" element={<CatalogProductPage />} />
-        <Route path="/orders" element={<OrderPage />} />
-        <Route path="/products/new" element={<AddProductForm />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/products/edit/:id" element={<EditProductPage />} />
-        <Route path="/order-history" element={<OrderHistoryPage />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="/admin/view-orders" element={<AllOrdersPage />} />
-          <Route path="/admin/catalog" element={<AdminCatalogProductPage />} />
-          <Route path="/admin/archivated-products" element={<AdminArchivatedProductsPage />} />
-          <Route path="/admin/product/:id" element={<ProductDetails />} />
-        </Route>
-        <Route path="/cart" element={<CartPage />} />
+          <Route index element={<HomePage />} />
+          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/auth/register" element={<RegisterPage />} />
+          <Route path="/catalog" element={<CatalogProductPage />} />
+          <Route path="/orders" element={<OrderPage />} />
+          <Route path="/products/new" element={<AddProductForm />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/products/edit/:id" element={<EditProductPage />} />
+          <Route path="/order-history" element={<OrderHistoryPage />} />
+
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:id" element={<ProductPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
-          </Route>
+          <Route
+            path="/order-confirmation"
+            element={<OrderConfirmationPage />}
+          />
+        </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin/view-orders" element={<AllOrdersPage />} />
+          <Route path="/admin/catalog" element={<AdminCatalogProductPage />} />
+          <Route
+            path="/admin/archivated-products"
+            element={<AdminArchivatedProductsPage />}
+          />
+          <Route path="/admin/product/:id" element={<ProductDetails />} />
+        </Route>
       </Routes>
     </div>
   )
