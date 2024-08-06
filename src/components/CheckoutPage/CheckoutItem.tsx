@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './checkoutItem.module.css';
+import styles from './CheckoutItem.module.css';
 
 interface CheckoutItemProps {
   id: string;
