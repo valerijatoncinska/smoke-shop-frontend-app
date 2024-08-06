@@ -22,7 +22,7 @@ const CatalogProductPage: React.FC = () => {
   const navigate = useNavigate()
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value.trim()
+    const query = e.target.value
     setSearchQuery(query)
     if (query === "") {
       dispatch(resetFilter()) // Сброс фильтра при пустом запросе
