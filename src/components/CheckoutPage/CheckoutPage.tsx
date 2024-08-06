@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
 import { fetchCartItems } from '../../store/redux/cartSlice';
 import CheckoutItem from './CheckoutItem';
 import styles from './CheckoutPage.module.css';
 
 const CheckoutPage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch: AppDispatch = useDispatch();
   const items = useSelector((state: RootState) => state.cart.items);
   const status = useSelector((state: RootState) => state.cart.status);
   const error = useSelector((state: RootState) => state.cart.error);
@@ -26,7 +26,12 @@ const CheckoutPage: React.FC = () => {
       {status === 'failed' && <p className={styles.error}>Error: {error}</p>}
       <ul className={styles.itemList}>
         {items.map((item) => (
-          <CheckoutItem key={item.id} {...item} />
+          <CheckoutItem 
+            key={item.id} 
+            product={item.title} 
+            quantity={item.quantity} 
+            price={item.price} 
+          />
         ))}
       </ul>
       <div className={styles.totalCost}>Total Cost: ${totalCost.toFixed(2)}</div>
