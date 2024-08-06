@@ -16,7 +16,7 @@ interface UserState {
 
 const initialState: UserState = {
   user: null,
-  isLoggedIn: false,
+  isLoggedIn: true,
   status: 'idle',
   error: null
 };
@@ -31,12 +31,25 @@ export const loginUser = createAsyncThunk<User, { email: string; password: strin
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue('An error has occurred. Try again.');
+      if (axios.isAxiosError(error)) {
+        // Проверяем код ответа от сервера
+        if (error.response) {
+          switch (error.response.status) {
+            case 401:
+              return rejectWithValue('Incorrect email or password');
+            case 404:
+              return rejectWithValue('Email not registered');
+            default:
+              return rejectWithValue('An error has occurred. Try again.');
+          }
+        }
+      }
+      return rejectWithValue('An unexpected error occurred');
     }
   }
 );
 
-export const registerUser = createAsyncThunk<User, { email: string; password: string }, { rejectValue: string }>(
+export const registerUser = createAsyncThunk<User, { email: string; password: string; isAdult: boolean; subscribe: boolean }, { rejectValue: string }>(
   'user/registerUser',
   async (userData, { rejectWithValue }) => {
     try {

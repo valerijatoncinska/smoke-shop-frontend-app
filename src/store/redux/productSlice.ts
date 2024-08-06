@@ -11,12 +11,14 @@ export interface Product {
 }
 
 export interface ProductsState {
-  products: Product[]
+  products: Product[],
+  filteredProducts: Product[],
   status: "loading" | "success" | "error"
 }
 
 const initialState: ProductsState = {
   products: [],
+  filteredProducts: [],
   status: "loading",
 }
 
@@ -47,6 +49,16 @@ const productSlice = createSlice({
     sortByPriceDesc: state => {
       state.products.sort((a, b) => b.price - a.price)
     },
+    filterProductsByName(state, action: PayloadAction<string>) {
+      const query = action.payload.toLowerCase()
+      state.filteredProducts = state.products.filter(product =>
+        product.title.toLowerCase().includes(query)
+      )
+    },
+    // Reducer для сброса фильтра
+    resetFilter(state) {
+      state.filteredProducts = state.products
+    },
   },
   extraReducers: builder => {
     builder
@@ -57,6 +69,8 @@ const productSlice = createSlice({
         fetchProducts.fulfilled,
         (state, action: PayloadAction<{ data: Product[] }>) => {
           state.products = action.payload.data
+          state.filteredProducts = action.payload.data
+          state.status = "success"
         },
       )
       .addCase(fetchProducts.rejected, state => {
@@ -65,6 +79,7 @@ const productSlice = createSlice({
   },
 })
 
-export const { addProduct, removeProduct, sortByPriceAsc, sortByPriceDesc } =
-  productSlice.actions
+
+export const { addProduct, removeProduct, sortByPriceAsc, sortByPriceDesc, filterProductsByName, resetFilter } = productSlice.actions
+
 export default productSlice.reducer
