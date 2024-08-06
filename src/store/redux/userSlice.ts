@@ -49,7 +49,7 @@ export const loginUser = createAsyncThunk<User, { email: string; password: strin
   }
 );
 
-export const registerUser = createAsyncThunk<User, { email: string; password: string }, { rejectValue: string }>(
+export const registerUser = createAsyncThunk<User, { email: string; password: string; isAdult: boolean; subscribe: boolean }, { rejectValue: string }>(
   'user/registerUser',
   async (userData, { rejectWithValue }) => {
     try {

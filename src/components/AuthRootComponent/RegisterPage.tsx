@@ -11,6 +11,9 @@ const RegisterPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
 
+  const [isAdult, setIsAdult] = useState<boolean>(false);
+  const [subscribe, setSubscribe] = useState<boolean>(false);
+
   const [emailError, setEmailError] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [repeatPasswordError, setRepeatPasswordError] = useState<string | null>(
@@ -65,8 +68,13 @@ const RegisterPage: React.FC = () => {
       return
     }
 
+    if (!isAdult) {
+      alert("You must be at least 18 years old to register.");
+      return;
+    }
+
     try {
-      await dispatch(registerUser({ email, password })).unwrap()
+      await dispatch(registerUser({ email, password, isAdult, subscribe })).unwrap()
       navigate("/")
     } catch (error) {
       console.log("Ошибка регистрации:", error)
@@ -181,6 +189,29 @@ const RegisterPage: React.FC = () => {
               number, one uppercase letter, and one special character (e.g., @,
               #, $).
             </p>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>
+                <input
+                  type="checkbox"
+                  checked={isAdult}
+                  onChange={(e) => setIsAdult(e.target.checked)}
+                  className={styles.checkbox}
+                  required
+                />
+                I am at least 18 years old
+              </label>
+            </div>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>
+                <input
+                  type="checkbox"
+                  checked={subscribe}
+                  onChange={(e) => setSubscribe(e.target.checked)}
+                  className={styles.checkbox}
+                />
+                Subscribe to the newsletter
+              </label>
+            </div>
             <button type="submit" className={styles.button}>
               Register
             </button>
