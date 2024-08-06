@@ -15,7 +15,9 @@ import { RootState } from "store/store"
 
 const CatalogProductPage: React.FC = () => {
   const dispatch = useAppDispatch()
-  const { status, filteredProducts } = useSelector((state: RootState) => state.products)
+  const { status, filteredProducts } = useSelector(
+    (state: RootState) => state.products,
+  )
   const [searchQuery, setSearchQuery] = useState<string>("")
   const navigate = useNavigate()
 
@@ -83,10 +85,19 @@ const CatalogProductPage: React.FC = () => {
         </div>
       )}
 
-      {status === "success" &&
-        filteredProducts.map(product => (
-          <ProductCardPage key={product.id} product={product} />
-        ))}
+      {status === "success" && (
+        <div className={styles.cardContainer}>
+          {filteredProducts ? (
+            filteredProducts.map(product => (
+              <ProductCardPage key={product.id} product={product} />
+            ))
+          ) : (
+            <p style={{ color: "white", fontSize: "1.5rem" }}>
+              No products available
+            </p>
+          )}
+        </div>
+      )}
 
       {status === "error" && <>Error!</>}
     </div>
