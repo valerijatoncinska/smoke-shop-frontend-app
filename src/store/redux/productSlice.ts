@@ -13,13 +13,13 @@ export interface Product {
 export interface ProductsState {
   products: Product[],
   filteredProducts: Product[],
-  status: "loading" | "success" | "error"
+  status: "idle" | "loading" | "success" | "error"
 }
 
 const initialState: ProductsState = {
   products: [],
   filteredProducts: [],
-  status: "loading",
+  status: "idle",
 }
 
 export const fetchProducts = createAsyncThunk<
@@ -28,7 +28,7 @@ export const fetchProducts = createAsyncThunk<
   { state: RootState }
 >("products/fetchProducts", async () => {
   const response = await axios.get<{ data: Product[] }>("/api/products")
-  return response.data
+  return response.data;
 })
 
 const productSlice = createSlice({

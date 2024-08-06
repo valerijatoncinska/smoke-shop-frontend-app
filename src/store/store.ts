@@ -3,7 +3,6 @@ import orderReducer from './redux/orderSlice';
 import productReducer from './redux/productSlice';
 import userReducer from './redux/userSlice';
 import orderHistoryReducer from './redux/orderHistorySlice';
-import tobaccoReducer from './redux/tobaccoSlice';
 import addNewProductReducer from './redux/openAddProductFormSlice';
 
 import cartReducer from './redux/cartSlice';
@@ -11,7 +10,7 @@ import cartReducer from './redux/cartSlice';
 const store = configureStore({
   reducer: {
     order: orderReducer,
-    product: productReducer,
+    products: productReducer,
     user: userReducer,
     orderHistory: orderHistoryReducer,
     addNewProduct: addNewProductReducer,
