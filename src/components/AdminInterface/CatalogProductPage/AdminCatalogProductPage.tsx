@@ -16,7 +16,7 @@ import React, { useEffect, useState } from "react"
 const AdminCatalogProductPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const dispatch: AppDispatch = useDispatch()
-  const { products } = useSelector((state: RootState) => state.product)
+  const { products } = useSelector((state: RootState) => state.products)
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
   // const products: Product[] = [{id: 1, title: "Apple", price: 300, isActive: true}, {id: 1, title: "Banana", price: 400, isActive: false}, {id: 1, title: "Apple", price: 500, isActive: true}, {id: 1, title: "Apple", price: 600, isActive: true}, {id: 1, title: "Apple", price: 300, isActive: true}]
   const status = useSelector((state: RootState) => state.user.status)

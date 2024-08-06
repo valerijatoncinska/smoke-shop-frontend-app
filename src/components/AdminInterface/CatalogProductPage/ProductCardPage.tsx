@@ -11,7 +11,7 @@ interface ProductCardPageProps {
 }
 
 const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
-  const { products } = useSelector((state: RootState) => state.product)
+  const { products } = useSelector((state: RootState) => state.products)
   const dispatch = useAppDispatch()
   const productToAdd = products.filter(item => item.id === product.id)
 
