@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
 import { RootState } from '../store';
+import Cookies from 'js-cookie';
 
-interface CartItem {
+export interface CartItem {
   id: string;
   title: string;
   stock: number;
@@ -11,7 +11,7 @@ interface CartItem {
   price: number;
 }
 
-interface CartState {
+export interface CartState {
   items: CartItem[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
@@ -71,19 +71,18 @@ const cartSlice = createSlice({
     },
     clearCart(state) {
       state.items = [];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCartItems.pending, (state) => {
         state.status = 'loading';
-        state.error = null;
       })
-      .addCase(fetchCartItems.fulfilled, (state, action: PayloadAction<CartItem[]>) => {
+      .addCase(fetchCartItems.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.items = action.payload;
       })
-      .addCase(fetchCartItems.rejected, (state, action: PayloadAction<string | undefined>) => {
+      .addCase(fetchCartItems.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload || 'Could not fetch cart items';
       });
@@ -91,7 +90,5 @@ const cartSlice = createSlice({
 });
 
 export const { addItemToCart, updateCartItem, removeItemFromCart, clearCart } = cartSlice.actions;
-
 export const selectCart = (state: RootState) => state.cart.items;
-
 export default cartSlice.reducer;

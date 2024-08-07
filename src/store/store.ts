@@ -4,7 +4,7 @@ import productReducer from './redux/productSlice';
 import userReducer from './redux/userSlice';
 import orderHistoryReducer from './redux/orderHistorySlice';
 import addNewProductReducer from './redux/openAddProductFormSlice';
-import cartReducer from './redux/cartSlice'; // Обновленный импорт
+import cartReducer from './redux/cartSlice';
 
 const store = configureStore({
   reducer: {
@@ -13,11 +13,10 @@ const store = configureStore({
     user: userReducer,
     orderHistory: orderHistoryReducer,
     addNewProduct: addNewProductReducer,
-    cart: cartReducer, // Добавляем редьюсер корзины
+    cart: cartReducer,
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>; // Определяем RootState
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
 export default store;
