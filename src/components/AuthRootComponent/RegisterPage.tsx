@@ -23,7 +23,7 @@ const RegisterPage: React.FC = () => {
 
   const { status, error } = useAppSelector(state => state.user)
 
-  const [registrationSuccess, setRegistrationSuccess] = useState<boolean>(true)
+  const [registrationSuccess, setRegistrationSuccess] = useState<boolean>(false)
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
