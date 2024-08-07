@@ -2,11 +2,12 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 
 interface User {
-  id: number
-  name: string
-  email: string
-  isAdult: boolean
-  subscribe: boolean
+  id?: number;
+  email: string;
+  isAdult?: boolean;
+  subscribe?: boolean;
+  accessToken: string;
+  refreshToken: string
 }
 
 interface UserState {
@@ -35,13 +36,21 @@ export const loginUser = createAsyncThunk<
       },
     })
 
-    const { token, user } = response.data
+    const { email, accessToken, refreshToken } = response.data;
 
-    localStorage.setItem("token", token)
-    localStorage.setItem("user", JSON.stringify(user))
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("email", email);
 
-    // Возвращаем данные пользователя
-    return user
+
+    const userData = {
+      email,
+      accessToken,
+      refreshToken,
+    };
+
+    return userData;
+
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // Проверяем код ответа от сервера
