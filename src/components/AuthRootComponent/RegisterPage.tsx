@@ -23,6 +23,8 @@ const RegisterPage: React.FC = () => {
 
   const { status, error } = useAppSelector(state => state.user)
 
+  const [registrationSuccess, setRegistrationSuccess] = useState<boolean>(true)
+
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -80,7 +82,8 @@ const RegisterPage: React.FC = () => {
       await dispatch(
         registerUser({ email, password, isAdult, subscribe }),
       ).unwrap()
-      navigate("/")
+
+      setRegistrationSuccess(true)
     } catch (error) {
       console.log("Ошибка регистрации:", error)
     }
@@ -119,115 +122,137 @@ const RegisterPage: React.FC = () => {
           className={styles.backgroundImage}
         />
         <div className={styles.card}>
-          <div className={styles.goHomeContainer}>
-            <button
-              type="button"
-              className={styles.goHomeButton}
-              onClick={handleGoHome}
-            >
-              Go to Home
-            </button>
-          </div>
-          <h2 className={styles.title}>Registration</h2>
-
-          {status === "loading" && (
-            <div className="text-center">
-              <div className="spinner-border text-black" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
+          {registrationSuccess ? (
+            <div className={styles.successContainer}>
+              <h2 className={styles.successTitle}>
+                Your registration was successful :)
+              </h2>
+              <p className={styles.successMessage}>
+                You can now go to the homepage.
+              </p>
+              <button
+                type="button"
+                className={styles.buttonHome}
+                onClick={handleGoHome}
+              >
+                Return to home page
+              </button>
             </div>
+          ) : (
+            <>
+              <div className={styles.goHomeContainer}>
+                <button
+                  type="button"
+                  className={styles.goHomeButton}
+                  onClick={handleGoHome}
+                >
+                  Go to Home
+                </button>
+              </div>
+              <h2 className={styles.title}>Registration</h2>
+
+              {status === "loading" && (
+                <div className="text-center">
+                  <div className="spinner-border text-black" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="email" className={styles.label}>
+                    Email:
+                  </label>
+                  <input
+                    type="email"
+                    className={styles.input}
+                    onChange={e => setEmail(e.target.value)}
+                    id="email"
+                    placeholder="Enter your email..."
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="password" className={styles.label}>
+                    Password:
+                  </label>
+                  <div className={styles.passwordContainer}>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className={styles.input}
+                      onChange={e => setPassword(e.target.value)}
+                      id="password"
+                      placeholder="Enter your password..."
+                      required
+                    />
+                    <button
+                      type="button"
+                      className={styles.togglePasswordButton}
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="confirmPassword" className={styles.label}>
+                    Confirm Password:
+                  </label>
+                  <div className={styles.passwordContainer}>
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      className={styles.input}
+                      onChange={e => setRepeatPassword(e.target.value)}
+                      id="confirmPassword"
+                      placeholder="Confirm your password..."
+                      required
+                    />
+                    <button
+                      type="button"
+                      className={styles.togglePasswordButton}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    >
+                      {showConfirmPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                </div>
+                <p className={styles.p}>
+                  Password must be at least 11 characters long, with at least
+                  one number, one uppercase letter, and one special character
+                  (e.g., @, #, $).
+                </p>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>
+                    <input
+                      type="checkbox"
+                      checked={isAdult}
+                      onChange={e => setIsAdult(e.target.checked)}
+                      className={styles.checkbox}
+                      required
+                    />
+                    I am at least 18 years old
+                  </label>
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>
+                    <input
+                      type="checkbox"
+                      checked={subscribe}
+                      onChange={e => setSubscribe(e.target.checked)}
+                      className={styles.checkbox}
+                    />
+                    Subscribe to the newsletter
+                  </label>
+                </div>
+                <button type="submit" className={styles.button}>
+                  Register
+                </button>
+              </form>
+            </>
           )}
-
-          <form onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-              <label htmlFor="email" className={styles.label}>
-                Email:
-              </label>
-              <input
-                type="email"
-                className={styles.input}
-                onChange={e => setEmail(e.target.value)}
-                id="email"
-                placeholder="Enter your email..."
-                required
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="password" className={styles.label}>
-                Password:
-              </label>
-              <div className={styles.passwordContainer}>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className={styles.input}
-                  onChange={e => setPassword(e.target.value)}
-                  id="password"
-                  placeholder="Enter your password..."
-                  required
-                />
-                <button
-                  type="button"
-                  className={styles.togglePasswordButton}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="confirmPassword" className={styles.label}>
-                Confirm Password:
-              </label>
-              <div className={styles.passwordContainer}>
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  className={styles.input}
-                  onChange={e => setRepeatPassword(e.target.value)}
-                  id="confirmPassword"
-                  placeholder="Confirm your password..."
-                  required
-                />
-                <button
-                  type="button"
-                  className={styles.togglePasswordButton}
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-            </div>
-            <p className={styles.p}>
-              Password must be at least 11 characters long, with at least one
-              number, one uppercase letter, and one special character (e.g., @,
-              #, $).
-            </p>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>
-                <input
-                  type="checkbox"
-                  checked={isAdult}
-                  onChange={e => setIsAdult(e.target.checked)}
-                  className={styles.checkbox}
-                  required
-                />
-                I am at least 18 years old
-              </label>
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>
-                <input
-                  type="checkbox"
-                  checked={subscribe}
-                  onChange={e => setSubscribe(e.target.checked)}
-                  className={styles.checkbox}
-                />
-                Subscribe to the newsletter
-              </label>
-            </div>
-            <button type="submit" className={styles.button}>
-              Register
-            </button>
-          </form>
         </div>
       </div>
     </>
