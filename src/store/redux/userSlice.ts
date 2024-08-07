@@ -29,14 +29,14 @@ export const loginUser = createAsyncThunk<
   { rejectValue: string }
 >("user/loginUser", async (credentials, { rejectWithValue }) => {
   try {
+    const token = localStorage.getItem("authToken")
+
     const response = await axios.post("/api/author/login", credentials, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
-    const token = response.data.token
-
-    localStorage.setItem("authToken", token)
     console.log("Ответ от сервера:", response.data)
 
     return response.data
@@ -47,6 +47,8 @@ export const loginUser = createAsyncThunk<
         switch (error.response.status) {
           case 401:
             return rejectWithValue("Incorrect email or password")
+          case 403:
+            return rejectWithValue("Forbidden: Access denied")
           case 404:
             return rejectWithValue("Email not registered")
           default:
