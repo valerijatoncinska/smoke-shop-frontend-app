@@ -29,14 +29,15 @@ export const loginUser = createAsyncThunk<
   { rejectValue: string }
 >("user/loginUser", async (credentials, { rejectWithValue }) => {
   try {
-    const token = localStorage.getItem("authToken")
     const response = await axios.post("/api/author/login", credentials, {
       headers: {
         "Content-Type": "application/json",
-        'Authorization': `Bearer ${token}`,
       },
     })
-    console.log('Ответ от сервера:', response.data);
+    const token = response.data.token
+
+    localStorage.setItem("authToken", token)
+    console.log("Ответ от сервера:", response.data)
 
     return response.data
   } catch (error) {
