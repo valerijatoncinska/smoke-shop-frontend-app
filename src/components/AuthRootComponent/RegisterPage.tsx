@@ -220,7 +220,6 @@ const RegisterPage: React.FC = () => {
                   checked={subscribe}
                   onChange={e => setSubscribe(e.target.checked)}
                   className={styles.checkbox}
-                  required
                 />
                 Subscribe to the newsletter
               </label>
