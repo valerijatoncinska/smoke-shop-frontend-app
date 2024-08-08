@@ -16,11 +16,12 @@ const AdminArchivatedProductsPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
   const products = useSelector((state: RootState) => state.products.products)
   // const products: Product[] = [
-  //   { id: 1, title: "Apple", price: 300, isActive: true },
-  //   { id: 1, title: "Banana", price: 300, isActive: false },
-  //   { id: 1, title: "Apple", price: 300, isActive: true },
-  //   { id: 1, title: "Apple", price: 300, isActive: true },
-  //   { id: 1, title: "Apple", price: 300, isActive: true },
+  //   { id: 1, title: "Apple", price: 300, active: true },
+  //   { id: 1, title: "Banana", price: 300, active: false },
+  //   { id: 1, title: "Apple", price: 300, active: true },
+  //   { id: 1, title: "Apple", price: 300, active: true },
+  //   { id: 1, title: "Apple", price: 300, active: true },
+  //   { id: 1, title: "Apple", price: 300, active: false },
   // ]
   const status = useSelector((state: RootState) => state.products.status)
 
@@ -44,16 +45,16 @@ const AdminArchivatedProductsPage: React.FC = () => {
         <div className={`${styles1.catalogContainer} text-center`}>
           <h3 className={` ${styles1.catalogTitle}`}>Archived Products</h3>
           <div className={styles.separator}></div>
-          {/* {status === "loading" && (
+          {status === "loading" && (
             <div className="text-center">
               <div className="spinner-border text-white" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          )} */}
-          <div className="d-flex flex-wrap justify-content-between">
+          )}
+          <div className="d-flex flex-wrap">
             {products
-              .filter(product => product.isActive)
+              .filter(product => !product.active)
               .map(product => (
                 <ProductCardPage key={product.id} product={product} />
               ))}

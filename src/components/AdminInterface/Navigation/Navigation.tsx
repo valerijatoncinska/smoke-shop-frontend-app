@@ -17,13 +17,8 @@ const Navigation = () => {
           </NavLink>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/admin/order-details">
-            Orders Details
-          </NavLink>
-        </li>
-        <li className="nav-item">
           <NavLink className="nav-link" to="/admin/archivated-products">
-            Archivated Products
+            Archived Products
           </NavLink>
         </li>
         <li className="nav-item">

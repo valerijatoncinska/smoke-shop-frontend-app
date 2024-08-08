@@ -46,8 +46,8 @@ const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
               Add to catalog
             </button>
     </div> */}
-      {product.isActive ? (
-        <div className="archivedCard">
+      {!product.active ? (
+        <div className="archivedCard mx-5">
           <img src="..." className="card-img-top" alt="..." />
           <div className="cardBody">
             <h5 className="cardTitle">{product.title}</h5>
@@ -66,7 +66,7 @@ const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
           </div>
         </div>
       ) : (
-        <div className="card mx-4">
+        <div className="card mx-5">
           <img src="..." className="card-img-top" alt="..." />
           <div className="cardBody">
             <h5 className="cardTitle">{product.title}</h5>

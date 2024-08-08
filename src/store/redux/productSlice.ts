@@ -6,8 +6,11 @@ export interface Product {
   id: number
   title: string
   price: number
+  quantity?: number
+  active?: boolean
   image?: string
-  isActive?: boolean
+  description?: string,
+  characteristics?: string
 }
 
 export interface ProductsState {
@@ -78,6 +81,11 @@ const productSlice = createSlice({
     resetFilter(state) {
       state.filteredProducts = state.products;
     },
+    archiveProduct(state, action: PayloadAction<number>) {
+      state.products = state.products.map(product =>
+        product.id === action.payload ? { ...product, active: false } : product,
+      )
+    },
   },
   extraReducers: builder => {
     builder
@@ -99,6 +107,6 @@ const productSlice = createSlice({
 })
 
 
-export const { addProduct, removeProduct, sortByPriceAsc, sortByPriceDesc, filterProductsByName, resetFilter } = productSlice.actions
+export const { addProduct, removeProduct, sortByPriceAsc, sortByPriceDesc, filterProductsByName, resetFilter, archiveProduct } = productSlice.actions
 
 export default productSlice.reducer

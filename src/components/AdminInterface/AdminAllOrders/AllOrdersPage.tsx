@@ -110,7 +110,7 @@ const AllOrdersPage = () => {
       <div className="tableContainer">
         <h2 className="text-center mb-5">View orders</h2>
         <table className="table">
-          <div className="d-flex justify-content-between mb-4">
+          <div className="text d-flex justify-content-between mb-4">
             <h5>Product name</h5>
             <h5>Date</h5>
             <h5>Order status</h5>

@@ -7,31 +7,37 @@ import { setIsAddedTrue } from "../../../store/redux/openAddProductFormSlice"
 import AddProductForm from "../../../components/AddProductForm/AddProductForm"
 import React, { useEffect, useState } from "react"
 import {
-  fetchAdminProducts,
-  IProduct,
+  fetchProducts,
+  Product,
   sortByPriceAsc,
   sortByPriceDesc,
-} from "../../../store/redux/adminProductSlice"
+} from "../../../store/redux/productSlice"
 
 const AdminCatalogProductPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const dispatch: AppDispatch = useDispatch()
-  const { adminProducts, status } = useSelector(
-    (state: RootState) => state.adminProducts,
-  )
+  const { products, status } = useSelector((state: RootState) => state.products)
+  const adminProducts: Product[] = [
+    { id: 1, title: "Parlament", price: 300, active: true },
+    { id: 2, title: "Marlboro Blue", price: 400, active: true },
+    { id: 3, title: "Marlboro Red", price: 500, active: true },
+    { id: 4, title: "L&M Blue", price: 600, active: true },
+    { id: 5, title: "Parlament Aqua", price: 300, active: true },
+  ]
+
   const [filteredProducts, setFilteredProducts] =
-    useState<IProduct[]>(adminProducts)
+    useState<Product[]>(products)
   useEffect(() => {
-    dispatch(fetchAdminProducts())
+    dispatch(fetchProducts())
   }, [])
 
   useEffect(() => {
-    setFilteredProducts(adminProducts) // Устанавливаем все продукты как изначально отображаемые
-  }, [adminProducts])
+    setFilteredProducts(products) // Устанавливаем все продукты как изначально отображаемые
+  }, [products])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
-    const results = adminProducts.filter(product =>
+    const results = products.filter(product =>
       product.title.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     setFilteredProducts(results)
@@ -90,7 +96,7 @@ const AdminCatalogProductPage: React.FC = () => {
           )}
 
           {status === "success" && (
-            <div className="d-flex flex-wrap ms-4">
+            <div className="d-flex flex-wrap">
               {filteredProducts.map(product => (
                 <ProductCardPage key={product.id} product={product} />
               ))}

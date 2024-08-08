@@ -6,7 +6,7 @@
   margin-left: auto;
   margin-right: auto;
   height: auto;
-  height: 2000px;
+  height: 910px;
   margin: auto;
   background-color: #181716;
 }
@@ -20,27 +20,86 @@
 .squareTwo {
   margin-top: 20px;
   width: 450px;
-  height: 600px;
+  height: 280px;
   background-color: white;
 }
 
 .squareThree {
-  width: 960px;
-  height: 300px;
+  width: 1100px;
+  height: 230px;
   background-color: white;
+}
+
+.squareThree h1, h2, h5, h6{
+  color: black;
+
 }
 
 .squareFour {
   margin-top: 20px;
-  width: 960px;
-  height: 300px;
+  width: 1100px;
+  height: 220px;
   background-color: white;
 }
 
 .squareFive {
   margin-top: 20px;
-  width: 960px;
-  height: 380px;
+  width: 1100px;
+  height: 210px;
   background-color: white;
+}
+
+.quantity{
+  margin-left: 20px;
+}
+
+.serviceButtons{
+  position: absolute;
+  right: 70px;
+  bottom: 60px;
+}
+
+.cardButtonEdit{
+  width: 300px;
+  padding: 15px;
+  font-size: 20px;
+  font-family: "Inria Serif", serif;
+  background-color: #774136;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cardButtonDelete{
+  width: 300px;
+  padding: 15px;
+  font-size: 20px;
+  font-family: "Inria Serif", serif;
+  background-color: #d3583f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cardButtonArchive{
+  width: 300px;
+  padding: 15px;
+  font-size: 20px;
+  font-family: "Inria Serif", serif;
+  background-color: #797979;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.descriptionInput{
+  width: 1000px;
+  height: auto;
 }
 
