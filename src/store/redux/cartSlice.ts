@@ -40,8 +40,8 @@ export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: 
         throw new Error('Failed to fetch cart items');
       }
 
-      const data: CartItem[] = await response.json();
-      return data;
+      const respObj = await response.json();
+      return respObj.products;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
