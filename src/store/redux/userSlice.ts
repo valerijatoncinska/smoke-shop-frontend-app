@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
-import Cookies from "js-cookie";
+import Cookies from "js-cookie"
 
 interface User {
-  id?: number;
-  email: string;
-  isAdult?: boolean;
-  subscribe?: boolean;
-  accessToken: string;
-  refreshToken: string;
+  id?: number
+  email: string
+  isAdult?: boolean
+  subscribe?: boolean
+  accessToken: string
+  refreshToken: string
 }
 
 interface UserState {
@@ -37,20 +37,19 @@ export const loginUser = createAsyncThunk<
       },
     })
 
-    const { email, accessToken, refreshToken } = response.data;
+    const { email, accessToken, refreshToken } = response.data
 
-    Cookies.set("accessToken", accessToken, { expires: 1 });
-    Cookies.set("refreshToken", refreshToken, { expires: 3 });
-    Cookies.set("email", email, { expires: 3 });
+    Cookies.set("ACCESS_TOKEN", accessToken, { expires: 1 })
+    Cookies.set("REFRESH_TOKEN", refreshToken, { expires: 3 })
+    Cookies.set("EMAIL", email, { expires: 3 })
 
     const userData: User = {
       email,
       accessToken,
       refreshToken,
-    };
+    }
 
-    return userData;
-
+    return userData
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // Проверяем код ответа от сервера
@@ -63,7 +62,9 @@ export const loginUser = createAsyncThunk<
           case 404:
             return rejectWithValue("Email not registered")
           default:
-            return rejectWithValue("Account is not active. Please check your email.")
+            return rejectWithValue(
+              "Account is not active. Please check your email.",
+            )
         }
       }
     }
@@ -80,24 +81,25 @@ export const registerUser = createAsyncThunk<
     const response = await axios.post("/api/author/reg", userData, {
       headers: { "Content-Type": "application/json" },
     })
-    const { email, accessToken, refreshToken } = response.data;
+    const { email, accessToken, refreshToken } = response.data
 
-    Cookies.set("accessToken", accessToken, { expires: 1 });
-    Cookies.set("refreshToken", refreshToken, { expires: 3 });
-    Cookies.set("email", email, { expires: 3 });
+    Cookies.set("accessToken", accessToken, { expires: 1 })
+    Cookies.set("refreshToken", refreshToken, { expires: 3 })
+    Cookies.set("email", email, { expires: 3 })
 
     const user: User = {
       email,
       accessToken,
       refreshToken,
-    };
+    }
 
-    return user;
+    return user
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 409) {
         return rejectWithValue(
-          "User already exists. Please try a different email.")
+          "User already exists. Please try a different email.",
+        )
       }
       return rejectWithValue(
         error.response?.data.message || "An error has occurred. Try again.",
@@ -121,9 +123,9 @@ const userSlice = createSlice({
       state.status = "success"
       state.error = null
 
-      Cookies.remove("accessToken");
-      Cookies.remove("refreshToken");
-      Cookies.remove("email");
+      Cookies.remove("ACCESS_TOKEN")
+      Cookies.remove("REFRESH_TOKEN")
+      Cookies.remove("EMAIL")
     },
     updateUser(state, action: PayloadAction<Partial<User>>) {
       if (state.user) {
