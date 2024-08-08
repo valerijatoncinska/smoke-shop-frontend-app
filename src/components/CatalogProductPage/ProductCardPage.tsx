@@ -1,12 +1,19 @@
 import React from "react";
 import { Product } from "store/redux/productSlice";
 import styles from './ProductCardPage.module.css';
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardPageProps {
   product: Product;
 }
 
 const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
+    const navigate = useNavigate();
+
+    const handleViewDetails = () => {
+      navigate(`/products/${product.id}`);
+    }
+
   return (
     <div className={styles.card}>
       <div className={styles.cardBody}>
@@ -14,7 +21,10 @@ const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
         <p className={styles.cardText}>{product.price} $</p>
       </div>
       <div className={styles.cardButton}>
-        <button className={styles.cardButtonText}>View Details</button>
+        <button 
+        className={styles.cardButtonText}
+        onClick={handleViewDetails}
+        >View Details</button>
       </div>
     </div>
   );

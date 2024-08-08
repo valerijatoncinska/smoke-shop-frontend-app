@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
+import Cookies from "js-cookie";
 
 interface User {
   id?: number;
@@ -7,7 +8,7 @@ interface User {
   isAdult?: boolean;
   subscribe?: boolean;
   accessToken: string;
-  refreshToken: string
+  refreshToken: string;
 }
 
 interface UserState {
@@ -38,12 +39,11 @@ export const loginUser = createAsyncThunk<
 
     const { email, accessToken, refreshToken } = response.data;
 
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
-    localStorage.setItem("email", email);
+    Cookies.set("accessToken", accessToken, { expires: 1 });
+    Cookies.set("refreshToken", refreshToken, { expires: 3 });
+    Cookies.set("email", email, { expires: 3 });
 
-
-    const userData = {
+    const userData: User = {
       email,
       accessToken,
       refreshToken,
@@ -63,7 +63,7 @@ export const loginUser = createAsyncThunk<
           case 404:
             return rejectWithValue("Email not registered")
           default:
-            return rejectWithValue("An error has occurred. Try again.")
+            return rejectWithValue("Account is not active. Please check your email.")
         }
       }
     }
@@ -80,13 +80,24 @@ export const registerUser = createAsyncThunk<
     const response = await axios.post("/api/author/reg", userData, {
       headers: { "Content-Type": "application/json" },
     })
-    return response.data
+    const { email, accessToken, refreshToken } = response.data;
+
+    Cookies.set("accessToken", accessToken, { expires: 1 });
+    Cookies.set("refreshToken", refreshToken, { expires: 3 });
+    Cookies.set("email", email, { expires: 3 });
+
+    const user: User = {
+      email,
+      accessToken,
+      refreshToken,
+    };
+
+    return user;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 409) {
         return rejectWithValue(
-          "User already exists. Please try a different email.",
-        )
+          "User already exists. Please try a different email.")
       }
       return rejectWithValue(
         error.response?.data.message || "An error has occurred. Try again.",
@@ -109,6 +120,10 @@ const userSlice = createSlice({
       state.isLoggedIn = false
       state.status = "success"
       state.error = null
+
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      Cookies.remove("email");
     },
     updateUser(state, action: PayloadAction<Partial<User>>) {
       if (state.user) {

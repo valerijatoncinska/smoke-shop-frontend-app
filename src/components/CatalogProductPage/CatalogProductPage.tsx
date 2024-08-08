@@ -92,14 +92,14 @@ const CatalogProductPage: React.FC = () => {
               <ProductCardPage key={product.id} product={product} />
             ))
           ) : (
-            <p style={{ color: "white", fontSize: "1.5rem" }}>
+            <p style={{ color: "white", fontSize: "1.5rem", textAlign: 'center' }}>
               No products available
             </p>
           )}
         </div>
       )}
 
-      {status === "error" && <>Error!</>}
+      {status === "error" && <p style={{ color: 'white', fontSize: '1.5rem' }}>Error!</p>}
     </div>
   )
 }
