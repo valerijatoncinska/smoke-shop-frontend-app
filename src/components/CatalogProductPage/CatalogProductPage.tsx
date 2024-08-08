@@ -11,7 +11,7 @@ import {
   sortByPriceDesc,
 } from "../../store/redux/productSlice"
 import { useNavigate } from "react-router-dom"
-import { RootState } from "store/store"
+import { RootState } from "../../store/store"
 
 const CatalogProductPage: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -87,8 +87,8 @@ const CatalogProductPage: React.FC = () => {
 
       {status === "success" && (
         <div className={styles.cardContainer}>
-          {filteredProducts ? (
-            filteredProducts.map(product => (
+          {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
               <ProductCardPage key={product.id} product={product} />
             ))
           ) : (
