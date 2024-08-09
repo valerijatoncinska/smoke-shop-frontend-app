@@ -3,11 +3,11 @@ import "./ProductDetails.css"
 import { useSelector } from "react-redux"
 import { RootState } from "store/store"
 import { useParams } from "react-router-dom"
-import { IProduct } from "store/redux/adminProductSlice"
+import { Product } from "../../../store/redux/productSlice"
 
 const ProductDetails: FC = () => {
   // const {adminProducts} = useSelector((state: RootState) => state.adminProducts);
-  const adminProducts: IProduct[] = [
+  const adminProducts: Product[] = [
     {
       id: 1,
       title: "Parlament",
