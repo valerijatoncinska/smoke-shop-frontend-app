@@ -9,6 +9,7 @@ export interface CartItem {
   quantity: number;
   productId: string;
   price: number;
+  totalPrice: number;
 }
 
 export interface CartState {
@@ -41,6 +42,7 @@ export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: 
       }
 
       const respObj = await response.json();
+      console.log(respObj); // Здесь вы увидите весь объект, включая totalPrice, если он есть
       return respObj.products;
     } catch (error: any) {
       return rejectWithValue(error.message);
