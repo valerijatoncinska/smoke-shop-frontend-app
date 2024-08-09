@@ -15,25 +15,16 @@ const ProductPage: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Состояние для проверки, авторизован ли пользователь
 
+  // Извлечение productId из параметров URL
   const { productId } = useParams<{ productId: string }>();
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!token) {
-        setError('No token found');
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`https://smoke-shop-68y5q.ondigitalocean.app/api/products/${productId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
+        const response = await fetch(`/api/products/${productId}`);
+        
         if (!response.ok) {
           throw new Error('Failed to fetch product');
         }
@@ -48,7 +39,42 @@ const ProductPage: React.FC = () => {
     };
 
     fetchProduct();
-  }, [productId, token]);
+
+    // Проверка на наличие токена в localStorage для определения, авторизован ли пользователь
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, [productId]);
+
+  const handleAddToCart = async () => {
+    if (!isLoggedIn) {
+      alert('You must be logged in to add items to the cart.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/cart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          productId: product?.id,
+          quantity: 1, // Добавляем 1 единицу товара в корзину
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add product to cart');
+      }
+
+      alert('Product added to cart successfully!');
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -78,7 +104,7 @@ const ProductPage: React.FC = () => {
           </label>
           <label>
             Price:
-            <input type="number" value={product.price} readOnly />
+            <input type="text" value={product.price} readOnly />
           </label>
           <label>
             Category:
@@ -86,8 +112,17 @@ const ProductPage: React.FC = () => {
           </label>
           <label>
             Stock:
-            <input type="number" value={product.stock} readOnly />
+            <input type="text" value={product.stock} readOnly />
           </label>
+        </div>
+        <div className="product-actions">
+          {isLoggedIn ? (
+            <button onClick={handleAddToCart} className="add-to-cart-button">
+              Add to Cart
+            </button>
+          ) : (
+            <p>You must be logged in to add items to the cart.</p>
+          )}
         </div>
       </div>
     </div>
