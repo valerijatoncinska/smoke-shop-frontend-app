@@ -3,12 +3,11 @@ import { useParams } from 'react-router-dom';
 import './ProductPage.css';
 
 interface Product {
-  id: string;
+  id: number;
   title: string;
-  description: string;
   price: number;
-  category: string;
-  stock: number;
+  quantity: number;
+  active: boolean;
 }
 
 const ProductPage: React.FC = () => {
@@ -16,6 +15,7 @@ const ProductPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(1); // Initial quantity set to 1
 
   const { id } = useParams<{ id: string }>();
 
@@ -29,7 +29,8 @@ const ProductPage: React.FC = () => {
         }
 
         const data = await response.json();
-        setProduct(data);
+        setProduct(data.data); 
+        setQuantity(1); 
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -60,7 +61,7 @@ const ProductPage: React.FC = () => {
         },
         body: JSON.stringify({
           productId: products?.id,
-          quantity: 1,
+          quantity: quantity, 
         }),
       });
 
@@ -71,6 +72,18 @@ const ProductPage: React.FC = () => {
       alert('Product added to cart successfully!');
     } catch (error: any) {
       alert(`Error: ${error.message}`);
+    }
+  };
+
+  const increaseQuantity = () => {
+    if (products && quantity < products.quantity) {
+      setQuantity(prevQuantity => prevQuantity + 1);
+    }
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prevQuantity => prevQuantity - 1);
     }
   };
 
@@ -103,20 +116,20 @@ const ProductPage: React.FC = () => {
           <h1>{products.title}</h1>
           <div className="product-price">Price: {products.price}€</div>
           <div className="product-quantity">
-            <button>-</button>
-            <input type="number" value={1} readOnly />
-            <button>+</button>
+            <button onClick={decreaseQuantity}>-</button>
+            <input type="number" value={quantity} readOnly />
+            <button onClick={increaseQuantity}>+</button>
           </div>
           <button onClick={handleAddToCart} className="add-to-basket-button">Add to Basket</button>
           <button className="buy-button">Buy</button>
           <div className="product-description">
             <h2>Description</h2>
-            <p>{products.description}</p>
+            <p>This is a placeholder description for the product "{products.title}".</p>
           </div>
           <div className="product-characteristics">
             <h2>Characteristics</h2>
-            <p>Category: {products.category}</p>
-            <p>Stock: {products.stock}</p>
+            <p>Stock: {products.quantity}</p>
+            <p>Status: {products.active ? 'Available' : 'Unavailable'}</p>
           </div>
         </div>
       </div>
