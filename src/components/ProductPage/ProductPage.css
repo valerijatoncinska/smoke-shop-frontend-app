@@ -1,91 +1,111 @@
 .product-page {
-  font-family: Arial, sans-serif;
-  color: #f0f0f0; /* Light grey text for readability */
-  background-color: #1e1e1e; /* Dark background */
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  color: #d3b0a0; /* Soft beige color for the main heading */
-  margin-bottom: 20px;
-}
-
-.product-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: #2a2a2a; /* Slightly lighter background for sections */
-  padding: 15px;
-  border-radius: 8px; /* Rounded corners for sections */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-}
-
-.product-section h2 {
-  color: #d3b0a0; /* Matching color for section titles */
-  margin-bottom: 10px;
-}
-
-.product-detail {
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.product-detail strong {
-  color: #d3b0a0; /* Beige color for labels */
-  width: 120px; /* Fixed width to align values */
-  text-align: right;
-  margin-right: 10px;
-}
-
-.product-detail span {
-  color: #f0f0f0; /* Light grey for product details */
-  background-color: #333; /* Dark background for the value display */
-  padding: 5px 10px;
-  border-radius: 4px; /* Rounded corners for detail values */
-}
-
-.product-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.add-to-cart-button {
-  background-color: #d3b0a0; /* Beige background for the button */
-  color: #1e1e1e; /* Dark text color for readability */
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px; /* Slight rounding for buttons */
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.add-to-cart-button:hover {
-  background-color: #bf9e8b; /* Darker beige on hover */
-}
-
-.error-message, .loading-message {
-  text-align: center;
-  color: #f0f0f0; /* Consistent color for error/loading messages */
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #2a2a2a; /* Dark background for messages */
-  border-radius: 5px;
-}
-
-.no-product-message {
-  text-align: center;
-  color: #f0f0f0; /* Light grey for consistency */
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #2a2a2a; /* Dark background for message */
-  border-radius: 5px;
-}
-
-p {
-  margin: 0;
-  padding: 0;
-}
+    font-family: Arial, sans-serif;
+    color: white;
+    background-color: #1e1e1e;
+    padding: 20px;
+  }
+  
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .nav-links a, .nav-links button {
+    color: #000;
+    background-color: #d3b0a0;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: none;
+  }
+  
+  .nav-links input {
+    padding: 5px;
+    margin-right: 10px;
+  }
+  
+  .product-details {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .product-images {
+    width: 45%;
+  }
+  
+  .main-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .thumbnail-images {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .thumbnail-image {
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+  }
+  
+  .product-info {
+    width: 45%;
+  }
+  
+  .product-info h2 {
+    margin-bottom: 10px;
+  }
+  
+  .product-info p {
+    margin-bottom: 10px;
+  }
+  
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .quantity-control button {
+    background-color: #d3b0a0;
+    border: none;
+    color: #000;
+    padding: 5px 10px;
+  }
+  
+  .quantity-control span {
+    margin: 0 10px;
+  }
+  
+  .add-to-basket, .buy-now {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .description, .characteristics {
+    margin-top: 20px;
+  }
+  
+  footer {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
