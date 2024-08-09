@@ -7,56 +7,39 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  imageUrl: string;
-  characteristics: string;
-  thumbnailUrls: string[];
-}
-
-interface User {
-  phoneNumber: string;
-  email: string;
+  category: string;
+  stock: number;
 }
 
 const ProductPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [mainImage, setMainImage] = useState<string | null>(null);
 
-  // Токен аутентификации, извлекаемый из localStorage (либо другого места)
+  const { productId } = useParams<{ productId: string }>();
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const fetchProductAndUser = async () => {
-      setLoading(true);
+    const fetchProduct = async () => {
+      if (!token) {
+        setError('No token found');
+        setLoading(false);
+        return;
+      }
+
       try {
-        // Запрос данных продукта
-        const productResponse = await fetch(`https://smoke-shop-68y5q.ondigitalocean.app/api/products/${id}`, {
+        const response = await fetch(`https://smoke-shop-68y5q.ondigitalocean.app/api/products/${productId}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`,
           },
         });
 
-        // Запрос данных пользователя
-        const userResponse = await fetch(`https://smoke-shop-68y5q.ondigitalocean.app/api/user`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!productResponse.ok || !userResponse.ok) {
-          throw new Error('Failed to fetch data');
+        if (!response.ok) {
+          throw new Error('Failed to fetch product');
         }
 
-        const productData = await productResponse.json();
-        const userData = await userResponse.json();
-
-        setProduct(productData);
-        setMainImage(productData.imageUrl);
-        setUser(userData);
+        const data = await response.json();
+        setProduct(data);
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -64,20 +47,8 @@ const ProductPage: React.FC = () => {
       }
     };
 
-    fetchProductAndUser();
-  }, [id, token]);
-
-  const increaseQuantity = () => {
-    setQuantity(prevQuantity => prevQuantity + 1);
-  };
-
-  const decreaseQuantity = () => {
-    setQuantity(prevQuantity => (prevQuantity > 1 ? prevQuantity - 1 : 1));
-  };
-
-  const handleThumbnailClick = (imageUrl: string) => {
-    setMainImage(imageUrl);
-  };
+    fetchProduct();
+  }, [productId, token]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -88,64 +59,37 @@ const ProductPage: React.FC = () => {
   }
 
   if (!product) {
-    return <div>Product not found</div>;
+    return <div>No product data available</div>;
   }
 
   return (
     <div className="product-page">
-      <div className="navigation">
-        <span>Phone: {user?.phoneNumber}</span>
-        <span>Email: {user?.email}</span>
-      </div>
-      <h1 className="title">Product: {product.name}</h1>
-      <div className="nav-links">
-        <a href="/home">Home</a>
-        <a href="/catalog">Catalog</a>
-        <input type="text" placeholder="Product search" />
-        <button>Search</button>
-      </div>
-      <div className="product-details">
-        <div className="product-images">
-          <img
-            src={mainImage || product.imageUrl}
-            alt={product.name}
-            className="main-image"
-          />
-          <div className="thumbnail-images">
-            {product.thumbnailUrls.map((url, index) => (
-              <img
-                key={index}
-                src={url}
-                alt={`Thumbnail ${index + 1}`}
-                className="thumbnail-image"
-                onClick={() => handleThumbnailClick(url)}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="product-info">
-          <h2>{product.name}</h2>
-          <p>Price: {product.price}€</p>
-          <div className="quantity-control">
-            <button onClick={decreaseQuantity}>-</button>
-            <span>{quantity}</span>
-            <button onClick={increaseQuantity}>+</button>
-          </div>
-          <button className="add-to-basket">Add to Basket</button>
-          <button className="buy-now">Buy Now</button>
-          <div className="description">
-            <h3>Description</h3>
-            <p>{product.description}</p>
-          </div>
-          <div className="characteristics">
-            <h3>Characteristics</h3>
-            <p>{product.characteristics}</p>
-          </div>
+      <h1>Product Details</h1>
+      <div className="product-sections">
+        <div className="product-section">
+          <h2>Details</h2>
+          <label>
+            Name:
+            <input type="text" value={product.name} readOnly />
+          </label>
+          <label>
+            Description:
+            <input type="text" value={product.description} readOnly />
+          </label>
+          <label>
+            Price:
+            <input type="number" value={product.price} readOnly />
+          </label>
+          <label>
+            Category:
+            <input type="text" value={product.category} readOnly />
+          </label>
+          <label>
+            Stock:
+            <input type="number" value={product.stock} readOnly />
+          </label>
         </div>
       </div>
-      <footer>
-        <p>Have a good day!</p>
-      </footer>
     </div>
   );
 };

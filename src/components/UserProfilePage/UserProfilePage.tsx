@@ -1,128 +1,139 @@
-import React, { useEffect, useState } from 'react';
-import './UserProfilePage.css';
+import React, { useEffect, useState } from "react"
+import "./UserProfilePage.css"
+
+interface Address {
+  city: string
+  zipCode: string
+  street: string
+  apartmentNumber: string
+}
 
 interface User {
-  name: string;
-  email: string;
-  address: {
-    city: string;
-    zipCode: string;
-    street: string;
-    apartmentNumber: string;
-  };
+  name: string
+  email: string
+  address: Address
 }
 
 const UserProfilePage: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null)
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token")
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch('/api/user-profile', {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          "/api/user/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        )
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user profile');
+          throw new Error("Failed to fetch user profile")
         }
 
-        const data = await response.json();
-        setUser(data);
+        const data = await response.json()
+        setUser(data)
       } catch (error: any) {
-        setError(error.message);
+        setError(error.message)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchUserProfile();
-  }, [token]);
+    fetchUserProfile()
+  }, [token])
 
   const handleDelete = async () => {
     try {
-      const response = await fetch('/api/user-profile', {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        "/api/user/profile",
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      )
 
       if (!response.ok) {
-        throw new Error('Failed to delete profile');
+        throw new Error("Failed to delete profile")
       }
 
-      alert('Profile deleted');
-      setUser(null);
+      alert("Profile deleted")
+      setUser(null)
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      alert(`Error: ${error.message}`)
     }
-  };
+  }
 
   const handleEdit = () => {
-    setIsEditing(true);
-  };
+    setIsEditing(true)
+  }
 
   const handleSave = async () => {
     try {
-      const response = await fetch('/api/user-profile', {
-        method: 'PATCH', 
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        "/api/user/profile",
+        {
+          method: "PATCH", // Используем PATCH для частичного обновления данных
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(user), // Отправляем обновлённые данные пользователя
         },
-        body: JSON.stringify(user), 
-      });
+      )
 
       if (!response.ok) {
-        throw new Error('Failed to update profile');
+        throw new Error("Failed to update profile")
       }
 
-      const updatedUser = await response.json();
-      setUser(updatedUser);
-      setIsEditing(false);
+      const updatedUser = await response.json()
+      setUser(updatedUser)
+      setIsEditing(false)
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      alert(`Error: ${error.message}`)
     }
-  };
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     setUser(prevUser => {
-      if (!prevUser) return null;
+      if (!prevUser) return null
 
-      if (name.includes('address.')) {
-        const addressKey = name.split('.')[1];
+      if (name.includes("address.")) {
+        const addressKey = name.split(".")[1]
         return {
           ...prevUser,
           address: {
             ...prevUser.address,
             [addressKey]: value,
           },
-        };
+        }
       }
 
-      return { ...prevUser, [name]: value };
-    });
-  };
+      return { ...prevUser, [name]: value }
+    })
+  }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error}</div>
   }
 
   if (!user) {
-    return <div>No user data available</div>;
+    return <div>No user data available</div>
   }
 
   return (
@@ -155,7 +166,7 @@ const UserProfilePage: React.FC = () => {
         <div className="profile-section">
           <h2>Address</h2>
           <label>
-          City:
+            City:
             <input
               type="text"
               name="address.city"
@@ -211,7 +222,7 @@ const UserProfilePage: React.FC = () => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserProfilePage;
+export default UserProfilePage
