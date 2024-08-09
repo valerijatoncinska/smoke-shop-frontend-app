@@ -18,12 +18,12 @@ const ProductPage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Состояние для проверки, авторизован ли пользователь
 
   // Извлечение productId из параметров URL
-  const { productId } = useParams<{ productId: string }>();
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/products/${productId}`);
+        const response = await fetch(`/api/products/${id}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch product');
@@ -45,7 +45,7 @@ const ProductPage: React.FC = () => {
     if (token) {
       setIsLoggedIn(true);
     }
-  }, [productId]);
+  }, [id]);
 
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
