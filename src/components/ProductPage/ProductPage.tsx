@@ -4,7 +4,7 @@ import './ProductPage.css';
 
 interface Product {
   id: string;
-  title: string;
+  name: string;
   description: string;
   price: number;
   category: string;
@@ -15,8 +15,9 @@ const ProductPage: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Состояние для проверки, авторизован ли пользователь
 
+  // Извлечение productId из параметров URL
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -39,6 +40,7 @@ const ProductPage: React.FC = () => {
 
     fetchProduct();
 
+    // Проверка на наличие токена в localStorage для определения, авторизован ли пользователь
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
@@ -60,7 +62,7 @@ const ProductPage: React.FC = () => {
         },
         body: JSON.stringify({
           productId: product?.id,
-          quantity: 1,
+          quantity: 1, // Добавляем 1 единицу товара в корзину
         }),
       });
 
@@ -92,21 +94,26 @@ const ProductPage: React.FC = () => {
       <div className="product-sections">
         <div className="product-section">
           <h2>Details</h2>
-          <div className="product-detail">
-            <strong>Name:</strong> <span>{product.title}</span>
-          </div>
-          <div className="product-detail">
-            <strong>Description:</strong> <span>{product.description}</span>
-          </div>
-          <div className="product-detail">
-            <strong>Price:</strong> <span>${product.price.toFixed(2)}</span>
-          </div>
-          <div className="product-detail">
-            <strong>Category:</strong> <span>{product.category}</span>
-          </div>
-          <div className="product-detail">
-            <strong>Stock:</strong> <span>{product.stock}</span>
-          </div>
+          <label>
+            Name:
+            <input type="text" value={product.name} readOnly />
+          </label>
+          <label>
+            Description:
+            <input type="text" value={product.description} readOnly />
+          </label>
+          <label>
+            Price:
+            <input type="text" value={product.price} readOnly />
+          </label>
+          <label>
+            Category:
+            <input type="text" value={product.category} readOnly />
+          </label>
+          <label>
+            Stock:
+            <input type="text" value={product.stock} readOnly />
+          </label>
         </div>
         <div className="product-actions">
           {isLoggedIn ? (
