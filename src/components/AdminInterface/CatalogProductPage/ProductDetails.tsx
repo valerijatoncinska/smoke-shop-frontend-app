@@ -6,64 +6,64 @@ import { useParams } from "react-router-dom"
 import { Product } from "../../../store/redux/productSlice"
 
 const ProductDetails: FC = () => {
-  // const {adminProducts} = useSelector((state: RootState) => state.adminProducts);
-  const adminProducts: Product[] = [
-    {
-      id: 1,
-      title: "Parlament",
-      price: 300,
-      active: true,
-      description:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      characteristics:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      quantity: 300,
-    },
-    {
-      id: 2,
-      title: "Marlboro Blue",
-      price: 400,
-      active: true,
-      description:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      characteristics:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      quantity: 300,
-    },
-    {
-      id: 3,
-      title: "Marlboro Red",
-      price: 500,
-      active: true,
-      description:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      characteristics:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      quantity: 300,
-    },
-    {
-      id: 4,
-      title: "L&M Blue",
-      price: 600,
-      active: true,
-      description:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      characteristics:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      quantity: 300,
-    },
-    {
-      id: 5,
-      title: "Parlament Aqua",
-      price: 300,
-      active: true,
-      description:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      characteristics:
-        "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
-      quantity: 300,
-    },
-  ]
+  const adminProducts = useSelector((state: RootState) => state.products.products);
+  // const adminProducts: Product[] = [
+  //   {
+  //     id: 1,
+  //     title: "Parlament",
+  //     price: 300,
+  //     active: true,
+  //     description:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     characteristics:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     quantity: 300,
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Marlboro Blue",
+  //     price: 400,
+  //     active: true,
+  //     description:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     characteristics:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     quantity: 300,
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Marlboro Red",
+  //     price: 500,
+  //     active: true,
+  //     description:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     characteristics:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     quantity: 300,
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "L&M Blue",
+  //     price: 600,
+  //     active: true,
+  //     description:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     characteristics:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     quantity: 300,
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Parlament Aqua",
+  //     price: 300,
+  //     active: true,
+  //     description:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     characteristics:
+  //       "TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT",
+  //     quantity: 300,
+  //   },
+  // ]
   const { id } = useParams() as { id: string }
   const [isEdit, setIsEdit] = useState<boolean>(true)
   const [productTitle, setProductTitle] = useState<string>(
