@@ -4,7 +4,7 @@ import './ProductPage.css';
 
 interface Product {
   id: string;
-  name: string;
+  title: string;
   description: string;
   price: number;
   category: string;
@@ -12,7 +12,7 @@ interface Product {
 }
 
 const ProductPage: React.FC = () => {
-  const [product, setProduct] = useState<Product | null>(null);
+  const [products, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -59,7 +59,7 @@ const ProductPage: React.FC = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-          productId: product?.id,
+          productId: products?.id,
           quantity: 1,
         }),
       });
@@ -82,7 +82,7 @@ const ProductPage: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!product) {
+  if (!products) {
     return <div>No product data available</div>;
   }
 
@@ -100,8 +100,8 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
         <div className="product-details-section">
-          <h1>{product.name}</h1>
-          <div className="product-price">Price: {product.price}€</div>
+          <h1>{products.title}</h1>
+          <div className="product-price">Price: {products.price}€</div>
           <div className="product-quantity">
             <button>-</button>
             <input type="number" value={1} readOnly />
@@ -111,12 +111,12 @@ const ProductPage: React.FC = () => {
           <button className="buy-button">Buy</button>
           <div className="product-description">
             <h2>Description</h2>
-            <p>{product.description}</p>
+            <p>{products.description}</p>
           </div>
           <div className="product-characteristics">
             <h2>Characteristics</h2>
-            <p>Category: {product.category}</p>
-            <p>Stock: {product.stock}</p>
+            <p>Category: {products.category}</p>
+            <p>Stock: {products.stock}</p>
           </div>
         </div>
       </div>
