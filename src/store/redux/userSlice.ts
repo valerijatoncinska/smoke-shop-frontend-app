@@ -83,9 +83,9 @@ export const registerUser = createAsyncThunk<
     })
     const { email, accessToken, refreshToken } = response.data
 
-    Cookies.set("accessToken", accessToken, { expires: 1 })
-    Cookies.set("refreshToken", refreshToken, { expires: 3 })
-    Cookies.set("email", email, { expires: 3 })
+    Cookies.set("ACCESS_TOKEN", accessToken, { expires: 1 })
+    Cookies.set("REFRESH_TOKEN", refreshToken, { expires: 3 })
+    Cookies.set("EMAIL", email, { expires: 3 })
 
     const user: User = {
       email,
@@ -109,6 +109,33 @@ export const registerUser = createAsyncThunk<
   }
 })
 
+
+export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
+  "user/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = Cookies.get('accessToken');
+      const response = await axios.get("/api/author/logout", {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Failed to logout");
+      }
+
+      Cookies.remove("ACCESS_TOKEN");
+      Cookies.remove("REFRESH_TOKEN");
+      Cookies.remove("EMAIL");
+    } catch (error) {
+      return rejectWithValue("Failed to logout. Please try again.");
+    }
+  }
+);
+
+
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -122,10 +149,6 @@ const userSlice = createSlice({
       state.isLoggedIn = false
       state.status = "success"
       state.error = null
-
-      Cookies.remove("ACCESS_TOKEN")
-      Cookies.remove("REFRESH_TOKEN")
-      Cookies.remove("EMAIL")
     },
     updateUser(state, action: PayloadAction<Partial<User>>) {
       if (state.user) {
@@ -167,6 +190,19 @@ const userSlice = createSlice({
         state.status = "error"
         state.error = action.payload as string
       })
+      // Выход
+      .addCase(logoutUser.pending, state => {
+        state.status = "loading";
+      })
+      .addCase(logoutUser.fulfilled, state => {
+        state.status = "success";
+        state.user = null;
+        state.isLoggedIn = false;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.status = "error";
+        state.error = action.payload as string;
+      });
   },
 })
 

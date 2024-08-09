@@ -5,17 +5,21 @@ import styles from './NavBar.module.css';
 import { authNavItems, guestNavItems } from '../../constans/navigation';
 import { RootState } from '../../store/store';
 import { useAppDispatch } from '../../app/hook';
-import { logout } from '../../store/redux/userSlice';
+import { logoutUser } from '../../store/redux/userSlice';
 
 const NavBar: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/');
-  }
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to logout:', error);
+    }
+  };
 
   return (
     <>
