@@ -26,33 +26,46 @@ const ProductPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [mainImage, setMainImage] = useState<string | null>(null);
 
+  // Токен аутентификации, извлекаемый из localStorage (либо другого места)
+  const token = localStorage.getItem('token');
+
   useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      fetch(`/api/products/${id}`).then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    const fetchProductAndUser = async () => {
+      setLoading(true);
+      try {
+        // Запрос данных продукта
+        const productResponse = await fetch(`https://smoke-shop-68y5q.ondigitalocean.app/api/products/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Запрос данных пользователя
+        const userResponse = await fetch(`https://smoke-shop-68y5q.ondigitalocean.app/api/user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!productResponse.ok || !userResponse.ok) {
+          throw new Error('Failed to fetch data');
         }
-        return response.json();
-      }),
-      fetch(`/api/user`).then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-    ])
-    .then(([productData, userData]) => {
-      setProduct(productData);
-      setMainImage(productData.imageUrl);
-      setUser(userData);
-      setLoading(false);
-    })
-    .catch(error => {
-      setError(error.message);
-      setLoading(false);
-    });
-  }, [id]);
+
+        const productData = await productResponse.json();
+        const userData = await userResponse.json();
+
+        setProduct(productData);
+        setMainImage(productData.imageUrl);
+        setUser(userData);
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductAndUser();
+  }, [id, token]);
 
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
@@ -81,10 +94,10 @@ const ProductPage: React.FC = () => {
   return (
     <div className="product-page">
       <div className="navigation">
-        <span>number: {user?.phoneNumber}</span>
-        <span>email: {user?.email}</span>
+        <span>Phone: {user?.phoneNumber}</span>
+        <span>Email: {user?.email}</span>
       </div>
-      <h1 className="title">Tobacco</h1>
+      <h1 className="title">Product: {product.name}</h1>
       <div className="nav-links">
         <a href="/home">Home</a>
         <a href="/catalog">Catalog</a>
@@ -93,7 +106,11 @@ const ProductPage: React.FC = () => {
       </div>
       <div className="product-details">
         <div className="product-images">
-          <img src={mainImage || product.imageUrl} alt={product.name} className="main-image" />
+          <img
+            src={mainImage || product.imageUrl}
+            alt={product.name}
+            className="main-image"
+          />
           <div className="thumbnail-images">
             {product.thumbnailUrls.map((url, index) => (
               <img
@@ -115,7 +132,7 @@ const ProductPage: React.FC = () => {
             <button onClick={increaseQuantity}>+</button>
           </div>
           <button className="add-to-basket">Add to Basket</button>
-          <button className="buy-now">Buy</button>
+          <button className="buy-now">Buy Now</button>
           <div className="description">
             <h3>Description</h3>
             <p>{product.description}</p>

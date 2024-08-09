@@ -14,29 +14,116 @@ interface User {
 
 const UserProfilePage: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    // Fetch user data from backend
-    fetch('/api/user-profile')
-      .then(response => response.json())
-      .then(data => setUser(data))
-      .catch(error => 
-        console.error('Error:', error));
-  }, []);
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch('/api/user-profile', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+        if (!response.ok) {
+          throw new Error('Failed to fetch user profile');
+        }
 
-  const handleDelete = () => {
-    // Logic for deleting profile
-    alert('Profile deleted');
+        const data = await response.json();
+        setUser(data);
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [token]);
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch('/api/user-profile', {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete profile');
+      }
+
+      alert('Profile deleted');
+      setUser(null);
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    }
   };
 
   const handleEdit = () => {
-    // Logic for editing profile
-    alert('Edit profile');
+    setIsEditing(true);
   };
+
+  const handleSave = async () => {
+    try {
+      const response = await fetch('/api/user-profile', {
+        method: 'PATCH', 
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(user), 
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile');
+      }
+
+      const updatedUser = await response.json();
+      setUser(updatedUser);
+      setIsEditing(false);
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setUser(prevUser => {
+      if (!prevUser) return null;
+
+      if (name.includes('address.')) {
+        const addressKey = name.split('.')[1];
+        return {
+          ...prevUser,
+          address: {
+            ...prevUser.address,
+            [addressKey]: value,
+          },
+        };
+      }
+
+      return { ...prevUser, [name]: value };
+    });
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!user) {
+    return <div>No user data available</div>;
+  }
 
   return (
     <div className="user-profile-page">
@@ -46,39 +133,85 @@ const UserProfilePage: React.FC = () => {
           <h2>Details</h2>
           <label>
             Name:
-            <input type="text" value={user.name} readOnly />
+            <input
+              type="text"
+              name="name"
+              value={user.name}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </label>
           <label>
             Email:
-            <input type="email" value={user.email} readOnly />
+            <input
+              type="email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </label>
         </div>
         <div className="profile-section">
           <h2>Address</h2>
           <label>
-            City:
-            <input type="text" value={user.address.city} readOnly />
+          City:
+            <input
+              type="text"
+              name="address.city"
+              value={user.address.city}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </label>
           <label>
             Zip code:
-            <input type="text" value={user.address.zipCode} readOnly />
+            <input
+              type="text"
+              name="address.zipCode"
+              value={user.address.zipCode}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </label>
           <label>
             Street:
-            <input type="text" value={user.address.street} readOnly />
+            <input
+              type="text"
+              name="address.street"
+              value={user.address.street}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </label>
           <label>
             Apartment number:
-            <input type="text" value={user.address.apartmentNumber} readOnly />
+            <input
+              type="text"
+              name="address.apartmentNumber"
+              value={user.address.apartmentNumber}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </label>
         </div>
       </div>
       <div className="buttons">
-        <button className="delete-profile" onClick={handleDelete}>Delete Profile</button>
-        <button className="edit-profile" onClick={handleEdit}>Edit Profile</button>
+        {isEditing ? (
+          <button className="save-profile" onClick={handleSave}>
+            Save Profile
+          </button>
+        ) : (
+          <button className="edit-profile" onClick={handleEdit}>
+            Edit Profile
+          </button>
+        )}
+        <button className="delete-profile" onClick={handleDelete}>
+          Delete Profile
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default UserProfilePage;
