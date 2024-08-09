@@ -7,7 +7,7 @@ const Navigation = () => {
       <h4 className="text-center mt-4">Hello, Admin :)</h4>
       <ul className="nav flex-column mt-5">
         <li className="nav-item">
-          <NavLink className="nav-link" to="/admin/account">
+          <NavLink className="nav-link" to="/admin">
             Account Admin
           </NavLink>
         </li>
