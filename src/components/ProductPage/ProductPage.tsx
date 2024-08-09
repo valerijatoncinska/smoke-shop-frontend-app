@@ -15,9 +15,8 @@ const ProductPage: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Состояние для проверки, авторизован ли пользователь
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-  // Извлечение productId из параметров URL
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -40,7 +39,6 @@ const ProductPage: React.FC = () => {
 
     fetchProduct();
 
-    // Проверка на наличие токена в localStorage для определения, авторизован ли пользователь
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
@@ -62,7 +60,7 @@ const ProductPage: React.FC = () => {
         },
         body: JSON.stringify({
           productId: product?.id,
-          quantity: 1, // Добавляем 1 единицу товара в корзину
+          quantity: 1,
         }),
       });
 
@@ -90,41 +88,39 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
-      <h1>Product Details</h1>
-      <div className="product-sections">
-        <div className="product-section">
-          <h2>Details</h2>
-          <label>
-            Name:
-            <input type="text" value={product.name} readOnly />
-          </label>
-          <label>
-            Description:
-            <input type="text" value={product.description} readOnly />
-          </label>
-          <label>
-            Price:
-            <input type="text" value={product.price} readOnly />
-          </label>
-          <label>
-            Category:
-            <input type="text" value={product.category} readOnly />
-          </label>
-          <label>
-            Stock:
-            <input type="text" value={product.stock} readOnly />
-          </label>
+      <a href="/" className="back-link">Come back</a>
+      <div className="product-container">
+        <div className="product-image-section">
+          <div className="main-image-placeholder" />
+          <div className="thumbnail-images-placeholder">
+            <div className="thumbnail-placeholder" />
+            <div className="thumbnail-placeholder" />
+            <div className="thumbnail-placeholder" />
+            <div className="thumbnail-placeholder" />
+          </div>
         </div>
-        <div className="product-actions">
-          {isLoggedIn ? (
-            <button onClick={handleAddToCart} className="add-to-cart-button">
-              Add to Cart
-            </button>
-          ) : (
-            <p>You must be logged in to add items to the cart.</p>
-          )}
+        <div className="product-details-section">
+          <h1>{product.name}</h1>
+          <div className="product-price">Price: {product.price}€</div>
+          <div className="product-quantity">
+            <button>-</button>
+            <input type="number" value={1} readOnly />
+            <button>+</button>
+          </div>
+          <button onClick={handleAddToCart} className="add-to-basket-button">Add to Basket</button>
+          <button className="buy-button">Buy</button>
+          <div className="product-description">
+            <h2>Description</h2>
+            <p>{product.description}</p>
+          </div>
+          <div className="product-characteristics">
+            <h2>Characteristics</h2>
+            <p>Category: {product.category}</p>
+            <p>Stock: {product.stock}</p>
+          </div>
         </div>
       </div>
+      <footer className="footer-text">Have a good day!</footer>
     </div>
   );
 };
