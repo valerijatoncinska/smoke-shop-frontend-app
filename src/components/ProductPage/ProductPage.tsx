@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import { AppDispatch } from '../../store/store';
@@ -46,7 +46,7 @@ const ProductPage: React.FC = () => {
   }, [id]);
 
   const handleAddToCart = () => {
-    const token = Cookies.get('accessToken'); // Check if user is logged in by checking the token
+    const token = Cookies.get('accessToken'); // Получение токена из куков
 
     if (!token) {
       alert('You must be logged in to add items to the cart.');
@@ -93,7 +93,7 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
-      <Link to="/#/catalog" className="back-link">Come back</Link>
+      <Link to="/catalog" className="back-link">Come back</Link> {/* Использование Link для навигации */}
       <div className="product-container">
         <div className="product-image-section">
           <div className="main-image-placeholder" />
@@ -118,7 +118,7 @@ const ProductPage: React.FC = () => {
             <p>This is a placeholder description for the product "{product.title}".</p>
           </div>
           <div className="product-characteristics">
-          <h2>Characteristics</h2>
+            <h2>Characteristics</h2>
             <p>Stock: {product.quantity}</p>
             <p>Status: {product.active ? 'Available' : 'Unavailable'}</p>
           </div>
