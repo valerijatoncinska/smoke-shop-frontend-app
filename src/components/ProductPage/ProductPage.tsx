@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
-import { AppDispatch, RootState } from '../../store/store';
+import { AppDispatch } from '../../store/store';
 import { addItemToCart, fetchCartItems } from '../../store/redux/cartSlice';
 import './ProductPage.css';
 
@@ -22,7 +22,6 @@ const ProductPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const dispatch: AppDispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -50,25 +49,29 @@ const ProductPage: React.FC = () => {
     const token = Cookies.get('accessToken'); // Получение токена из куков
 
     if (!token) {
-      alert('You must be logged in to add items to the cart.');
+      alert('You must be registered to add items to the cart.');
       return;
     }
 
     if (product) {
-      await dispatch(addItemToCart({
-        id: product.id,
-        title: product.title,
-        stock: product.quantity,
-        quantity: quantity,
-        productId: product.id,
-        price: product.price,
-        totalPrice: product.price * quantity,
-      }));
+      try {
+        await dispatch(addItemToCart({
+          id: product.id,
+          title: product.title,
+          stock: product.quantity,
+          quantity: quantity,
+          productId: product.id,
+          price: product.price,
+          totalPrice: product.price * quantity,
+        }));
 
-      // Обновление состояния корзины после добавления товара
-      await dispatch(fetchCartItems());
+        // Обновление состояния корзины после добавления товара
+        await dispatch(fetchCartItems());
 
-      alert('Product added to cart successfully!');
+        alert('Product added to cart successfully!');
+      } catch (error) {
+        alert('Failed to add product to cart.');
+      }
     }
   };
 
@@ -119,7 +122,7 @@ const ProductPage: React.FC = () => {
           </div>
           <button onClick={handleAddToCart} className="add-to-basket-button">Add to Basket</button>
           <div className="product-description">
-          <h2>Description</h2>
+            <h2>Description</h2>
             <p>This is a placeholder description for the product "{product.title}".</p>
           </div>
           <div className="product-characteristics">
