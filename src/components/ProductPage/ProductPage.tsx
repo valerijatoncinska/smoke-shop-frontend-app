@@ -93,7 +93,7 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
-      <Link to="/catalog" className="back-link">Come back</Link>
+      <Link to="/#/catalog" className="back-link">Come back</Link>
       <div className="product-container">
         <div className="product-image-section">
           <div className="main-image-placeholder" />
