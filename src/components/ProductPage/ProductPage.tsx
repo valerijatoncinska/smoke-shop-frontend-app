@@ -11,7 +11,7 @@ interface Product {
 }
 
 const ProductPage: React.FC = () => {
-  const [products, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -29,8 +29,8 @@ const ProductPage: React.FC = () => {
         }
 
         const data = await response.json();
-        setProduct(data.data); 
-        setQuantity(1); 
+        setProduct(data.data); // Accessing the 'data' object from the response
+        setQuantity(1); // Resetting quantity to 1 when a new product is loaded
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -46,37 +46,36 @@ const ProductPage: React.FC = () => {
     }
   }, [id]);
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
     if (!isLoggedIn) {
       alert('You must be logged in to add items to the cart.');
       return;
     }
 
-    try {
-      const response = await fetch(`/api/cart`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          productId: products?.id,
-          quantity: quantity, 
-        }),
-      });
+    if (product) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-      if (!response.ok) {
-        throw new Error('Failed to add product to cart');
+      const existingProductIndex = cart.findIndex((item: any) => item.id === product.id);
+      if (existingProductIndex > -1) {
+        // If the product already exists in the cart, update the quantity
+        cart[existingProductIndex].quantity += quantity;
+      } else {
+        // If the product is not in the cart, add it
+        cart.push({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          quantity: quantity,
+        });
       }
 
+      localStorage.setItem('cart', JSON.stringify(cart));
       alert('Product added to cart successfully!');
-    } catch (error: any) {
-      alert(`Error: ${error.message}`);
     }
   };
 
   const increaseQuantity = () => {
-    if (products && quantity < products.quantity) {
+    if (product && quantity < product.quantity) {
       setQuantity(prevQuantity => prevQuantity + 1);
     }
   };
@@ -95,13 +94,13 @@ const ProductPage: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!products) {
+  if (!product) {
     return <div>No product data available</div>;
   }
 
   return (
     <div className="product-page">
-      <a href="/" className="back-link">Come back</a>
+      <a href="/catalog" className="back-link">Come back</a>
       <div className="product-container">
         <div className="product-image-section">
           <div className="main-image-placeholder" />
@@ -113,8 +112,8 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
         <div className="product-details-section">
-          <h1>{products.title}</h1>
-          <div className="product-price">Price: {products.price}€</div>
+          <h1>{product.title}</h1>
+          <div className="product-price">Price: {product.price}€</div>
           <div className="product-quantity">
             <button onClick={decreaseQuantity}>-</button>
             <input type="number" value={quantity} readOnly />
@@ -124,12 +123,12 @@ const ProductPage: React.FC = () => {
           <button className="buy-button">Buy</button>
           <div className="product-description">
             <h2>Description</h2>
-            <p>This is a placeholder description for the product "{products.title}".</p>
+            <p>This is a placeholder description for the product "{product.title}".</p>
           </div>
           <div className="product-characteristics">
             <h2>Characteristics</h2>
-            <p>Stock: {products.quantity}</p>
-            <p>Status: {products.active ? 'Available' : 'Unavailable'}</p>
+            <p>Stock: {product.quantity}</p>
+            <p>Status: {product.active ? 'Available' : 'Unavailable'}</p>
           </div>
         </div>
       </div>
