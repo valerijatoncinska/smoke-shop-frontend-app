@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import { AppDispatch } from '../../store/store';
@@ -93,7 +93,7 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
-      <a href="/catalog" className="back-link">Come back</a>
+      <Link to="/catalog" className="back-link">Come back</Link>
       <div className="product-container">
         <div className="product-image-section">
           <div className="main-image-placeholder" />
