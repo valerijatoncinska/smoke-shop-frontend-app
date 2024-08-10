@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
+import { AppDispatch } from '../../store/store';
+import { addItemToCart } from '../../store/redux/cartSlice';
 import './ProductPage.css';
 
 interface Product {
-  id: number;
+  id: string;
   title: string;
   price: number;
   quantity: number;
@@ -14,10 +18,10 @@ const ProductPage: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [quantity, setQuantity] = useState<number>(1); // Initial quantity set to 1
 
   const { id } = useParams<{ id: string }>();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -39,37 +43,26 @@ const ProductPage: React.FC = () => {
     };
 
     fetchProduct();
-
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
-    }
   }, [id]);
 
   const handleAddToCart = () => {
-    if (!isLoggedIn) {
+    const token = Cookies.get('accessToken'); // Check if user is logged in by checking the token
+
+    if (!token) {
       alert('You must be logged in to add items to the cart.');
       return;
     }
 
     if (product) {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-      const existingProductIndex = cart.findIndex((item: any) => item.id === product.id);
-      if (existingProductIndex > -1) {
-        // If the product already exists in the cart, update the quantity
-        cart[existingProductIndex].quantity += quantity;
-      } else {
-        // If the product is not in the cart, add it
-        cart.push({
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          quantity: quantity,
-        });
-      }
-
-      localStorage.setItem('cart', JSON.stringify(cart));
+      dispatch(addItemToCart({
+        id: product.id,
+        title: product.title,
+        stock: product.quantity,
+        quantity: quantity,
+        productId: product.id,
+        price: product.price,
+        totalPrice: product.price * quantity,
+      }));
       alert('Product added to cart successfully!');
     }
   };
@@ -120,13 +113,12 @@ const ProductPage: React.FC = () => {
             <button onClick={increaseQuantity}>+</button>
           </div>
           <button onClick={handleAddToCart} className="add-to-basket-button">Add to Basket</button>
-          <button className="buy-button">Buy</button>
           <div className="product-description">
             <h2>Description</h2>
             <p>This is a placeholder description for the product "{product.title}".</p>
           </div>
           <div className="product-characteristics">
-            <h2>Characteristics</h2>
+          <h2>Characteristics</h2>
             <p>Stock: {product.quantity}</p>
             <p>Status: {product.active ? 'Available' : 'Unavailable'}</p>
           </div>
