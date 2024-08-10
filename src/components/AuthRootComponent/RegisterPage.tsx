@@ -23,7 +23,7 @@ const RegisterPage: React.FC = () => {
 
   const { status, error } = useAppSelector(state => state.user)
 
-  const [registrationSuccess, setRegistrationSuccess] = useState<boolean>(false)
+  const [registration, setRegistration] = useState<boolean>(false)
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -83,7 +83,7 @@ const RegisterPage: React.FC = () => {
         registerUser({ email, password, isAdult, subscribe }),
       ).unwrap()
 
-      setRegistrationSuccess(true)
+      setRegistration(true)
     } catch (error) {
       console.log("Ошибка регистрации:", error)
     }
@@ -122,14 +122,11 @@ const RegisterPage: React.FC = () => {
           className={styles.backgroundImage}
         />
         <div className={styles.card}>
-          {registrationSuccess ? (
+          {registration ? (
             <div className={styles.successContainer}>
               <h2 className={styles.successTitle}>
-                Your registration was successful :)
+              To complete your registration, check your email to confirm!
               </h2>
-              <p className={styles.successMessage}>
-                You can now go to the homepage.
-              </p>
               <button
                 type="button"
                 className={styles.buttonHome}

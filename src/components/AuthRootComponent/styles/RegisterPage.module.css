@@ -3,8 +3,8 @@
   justify-content: center;
   align-items: center;
   background-attachment: fixed;
-  height: calc(100vh - 150px); 
-  margin-top: 5%; 
+  height: calc(100vh - 150px);
+  margin-top: 5%;
   margin-bottom: 5%;
   padding: 0 20px;
   z-index: 1;
@@ -71,13 +71,13 @@
 }
 
 .backgroundImage {
-  position: fixed; 
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -1; 
+  z-index: -1;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -85,9 +85,9 @@
 }
 
 .formGroupCheckbox {
-  display: flex; 
-  align-items: center; 
-  margin-top: 20px; 
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .formGroupCheckbox input[type="checkbox"] {
@@ -156,32 +156,25 @@
 .p {
   color: #6d420a;
   font-size: 0.8rem;
-  padding: 10px; 
-  border-radius: 5px; 
+  padding: 10px;
+  border-radius: 5px;
   border: 1px solid #dcdcdc;
   max-width: 400px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.successContainer{
+.successContainer {
   text-align: center;
 }
 
-.successTitle{
-  font-size: 24px;
-  margin-bottom: 15px;
-  margin-top: 50px;
-  color: #161515;
+.successTitle {
+  font-size: 1.3rem;
+  margin: 50px;
+  color: #252323;
 }
 
-.successMessage{
-  font-size: 1rem;
-  margin-bottom: 20px;
-  color: #534848;
-}
-
-.buttonHome{
-  width: 100%;
+.buttonHome {
+  width: 80%;
   padding: 10px;
   background-color: black;
   color: white;
@@ -225,4 +218,3 @@
     font-size: 12px;
   }
 }
-

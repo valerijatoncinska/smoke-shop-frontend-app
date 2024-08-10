@@ -16,6 +16,7 @@ interface UserState {
   isLoggedIn: boolean
   status: "idle" | "loading" | "success" | "error"
   error: string | null
+  activationStatus: "idle" | "loading" | "success" | "error";
 }
 
 const initialState: UserState = {
@@ -23,6 +24,7 @@ const initialState: UserState = {
   isLoggedIn: false,
   status: "idle",
   error: null,
+  activationStatus: 'idle'
 }
 
 export const loginUser = createAsyncThunk<
@@ -73,27 +75,15 @@ export const loginUser = createAsyncThunk<
 })
 
 export const registerUser = createAsyncThunk<
-  User,
+  void,
   { email: string; password: string; isAdult: boolean; subscribe: boolean },
   { rejectValue: string }
 >("user/registerUser", async (userData, { rejectWithValue }) => {
   try {
-    const response = await axios.post("/api/author/reg", userData, {
+     await axios.post("/api/author/reg", userData, {
       headers: { "Content-Type": "application/json" },
     })
-    const { email, accessToken, refreshToken } = response.data
 
-    Cookies.set("ACCESS_TOKEN", accessToken, { expires: 1 })
-    Cookies.set("REFRESH_TOKEN", refreshToken, { expires: 3 })
-    Cookies.set("EMAIL", email, { expires: 3 })
-
-    const user: User = {
-      email,
-      accessToken,
-      refreshToken,
-    }
-
-    return user
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 409) {
@@ -133,6 +123,19 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
     }
   }
 );
+
+export const activateAccount = createAsyncThunk<void, string, { rejectValue: string}>("user/activateAccount", async (uuid, {rejectWithValue}) => {
+  try {
+    await axios.get('/api/author/account-activate/${uuid}');
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 404) {
+        return rejectWithValue("Activation link is invalid or expired.");
+      }
+    }
+    return rejectWithValue("An unexpected error occurred during activation.");
+  }
+});
 
 
 
@@ -181,10 +184,10 @@ const userSlice = createSlice({
         state.status = "loading"
         state.error = null
       })
-      .addCase(registerUser.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.status = "success"
-        state.user = action.payload
-        state.isLoggedIn = true
+        state.user = null
+        state.isLoggedIn = false
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = "error"
@@ -202,7 +205,18 @@ const userSlice = createSlice({
       .addCase(logoutUser.rejected, (state, action) => {
         state.status = "error";
         state.error = action.payload as string;
-      });
+      })
+      // Активация аккаунта
+      .addCase(activateAccount.pending, (state) => {
+        state.activationStatus = 'loading';
+      })
+      .addCase(activateAccount.fulfilled, (state) => {
+        state.activationStatus = 'success';
+      })
+      .addCase(activateAccount.rejected, (state, action) => {
+        state.activationStatus = 'error';
+        state.error = action.payload as string
+      })
   },
 })
 

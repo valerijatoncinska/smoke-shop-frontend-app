@@ -1,0 +1,98 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-attachment: fixed;
+  height: calc(100vh - 150px);
+  margin-top: 5%;
+  margin-bottom: 5%;
+  padding: 0 20px;
+  z-index: 1;
+}
+
+.card {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 30px;
+  background-color: #e4cabf;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.backgroundImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(8px);
+}
+
+.successContainer {
+  text-align: center;
+}
+
+.successTitle {
+  font-size: 24px;
+  margin-bottom: 15px;
+  margin-top: 50px;
+  color: #161515;
+}
+
+.successMessage {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  color: #534848;
+}
+
+.buttonSignIn {
+  width: 80%;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  margin-bottom: 0;
+  border-radius: 15px;
+}
+
+.errorContainer {
+  text-align: center;
+}
+
+.errorTitle {
+  font-size: 24px;
+  margin-bottom: 15px;
+  margin-top: 50px;
+  color: #161515;
+}
+
+.errorMessage {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  color: #534848;
+}
+
+.buttonGoHome {
+  width: 80%;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  margin-bottom: 0;
+  border-radius: 15px;
+}
