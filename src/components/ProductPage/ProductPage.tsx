@@ -120,7 +120,7 @@ const ProductPage: React.FC = () => {
             <input type="number" value={quantity} readOnly />
             <button onClick={increaseQuantity}>+</button>
           </div>
-          <button onClick={handleAddToCart} className="add-to-basket-button">Add to Basket</button>
+          <button onClick={handleAddToCart} className="add-to-basket-button">Add to Cart</button>
           <div className="product-description">
             <h2>Description</h2>
             <p>This is a placeholder description for the product "{product.title}".</p>
