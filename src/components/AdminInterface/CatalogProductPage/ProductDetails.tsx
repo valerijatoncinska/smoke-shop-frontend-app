@@ -1,12 +1,19 @@
-import React, { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import "./ProductDetails.css"
-import { useSelector } from "react-redux"
-import { RootState } from "store/store"
-import { useParams } from "react-router-dom"
-import { Product } from "../../../store/redux/productSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "store/store"
+import { useNavigate, useParams } from "react-router-dom"
+import axios from "axios"
+import { fetchProducts } from "../../../store/redux/productSlice"
 
 const ProductDetails: FC = () => {
-  const adminProducts = useSelector((state: RootState) => state.products.products);
+  const dispatch: AppDispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [])
+  const adminProductsFetch = useSelector(
+    (state: RootState) => state.products.products,
+  )
   // const adminProducts: Product[] = [
   //   {
   //     id: 1,
@@ -64,29 +71,85 @@ const ProductDetails: FC = () => {
   //     quantity: 300,
   //   },
   // ]
+
   const { id } = useParams() as { id: string }
-  const [isEdit, setIsEdit] = useState<boolean>(true)
+  const navigate = useNavigate();
+  const adminProducts = adminProductsFetch.filter(product => product.id === +id)
+  const initialProduct = adminProducts[0]
+  const [isEdit, setIsEdit] = useState<boolean>(false)
   const [productTitle, setProductTitle] = useState<string>(
-    adminProducts[+id - 1].title,
+    adminProducts[0].title,
   )
   const [productPrice, setProductPrice] = useState<number>(
-    adminProducts[+id - 1].price,
+    adminProducts[0].price,
   )
   const [productQuantity, setProductQuantity] = useState<number | undefined>(
-    adminProducts[+id - 1].quantity,
+    adminProducts[0].quantity,
   )
   const [productDescription, setProductDescription] = useState<
     string | undefined
-  >(adminProducts[+id - 1].description)
+  >(adminProducts[0].description)
   const [productCharacteristics, setProductCharacteristics] = useState<
     string | undefined
-  >(adminProducts[+id - 1].characteristics)
+  >(adminProducts[0].characteristics)
 
-  const handleArchiveProduct = () => {}
+  const handleArchiveProduct = () => {
 
-  const handleEditProduct = () => {}
+    const data = {
+      // id: +id,
+      title: productTitle,
+      price: productPrice,
+      quantity: productQuantity,
+      active: false,
+      // description: productDescription,
+      // characteristics: productCharacteristics,
+    }
 
-  const handleSaveProduct = () => {}
+    axios
+      .put(`/api/products/${id}`, data)
+      .then(response => {
+        console.log("Response", response.data)
+        navigate("/admin/catalog")
+      })
+      .catch(error => {
+        console.log("Error", error)
+      })
+  }
+
+  const handleSaveProduct = () => {
+    // const token = Cookies.get("ACCESS_TOKEN")
+    const data = {
+      // id: +id,
+      title: productTitle,
+      price: productPrice,
+      quantity: productQuantity,
+      active: true,
+      // description: productDescription,
+      // characteristics: productCharacteristics,
+    }
+    // console.log(token)
+
+    axios
+      .put(`/api/products/${id}`, data)
+      .then(response => {
+        console.log("Response", response.data)
+      })
+      .catch(error => {
+        console.log("Error", error)
+      })
+
+    setIsEdit(false)
+  }
+
+  const handleCancelButton = () => {
+    setProductTitle(initialProduct.title)
+    setProductPrice(initialProduct.price)
+    setProductQuantity(initialProduct.quantity)
+    setProductDescription(initialProduct.description)
+    setProductCharacteristics(initialProduct.characteristics)
+
+    setIsEdit(false)
+  }
 
   return (
     <div>
@@ -94,7 +157,7 @@ const ProductDetails: FC = () => {
         <div className="tableContainer">
           <div className="d-flex">
             <div className="leftColumn">
-              <div className="squareOne">{adminProducts[+id - 1].image}</div>
+              <div className="squareOne">{adminProducts[0].image}</div>
               <div className="squareTwo"></div>
             </div>
             <div className="rightColumn ms-5">
@@ -125,7 +188,7 @@ const ProductDetails: FC = () => {
               <div className="squareFour p-3 ps-5">
                 <h5>Description</h5>
                 <input
-                className="descriptionInput"
+                  className="descriptionInput"
                   value={productDescription}
                   onChange={e => setProductDescription(e.target.value)}
                 />
@@ -133,7 +196,7 @@ const ProductDetails: FC = () => {
               <div className="squareFive p-3 ps-5">
                 <h5>Characteristics</h5>
                 <input
-                className="characteristicsInput"
+                  className="characteristicsInput"
                   value={productCharacteristics}
                   onChange={e => setProductCharacteristics(e.target.value)}
                 />
@@ -141,7 +204,12 @@ const ProductDetails: FC = () => {
             </div>
           </div>
           <div className="serviceButtons">
-            <button className="cardButtonArchive me-5 p-3 px-5">Cancel</button>
+            <button
+              className="cardButtonArchive me-5 p-3 px-5"
+              onClick={handleCancelButton}
+            >
+              Cancel
+            </button>
             <button
               className="cardButtonEdit ms-5 p-3 px-5"
               onClick={handleSaveProduct}
@@ -154,30 +222,28 @@ const ProductDetails: FC = () => {
         <div className="tableContainer">
           <div className="d-flex">
             <div className="leftColumn">
-              <div className="squareOne">{adminProducts[+id - 1].image}</div>
+              <div className="squareOne">{adminProducts[0].image}</div>
               <div className="squareTwo"></div>
             </div>
             <div className="rightColumn ms-5">
               <div className="squareThree">
-                <h2 className="py-3 ps-5">{adminProducts[+id - 1].title}</h2>
+                <h2 className="py-3 ps-5">{productTitle}</h2>
                 <div className="ps-5 py-3 d-flex">
                   <h6 className="me-5">Price of product:</h6>
-                  <h6 className="ms-5"> {adminProducts[+id - 1].price} €</h6>
+                  <h6 className="ms-5"> {productPrice} €</h6>
                 </div>
                 <div className="ps-5 pt-1 d-flex">
                   <h6 className="me-5">Quantity of product:</h6>
-                  <h6 className="quantity">
-                    {adminProducts[+id - 1].quantity}
-                  </h6>
+                  <h6 className="quantity">{productQuantity}</h6>
                 </div>
               </div>
               <div className="squareFour p-3 ps-5">
                 <h5>Description</h5>
-                <h6>{adminProducts[+id - 1].description}</h6>
+                <h6>{productDescription}</h6>
               </div>
               <div className="squareFive p-3 ps-5">
                 <h5>Characteristics</h5>
-                <h6>{adminProducts[+id - 1].characteristics}</h6>
+                <h6>{productCharacteristics}</h6>
               </div>
             </div>
           </div>
@@ -191,7 +257,7 @@ const ProductDetails: FC = () => {
             <button className="cardButtonDelete">Delete Product</button>
             <button
               className="cardButtonEdit ms-5 p-3 px-5"
-              onClick={handleEditProduct}
+              onClick={() => setIsEdit(true)}
             >
               Edit
             </button>

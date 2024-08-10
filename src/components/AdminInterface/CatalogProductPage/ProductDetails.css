@@ -98,8 +98,10 @@
   transition: background-color 0.3s;
 }
 
-.descriptionInput{
+.descriptionInput, .characteristicsInput{
   width: 1000px;
   height: auto;
 }
+
+
 

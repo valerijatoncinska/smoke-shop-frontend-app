@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
+import { Root } from "react-dom/client"
 import { RootState } from "store/store"
 
 export interface Product {
