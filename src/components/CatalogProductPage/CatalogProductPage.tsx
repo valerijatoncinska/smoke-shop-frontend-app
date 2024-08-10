@@ -16,7 +16,7 @@ import { RootState } from "../../store/store"
 const CatalogProductPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const { status, filteredProducts } = useSelector(
-    (state: RootState) => state.products,
+    (state: RootState) => state.products
   )
   const [searchQuery, setSearchQuery] = useState<string>("")
   const navigate = useNavigate()

@@ -21,6 +21,7 @@ import RegisterPage from "./components/AuthRootComponent/RegisterPage"
 import AdminArchivatedProductsPage from "./components/AdminInterface/ArchivatedProductsPage/AdminArchivatedProductsPage"
 import ProductDetails from "./components/AdminInterface/CatalogProductPage/ProductDetails"
 import AccountAdmin from "./components/AdminInterface/AccountAdmin/AccountAdmin"
+import AccountActivation from "./components/AuthRootComponent/AccountActivation"
 
 const App: React.FC = () => {
   return (
@@ -31,6 +32,7 @@ const App: React.FC = () => {
           <Route index element={<HomePage />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/register" element={<RegisterPage />} />
+          <Route path="/auth/account-activated/:uuid" element={<AccountActivation />} />
           <Route path="/catalog" element={<CatalogProductPage />} />
           <Route path="/orders" element={<OrderPage />} />
           <Route path="/products/new" element={<AddProductForm />} />
