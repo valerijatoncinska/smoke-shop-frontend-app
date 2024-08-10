@@ -75,7 +75,8 @@ const ProductDetails: FC = () => {
   const { id } = useParams() as { id: string }
   const navigate = useNavigate();
   const adminProducts = adminProductsFetch.filter(product => product.id === +id)
-  const initialProduct = adminProducts[0]
+  const [initialProduct, setInitialProduct] = useState(adminProducts[0])
+  // const initialProduct = adminProducts[0]
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [productTitle, setProductTitle] = useState<string>(
     adminProducts[0].title,
@@ -133,10 +134,13 @@ const ProductDetails: FC = () => {
       .put(`/api/products/${id}`, data)
       .then(response => {
         console.log("Response", response.data)
+        setInitialProduct({...initialProduct, title: productTitle, price: productPrice, quantity: productQuantity})
       })
       .catch(error => {
         console.log("Error", error)
       })
+
+
 
     setIsEdit(false)
   }
