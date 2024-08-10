@@ -67,6 +67,7 @@ const CartPage: React.FC = () => {
           <div key={item.id} className="cart-item">
             <span>{item.title}</span>
             <span>{item.quantity}</span>
+            <span>{item.totalPrice}</span>
             <span>{item.price}</span>
             <button onClick={() => handleIncreaseQuantity(item.id)}>+</button>
             <button onClick={() => handleDecreaseQuantity(item.id)}>-</button>

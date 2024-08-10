@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
-import Cookies from "js-cookie";
+import Cookies from "js-cookie"
 
 interface User {
-  id?: number;
-  email: string;
-  isAdult?: boolean;
-  subscribe?: boolean;
-  accessToken: string;
-  refreshToken: string;
+  id?: number
+  email: string
+  isAdult?: boolean
+  subscribe?: boolean
+  accessToken: string
+  refreshToken: string
 }
 
 interface UserState {
@@ -37,20 +37,19 @@ export const loginUser = createAsyncThunk<
       },
     })
 
-    const { email, accessToken, refreshToken } = response.data;
+    const { email, accessToken, refreshToken } = response.data
 
-    Cookies.set("accessToken", accessToken, { expires: 1 });
-    Cookies.set("refreshToken", refreshToken, { expires: 3 });
-    Cookies.set("email", email, { expires: 3 });
+    Cookies.set("ACCESS_TOKEN", accessToken, { expires: 1 })
+    Cookies.set("REFRESH_TOKEN", refreshToken, { expires: 3 })
+    Cookies.set("EMAIL", email, { expires: 3 })
 
     const userData: User = {
       email,
       accessToken,
       refreshToken,
-    };
+    }
 
-    return userData;
-
+    return userData
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // Проверяем код ответа от сервера
@@ -63,7 +62,9 @@ export const loginUser = createAsyncThunk<
           case 404:
             return rejectWithValue("Email not registered")
           default:
-            return rejectWithValue("Account is not active. Please check your email.")
+            return rejectWithValue(
+              "Account is not active. Please check your email.",
+            )
         }
       }
     }
@@ -80,24 +81,25 @@ export const registerUser = createAsyncThunk<
     const response = await axios.post("/api/author/reg", userData, {
       headers: { "Content-Type": "application/json" },
     })
-    const { email, accessToken, refreshToken } = response.data;
+    const { email, accessToken, refreshToken } = response.data
 
-    Cookies.set("accessToken", accessToken, { expires: 1 });
-    Cookies.set("refreshToken", refreshToken, { expires: 3 });
-    Cookies.set("email", email, { expires: 3 });
+    Cookies.set("ACCESS_TOKEN", accessToken, { expires: 1 })
+    Cookies.set("REFRESH_TOKEN", refreshToken, { expires: 3 })
+    Cookies.set("EMAIL", email, { expires: 3 })
 
     const user: User = {
       email,
       accessToken,
       refreshToken,
-    };
+    }
 
-    return user;
+    return user
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 409) {
         return rejectWithValue(
-          "User already exists. Please try a different email.")
+          "User already exists. Please try a different email.",
+        )
       }
       return rejectWithValue(
         error.response?.data.message || "An error has occurred. Try again.",
@@ -106,6 +108,33 @@ export const registerUser = createAsyncThunk<
     return rejectWithValue("An unexpected error has occurred. Try again.")
   }
 })
+
+
+export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
+  "user/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = Cookies.get('accessToken');
+      const response = await axios.get("/api/author/logout", {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Failed to logout");
+      }
+
+      Cookies.remove("ACCESS_TOKEN");
+      Cookies.remove("REFRESH_TOKEN");
+      Cookies.remove("EMAIL");
+    } catch (error) {
+      return rejectWithValue("Failed to logout. Please try again.");
+    }
+  }
+);
+
+
 
 const userSlice = createSlice({
   name: "user",
@@ -120,10 +149,6 @@ const userSlice = createSlice({
       state.isLoggedIn = false
       state.status = "success"
       state.error = null
-
-      Cookies.remove("accessToken");
-      Cookies.remove("refreshToken");
-      Cookies.remove("email");
     },
     updateUser(state, action: PayloadAction<Partial<User>>) {
       if (state.user) {
@@ -165,6 +190,19 @@ const userSlice = createSlice({
         state.status = "error"
         state.error = action.payload as string
       })
+      // Выход
+      .addCase(logoutUser.pending, state => {
+        state.status = "loading";
+      })
+      .addCase(logoutUser.fulfilled, state => {
+        state.status = "success";
+        state.user = null;
+        state.isLoggedIn = false;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.status = "error";
+        state.error = action.payload as string;
+      });
   },
 })
 
