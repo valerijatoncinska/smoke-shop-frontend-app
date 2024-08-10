@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
-import { AppDispatch } from '../../store/store';
-import { addItemToCart } from '../../store/redux/cartSlice';
+import { AppDispatch, RootState } from '../../store/store';
+import { addItemToCart, fetchCartItems } from '../../store/redux/cartSlice';
 import './ProductPage.css';
 
 interface Product {
@@ -22,6 +22,7 @@ const ProductPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const dispatch: AppDispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -45,7 +46,7 @@ const ProductPage: React.FC = () => {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const token = Cookies.get('accessToken'); // Получение токена из куков
 
     if (!token) {
@@ -54,7 +55,7 @@ const ProductPage: React.FC = () => {
     }
 
     if (product) {
-      dispatch(addItemToCart({
+      await dispatch(addItemToCart({
         id: product.id,
         title: product.title,
         stock: product.quantity,
@@ -63,6 +64,10 @@ const ProductPage: React.FC = () => {
         price: product.price,
         totalPrice: product.price * quantity,
       }));
+
+      // Обновление состояния корзины после добавления товара
+      await dispatch(fetchCartItems());
+
       alert('Product added to cart successfully!');
     }
   };
@@ -114,7 +119,7 @@ const ProductPage: React.FC = () => {
           </div>
           <button onClick={handleAddToCart} className="add-to-basket-button">Add to Basket</button>
           <div className="product-description">
-            <h2>Description</h2>
+          <h2>Description</h2>
             <p>This is a placeholder description for the product "{product.title}".</p>
           </div>
           <div className="product-characteristics">
