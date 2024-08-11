@@ -30,9 +30,9 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/auth/login" element={<LoginPage />} />
-          <Route path="/auth/register" element={<RegisterPage />} />
-          <Route path="/auth/account-activate/:uuid" element={<AccountActivation />} />
+          <Route path="/author/login" element={<LoginPage />} />
+          <Route path="/author/register" element={<RegisterPage />} />
+          <Route path="/author/account-activate/:uuid" element={<AccountActivation />} />
           <Route path="/catalog" element={<CatalogProductPage />} />
           <Route path="/orders" element={<OrderPage />} />
           <Route path="/products/new" element={<AddProductForm />} />
