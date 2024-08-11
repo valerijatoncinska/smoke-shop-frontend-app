@@ -11,6 +11,13 @@ const AccountActivation = () => {
   const activationStatus = useSelector(
     (state: RootState) => state.user.activationStatus,
   )
+  const activationMessage = useSelector(
+    (state: RootState) => state.user.activationMessage,
+  )
+  const activationErrorMessage = useSelector(
+    (state: RootState) => state.user.activationErrorMessage,
+  )
+
   const navigate = useNavigate()
   const { uuid } = useParams<{ uuid: string }>()
 
@@ -51,7 +58,7 @@ const AccountActivation = () => {
         {activationStatus === "success" && (
           <div className={styles.successContainer}>
             <h2 className={styles.successTitle}>
-              Your registration was successful :)
+              {activationMessage || "Your registration was successful :)"}
             </h2>
             <p className={styles.successMessage}>
               To log into your account, go to the login page.
@@ -70,8 +77,8 @@ const AccountActivation = () => {
           <div className={styles.errorContainer}>
             <h2 className={styles.errorTitle}>Activation Failed</h2>
             <p className={styles.errorMessage}>
-              There was an issue with your account activation. Please try again
-              later.
+              {activationErrorMessage ||
+                "There was an issue with your account activation. Please try again later."}
             </p>
             <button
               type="button"

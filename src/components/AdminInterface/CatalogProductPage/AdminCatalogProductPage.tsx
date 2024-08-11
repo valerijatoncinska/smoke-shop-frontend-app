@@ -17,16 +17,8 @@ const AdminCatalogProductPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const dispatch: AppDispatch = useDispatch()
   const { products, status } = useSelector((state: RootState) => state.products)
-  const adminProducts: Product[] = [
-    { id: 1, title: "Parlament", price: 300, active: true },
-    { id: 2, title: "Marlboro Blue", price: 400, active: true },
-    { id: 3, title: "Marlboro Red", price: 500, active: true },
-    { id: 4, title: "L&M Blue", price: 600, active: true },
-    { id: 5, title: "Parlament Aqua", price: 300, active: true },
-  ]
 
-  const [filteredProducts, setFilteredProducts] =
-    useState<Product[]>(products)
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
   useEffect(() => {
     dispatch(fetchProducts())
   }, [])
@@ -37,18 +29,25 @@ const AdminCatalogProductPage: React.FC = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
+  }
+
+  const handleSearchProducts = () => {
     const results = products.filter(product =>
       product.title.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     setFilteredProducts(results)
+
+    setSearchQuery("")
   }
 
   const handleSortAsc = () => {
-    dispatch(sortByPriceAsc())
+    const results = [...filteredProducts].sort((a, b) => a.price - b.price)
+    setFilteredProducts(results)
   }
 
   const handleSortDesc = () => {
-    dispatch(sortByPriceDesc())
+    const results = [...filteredProducts].sort((a, b) => b.price - a.price)
+    setFilteredProducts(results)
   }
 
   const handleAddProductClick = () => {
@@ -71,6 +70,7 @@ const AdminCatalogProductPage: React.FC = () => {
               onChange={handleInputChange}
               value={searchQuery}
             />
+            <button onClick={handleSearchProducts}>Search</button>
           </div>
         </div>
         <div className={styles.sortButtons}>
@@ -97,9 +97,11 @@ const AdminCatalogProductPage: React.FC = () => {
 
           {status === "success" && (
             <div className="d-flex flex-wrap">
-              {filteredProducts.map(product => (
-                <ProductCardPage key={product.id} product={product} />
-              ))}
+              {filteredProducts
+                .filter(product => product.active)
+                .map(product => (
+                  <ProductCardPage key={product.id} product={product} />
+                ))}
             </div>
           )}
 

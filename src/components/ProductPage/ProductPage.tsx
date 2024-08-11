@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
+import { AppDispatch } from '../../store/store';
+import { addItemToCart, fetchCartItems } from '../../store/redux/cartSlice';
 import './ProductPage.css';
 
 interface Product {
-  id: number;
+  id: string;
   title: string;
   price: number;
   quantity: number;
@@ -11,13 +15,13 @@ interface Product {
 }
 
 const ProductPage: React.FC = () => {
-  const [products, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [quantity, setQuantity] = useState<number>(1); // Initial quantity set to 1
 
   const { id } = useParams<{ id: string }>();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -29,8 +33,8 @@ const ProductPage: React.FC = () => {
         }
 
         const data = await response.json();
-        setProduct(data.data); 
-        setQuantity(1); 
+        setProduct(data.data); // Accessing the 'data' object from the response
+        setQuantity(1); // Resetting quantity to 1 when a new product is loaded
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -39,44 +43,40 @@ const ProductPage: React.FC = () => {
     };
 
     fetchProduct();
-
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
-    }
   }, [id]);
 
   const handleAddToCart = async () => {
-    if (!isLoggedIn) {
-      alert('You must be logged in to add items to the cart.');
+    const token = Cookies.get('accessToken'); // Получение токена из куков
+
+    if (!token) {
+      alert('You must be registered to add items to the cart.');
       return;
     }
 
-    try {
-      const response = await fetch(`/api/cart`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          productId: products?.id,
-          quantity: quantity, 
-        }),
-      });
+    if (product) {
+      try {
+        await dispatch(addItemToCart({
+          id: product.id,
+          title: product.title,
+          stock: product.quantity,
+          quantity: quantity,
+          productId: product.id,
+          price: product.price,
+          totalPrice: product.price * quantity,
+        }));
 
-      if (!response.ok) {
-        throw new Error('Failed to add product to cart');
+        // Обновление состояния корзины после добавления товара
+        await dispatch(fetchCartItems());
+
+        alert('Product added to cart successfully!');
+      } catch (error) {
+        alert('Failed to add product to cart.');
       }
-
-      alert('Product added to cart successfully!');
-    } catch (error: any) {
-      alert(`Error: ${error.message}`);
     }
   };
 
   const increaseQuantity = () => {
-    if (products && quantity < products.quantity) {
+    if (product && quantity < product.quantity) {
       setQuantity(prevQuantity => prevQuantity + 1);
     }
   };
@@ -95,13 +95,13 @@ const ProductPage: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!products) {
+  if (!product) {
     return <div>No product data available</div>;
   }
 
   return (
     <div className="product-page">
-      <a href="/" className="back-link">Come back</a>
+      <Link to="/catalog" className="back-link">Come back</Link> {/* Использование Link для навигации */}
       <div className="product-container">
         <div className="product-image-section">
           <div className="main-image-placeholder" />
@@ -113,23 +113,22 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
         <div className="product-details-section">
-          <h1>{products.title}</h1>
-          <div className="product-price">Price: {products.price}€</div>
+          <h1>{product.title}</h1>
+          <div className="product-price">Price: {product.price}€</div>
           <div className="product-quantity">
             <button onClick={decreaseQuantity}>-</button>
             <input type="number" value={quantity} readOnly />
             <button onClick={increaseQuantity}>+</button>
           </div>
-          <button onClick={handleAddToCart} className="add-to-basket-button">Add to Basket</button>
-          <button className="buy-button">Buy</button>
+          <button onClick={handleAddToCart} className="add-to-basket-button">Add to Cart</button>
           <div className="product-description">
             <h2>Description</h2>
-            <p>This is a placeholder description for the product "{products.title}".</p>
+            <p>This is a placeholder description for the product "{product.title}".</p>
           </div>
           <div className="product-characteristics">
             <h2>Characteristics</h2>
-            <p>Stock: {products.quantity}</p>
-            <p>Status: {products.active ? 'Available' : 'Unavailable'}</p>
+            <p>Stock: {product.quantity}</p>
+            <p>Status: {product.active ? 'Available' : 'Unavailable'}</p>
           </div>
         </div>
       </div>

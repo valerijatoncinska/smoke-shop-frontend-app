@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom"
 import "./Navigation.css"
+import axios from "axios"
 
 const Navigation = () => {
   return (
@@ -28,7 +29,12 @@ const Navigation = () => {
         </li>
       </ul>
       <NavLink to="/auth/login">
-        <button className="button ms-3">Sign out</button>
+        <button
+          onClick={() => axios.get("/api/author/logout")}
+          className="button ms-3"
+        >
+          Sign out
+        </button>
       </NavLink>
     </nav>
   )

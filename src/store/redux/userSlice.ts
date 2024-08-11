@@ -17,6 +17,8 @@ interface UserState {
   status: "idle" | "loading" | "success" | "error"
   error: string | null
   activationStatus: "idle" | "loading" | "success" | "error";
+  activationMessage: string | null;
+  activationErrorMessage: string | null;
 }
 
 const initialState: UserState = {
@@ -24,7 +26,9 @@ const initialState: UserState = {
   isLoggedIn: false,
   status: "idle",
   error: null,
-  activationStatus: 'idle'
+  activationStatus: 'idle',
+  activationMessage: null,
+  activationErrorMessage: null
 }
 
 export const loginUser = createAsyncThunk<
@@ -124,9 +128,10 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   }
 );
 
-export const activateAccount = createAsyncThunk<void, string, { rejectValue: string}>("user/activateAccount", async (uuid, {rejectWithValue}) => {
+export const activateAccount = createAsyncThunk<{ message: string; errorMessage: string | null }, string, { rejectValue: string}>("user/activateAccount", async (uuid, {rejectWithValue}) => {
   try {
-    await axios.get('/api/author/account-activate/${uuid}');
+    const response = await axios.get(`/api/author/account-activate/${uuid}`);
+    return { message: response.data.message, errorMessage: null };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 404) {
@@ -209,13 +214,17 @@ const userSlice = createSlice({
       // Активация аккаунта
       .addCase(activateAccount.pending, (state) => {
         state.activationStatus = 'loading';
+        state.error = null;
+        state.activationMessage = null;
+        state.activationErrorMessage = null;
       })
-      .addCase(activateAccount.fulfilled, (state) => {
+      .addCase(activateAccount.fulfilled, (state, action) => {
         state.activationStatus = 'success';
+        state.activationMessage = action.payload.message;
       })
       .addCase(activateAccount.rejected, (state, action) => {
         state.activationStatus = 'error';
-        state.error = action.payload as string
+        state.activationErrorMessage = action.payload as string
       })
   },
 })
