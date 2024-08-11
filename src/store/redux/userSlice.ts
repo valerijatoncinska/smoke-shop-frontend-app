@@ -11,6 +11,10 @@ interface User {
   refreshToken: string
 }
 
+export interface ActivationResponse {
+  message: string;
+}
+
 interface UserState {
   user: User | null
   isLoggedIn: boolean
@@ -128,19 +132,25 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   }
 );
 
-export const activateAccount = createAsyncThunk<{ message: string; errorMessage: string | null }, string, { rejectValue: string}>("user/activateAccount", async (uuid, {rejectWithValue}) => {
-  try {
-    const response = await axios.get(`/api/author/account-activate/${uuid}`);
-    return { message: response.data.message, errorMessage: null };
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (error.response?.status === 404) {
-        return rejectWithValue("Activation link is invalid or expired.");
+export const activateAccount = createAsyncThunk<string, string, { rejectValue: string }>(
+  'user/activateAccount',
+  async (uuid, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<ActivationResponse>(`/api/author/account-activate/${uuid}`);
+      return response.data.message;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          return rejectWithValue("Activation link is invalid or expired.");
+        }
+        if (error.response?.data && error.response.data.message) {
+          return rejectWithValue(error.response.data.message);
+        }
       }
+      return rejectWithValue("An unexpected error occurred during activation.");
     }
-    return rejectWithValue("An unexpected error occurred during activation.");
   }
-});
+);
 
 
 
@@ -214,17 +224,18 @@ const userSlice = createSlice({
       // Активация аккаунта
       .addCase(activateAccount.pending, (state) => {
         state.activationStatus = 'loading';
-        state.error = null;
         state.activationMessage = null;
         state.activationErrorMessage = null;
       })
       .addCase(activateAccount.fulfilled, (state, action) => {
         state.activationStatus = 'success';
-        state.activationMessage = action.payload.message;
+        state.activationMessage = action.payload;
+        state.activationErrorMessage = null;
       })
       .addCase(activateAccount.rejected, (state, action) => {
         state.activationStatus = 'error';
-        state.activationErrorMessage = action.payload as string
+        state.activationErrorMessage = action.payload as string;
+        state.activationMessage = null;
       })
   },
 })
