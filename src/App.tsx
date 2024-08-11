@@ -31,11 +31,11 @@ const App: React.FC = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="/author/login" element={<LoginPage />} />
-          <Route path="/author/register" element={<RegisterPage />} />
-          <Route path="/author/account-activate/:uuid" element={<AccountActivation />} />
+          <Route path="/auth/register" element={<RegisterPage />} />
+          <Route path="/auth/account-activate/:uuid" element={<AccountActivation />} />
           <Route path="/catalog" element={<CatalogProductPage />} />
           <Route path="/orders" element={<OrderPage />} />
-          <Route path="/products/new" element={<AddProductForm />} />
+          {/* <Route path="/products/new" element={<AddProductForm />} /> */}
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/products/edit/:id" element={<EditProductPage />} />
           <Route path="/order-history" element={<OrderHistoryPage />} />

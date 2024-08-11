@@ -50,7 +50,7 @@ const AccountActivation = () => {
         {activationStatus === "success" && (
           <div className={styles.successContainer}>
             <h2 className={styles.successTitle}>
-            {activationMessage}
+            {activationMessage || "Account successfully activated!"}
             </h2>
             <p className={styles.successMessage}>
               To log into your account, go to the login page.
@@ -69,7 +69,7 @@ const AccountActivation = () => {
           <div className={styles.errorContainer}>
             <h2 className={styles.errorTitle}>Activation Failed</h2>
             <p className={styles.errorMessage}>
-            {activationErrorMessage}
+            {activationErrorMessage || "An error occurred. Please try again later."}
             </p>
             <button
               type="button"

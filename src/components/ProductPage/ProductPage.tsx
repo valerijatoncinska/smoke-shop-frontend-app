@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
-import { AppDispatch } from '../../store/store';
-import { addItemToCart, fetchCartItems } from '../../store/redux/cartSlice';
+import { AppDispatch, RootState } from '../../store/store';
+import { addItemToCart, fetchCartItems, updateCartItem } from '../../store/redux/cartSlice';
 import './ProductPage.css';
 
 interface Product {
@@ -22,12 +22,13 @@ const ProductPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const dispatch: AppDispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(`/api/products/${id}`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch product');
         }
@@ -46,7 +47,7 @@ const ProductPage: React.FC = () => {
   }, [id]);
 
   const handleAddToCart = async () => {
-    const token = Cookies.get('accessToken'); // Получение токена из куков
+    const token = Cookies.get('accessToken'); // Get token from cookies
 
     if (!token) {
       alert('You must be registered to add items to the cart.');
@@ -54,7 +55,17 @@ const ProductPage: React.FC = () => {
     }
 
     if (product) {
-      try {
+      // Check if the product is already in the cart
+      const existingCartItem = cartItems.find((item) => item.id === product.id);
+
+      if (existingCartItem) {
+        // If it is, update the quantity
+        await dispatch(updateCartItem({ 
+          ...existingCartItem, 
+          quantity: existingCartItem.quantity + quantity 
+        }));
+      } else {
+        // If not, add the product to the cart
         await dispatch(addItemToCart({
           id: product.id,
           title: product.title,
@@ -64,14 +75,12 @@ const ProductPage: React.FC = () => {
           price: product.price,
           totalPrice: product.price * quantity,
         }));
-
-        // Обновление состояния корзины после добавления товара
-        await dispatch(fetchCartItems());
-
-        alert('Product added to cart successfully!');
-      } catch (error) {
-        alert('Failed to add product to cart.');
       }
+
+      // Fetch cart items again to refresh the state
+      await dispatch(fetchCartItems());
+
+      alert('Product added to cart successfully!');
     }
   };
 
@@ -101,7 +110,7 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
-      <Link to="/catalog" className="back-link">Come back</Link> {/* Использование Link для навигации */}
+      <Link to="/catalog" className="back-link">Come back</Link> {/* Use Link for navigation */}
       <div className="product-container">
         <div className="product-image-section">
           <div className="main-image-placeholder" />
