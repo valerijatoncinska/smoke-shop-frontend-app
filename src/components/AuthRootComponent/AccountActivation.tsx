@@ -11,6 +11,7 @@ const AccountActivation = () => {
   const activationStatus = useSelector(
     (state: RootState) => state.user.activationStatus,
   )
+
   const activationMessage = useSelector(
     (state: RootState) => state.user.activationMessage,
   )
