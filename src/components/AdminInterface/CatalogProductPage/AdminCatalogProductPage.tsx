@@ -61,7 +61,7 @@ const AdminCatalogProductPage: React.FC = () => {
   return (
     <>
       <div className={`z-1 container ${styles1.addProductContainer}`}>
-        <AddProductForm onProductAdded={handleProductAdded}/>
+        <AddProductForm onProductAdded={() => {}}/>
       </div>
 
       <div className={`mt-0 ${styles.containerCatalog} w-100`}>

@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from '../../store/store'   // Свойство объявлено, но его значение не было прочитано.
+import { RootState } from '../../store/store'   // Свойство объявлено, но его значение не было прочитано.
 import { setIsAddedFalse } from "../../store/redux/openAddProductFormSlice"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
 
 interface AddProductFormProps {
   onProductAdded: () => void
@@ -31,7 +30,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({onProductAdded}) => {
     .post(`/api/products`, data)
     .then(response => {
       console.log("Response", response.data)
-      onProductAdded()
     })
     .catch(error => {
       console.log("Error", error)
@@ -41,6 +39,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({onProductAdded}) => {
     setPrice("")
     setQuantity("")
 
+    onProductAdded()
     dispatch(setIsAddedFalse()) // связь с AdminInterfaceCatalogProductPage
   }
 
@@ -74,7 +73,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({onProductAdded}) => {
       <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
     </label>
   </div>
-      <button onClick={handleCancelButton}>Cancel</button>
+      <button type="button" onClick={handleCancelButton}>Cancel</button>
       <button type="submit">Add Product</button>
     </form>
   )
