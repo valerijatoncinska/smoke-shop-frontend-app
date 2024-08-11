@@ -10,8 +10,7 @@ const AccountActivation = () => {
   const dispatch = useAppDispatch();
 
   const activationStatus = useSelector((state: RootState) => state.user.activationStatus);
-  const activationMessage = useSelector((state: RootState) => state.user.activationMessage);
-  const activationErrorMessage = useSelector((state: RootState) => state.user.activationErrorMessage);
+  const activationMessage = useSelector((state: RootState) => state.user.messageState.message);
 
   const navigate = useNavigate()
 
@@ -69,7 +68,7 @@ const AccountActivation = () => {
           <div className={styles.errorContainer}>
             <h2 className={styles.errorTitle}>Activation Failed</h2>
             <p className={styles.errorMessage}>
-            {activationErrorMessage || "An error occurred. Please try again later."}
+            {activationMessage || "An error occurred. Please try again later."}
             </p>
             <button
               type="button"
