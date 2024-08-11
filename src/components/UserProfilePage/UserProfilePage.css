@@ -1,67 +1,63 @@
 .user-profile-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #f5ece8;
-  }
-  
-  .user-profile-page h1 {
-    margin-bottom: 20px;
-  }
-  
-  .profile-sections {
-    display: flex;
-    justify-content: space-around;
-    width: 80%;
-  }
-  
-  .profile-section {
-    border: 1px solid #000;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #fff;
-    margin-bottom: 20px;
-  }
-  
-  .profile-section h2 {
-    margin-bottom: 10px;
-  }
-  
-  .profile-section label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  .profile-section input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    background-color: #d3d3d3;
-  }
-  
-  .buttons {
-    display: flex;
-    justify-content: center;
-    width: 80%;
-  }
-  
-  .buttons button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .delete-profile {
-    background-color: #ff4d4d;
-    color: #fff;
-  }
-  
-  .edit-profile {
-    background-color: #4CAF50;
-    color: #fff;
-  }
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  background-color: #f5e8e3;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #5a2f27;
+  margin-bottom: 20px;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.profile-section {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  width: 45%;
+  text-align: left;
+}
+
+.profile-section h2 {
+  font-size: 1.5rem;
+  color: #5a2f27;
+  margin-bottom: 10px;
+}
+
+.profile-section p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: #333;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.edit-profile {
+  background-color: #3d3d3d;
+  color: #fff;
+}
+
+.delete-profile {
+  background-color: #d9534f;
+  color: #fff;
+}

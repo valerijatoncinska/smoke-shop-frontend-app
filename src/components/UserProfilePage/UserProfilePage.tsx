@@ -5,9 +5,12 @@ import { updateUser, logoutUser, clearError } from "../../store/redux/userSlice"
 import "./UserProfilePage.css";
 
 interface User {
+  name?: string;
   email: string;
-  isAdult?: boolean;
-  subscribe?: boolean;
+  city?: string;
+  zipCode?: string;
+  street?: string;
+  apartmentNumber?: string;
   accessToken: string;
   refreshToken: string;
 }
@@ -70,65 +73,24 @@ const UserProfilePage: React.FC = () => {
   return (
     <div className="user-profile-page">
       <h1>My Profile</h1>
-      <div className="profile-sections">
+      <div className="profile-container">
         <div className="profile-section">
           <h2>Details</h2>
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={userData.email}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </label>
-          <label>
-            Is Adult:
-            <input
-              type="checkbox"
-              name="isAdult"
-              checked={userData.isAdult || false}
-              onChange={(e) =>
-                setUserData((prevUser) =>
-                  prevUser
-                    ? { ...prevUser, isAdult: e.target.checked }
-                    : prevUser
-                )
-              }
-              disabled={!isEditing}
-            />
-          </label>
-          <label>
-            Subscribe:
-            <input
-              type="checkbox"
-              name="subscribe"
-              checked={userData.subscribe || false}
-              onChange={(e) =>
-                setUserData((prevUser) =>
-                  prevUser
-                    ? { ...prevUser, subscribe: e.target.checked }
-                    : prevUser
-                )
-              }
-              disabled={!isEditing}
-            />
-          </label>
+          <p>Name: {userData.name || "N/A"}</p>
+          <p>Email: {userData.email}</p>
+        </div>
+        <div className="profile-section">
+          <h2>Address</h2>
+          <p>City: {userData.city || "N/A"}</p>
+          <p>Zip code: {userData.zipCode || "N/A"}</p>
+          <p>Street: {userData.street || "N/A"}</p>
+          <p>Apartment number: {userData.apartmentNumber || "N/A"}</p>
         </div>
       </div>
       <div className="buttons">
-        {isEditing ? (
-          <button className="save-profile" onClick={handleSave}>
-            Save Profile
-          </button>
-        ) : (
-          <button className="edit-profile" onClick={handleEdit}>
-            Edit Profile
-          </button>
-        )}
-        <button className="logout-profile" onClick={handleLogout}>
-          Logout
+        <button className="delete-profile">Delete profile</button>
+        <button className="edit-profile" onClick={handleEdit}>
+          Edit profile
         </button>
       </div>
     </div>
