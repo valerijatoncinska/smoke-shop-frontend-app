@@ -1,139 +1,70 @@
-import React, { useEffect, useState } from "react"
-import "./UserProfilePage.css"
-
-interface Address {
-  city: string
-  zipCode: string
-  street: string
-  apartmentNumber: string
-}
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
+import { updateUser, logoutUser, clearError } from "../../store/redux/userSlice";
+import "./UserProfilePage.css";
 
 interface User {
-  name: string
-  email: string
-  address: Address
+  email: string;
+  isAdult?: boolean;
+  subscribe?: boolean;
+  accessToken: string;
+  refreshToken: string;
 }
 
 const UserProfilePage: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null)
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
+  const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
+  const status = useSelector((state: RootState) => state.user.status);
+  const error = useSelector((state: RootState) => state.user.error);
 
-  const token = localStorage.getItem("token")
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [userData, setUserData] = useState<User | null>(user);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await fetch(
-          "/api/user/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        )
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch user profile")
-        }
-
-        const data = await response.json()
-        setUser(data)
-      } catch (error: any) {
-        setError(error.message)
-      } finally {
-        setLoading(false)
-      }
+    if (user) {
+      setUserData(user);
     }
-
-    fetchUserProfile()
-  }, [token])
-
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(
-        "/api/user/profile",
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-
-      if (!response.ok) {
-        throw new Error("Failed to delete profile")
-      }
-
-      alert("Profile deleted")
-      setUser(null)
-    } catch (error: any) {
-      alert(`Error: ${error.message}`)
-    }
-  }
+  }, [user]);
 
   const handleEdit = () => {
-    setIsEditing(true)
-  }
+    setIsEditing(true);
+  };
 
   const handleSave = async () => {
-    try {
-      const response = await fetch(
-        "/api/user/profile",
-        {
-          method: "PATCH", // Используем PATCH для частичного обновления данных
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(user), // Отправляем обновлённые данные пользователя
-        },
-      )
-
-      if (!response.ok) {
-        throw new Error("Failed to update profile")
-      }
-
-      const updatedUser = await response.json()
-      setUser(updatedUser)
-      setIsEditing(false)
-    } catch (error: any) {
-      alert(`Error: ${error.message}`)
+    if (userData) {
+      await dispatch(updateUser(userData));
+      setIsEditing(false);
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
+    setUserData((prevUser) => {
+      if (!prevUser) return null;
+      return { ...prevUser, [name]: value };
+    });
+  };
 
-    setUser(prevUser => {
-      if (!prevUser) return null
+  const handleLogout = async () => {
+    await dispatch(logoutUser());
+  };
 
-      if (name.includes("address.")) {
-        const addressKey = name.split(".")[1]
-        return {
-          ...prevUser,
-          address: {
-            ...prevUser.address,
-            [addressKey]: value,
-          },
-        }
-      }
-
-      return { ...prevUser, [name]: value }
-    })
-  }
-
-  if (loading) {
-    return <div>Loading...</div>
+  if (status === "loading") {
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>
+    return (
+      <div>
+        Error: {error}
+        <button onClick={() => dispatch(clearError())}>Clear Error</button>
+      </div>
+    );
   }
 
-  if (!user) {
-    return <div>No user data available</div>
+  if (!userData) {
+    return <div>No user data available</div>;
   }
 
   return (
@@ -143,66 +74,45 @@ const UserProfilePage: React.FC = () => {
         <div className="profile-section">
           <h2>Details</h2>
           <label>
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={user.name}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </label>
-          <label>
             Email:
             <input
               type="email"
               name="email"
-              value={user.email}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </label>
-        </div>
-        <div className="profile-section">
-          <h2>Address</h2>
-          <label>
-            City:
-            <input
-              type="text"
-              name="address.city"
-              value={user.address.city}
+              value={userData.email}
               onChange={handleChange}
               readOnly={!isEditing}
             />
           </label>
           <label>
-            Zip code:
+            Is Adult:
             <input
-              type="text"
-              name="address.zipCode"
-              value={user.address.zipCode}
-              onChange={handleChange}
-              readOnly={!isEditing}
+              type="checkbox"
+              name="isAdult"
+              checked={userData.isAdult || false}
+              onChange={(e) =>
+                setUserData((prevUser) =>
+                  prevUser
+                    ? { ...prevUser, isAdult: e.target.checked }
+                    : prevUser
+                )
+              }
+              disabled={!isEditing}
             />
           </label>
           <label>
-            Street:
+            Subscribe:
             <input
-              type="text"
-              name="address.street"
-              value={user.address.street}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </label>
-          <label>
-            Apartment number:
-            <input
-              type="text"
-              name="address.apartmentNumber"
-              value={user.address.apartmentNumber}
-              onChange={handleChange}
-              readOnly={!isEditing}
+              type="checkbox"
+              name="subscribe"
+              checked={userData.subscribe || false}
+              onChange={(e) =>
+                setUserData((prevUser) =>
+                  prevUser
+                    ? { ...prevUser, subscribe: e.target.checked }
+                    : prevUser
+                )
+              }
+              disabled={!isEditing}
             />
           </label>
         </div>
@@ -217,12 +127,12 @@ const UserProfilePage: React.FC = () => {
             Edit Profile
           </button>
         )}
-        <button className="delete-profile" onClick={handleDelete}>
-          Delete Profile
+        <button className="logout-profile" onClick={handleLogout}>
+          Logout
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserProfilePage
+export default UserProfilePage;
