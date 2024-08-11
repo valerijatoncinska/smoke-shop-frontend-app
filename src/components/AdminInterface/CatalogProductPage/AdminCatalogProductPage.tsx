@@ -9,8 +9,6 @@ import React, { useEffect, useState } from "react"
 import {
   fetchProducts,
   Product,
-  sortByPriceAsc,
-  sortByPriceDesc,
 } from "../../../store/redux/productSlice"
 
 const AdminCatalogProductPage: React.FC = () => {
@@ -61,7 +59,7 @@ const AdminCatalogProductPage: React.FC = () => {
   return (
     <>
       <div className={`z-1 container ${styles1.addProductContainer}`}>
-        <AddProductForm onProductAdded={() => {}}/>
+        <AddProductForm onProductAdded={handleProductAdded}/>
       </div>
 
       <div className={`mt-0 ${styles.containerCatalog} w-100`}>
