@@ -47,7 +47,6 @@ export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: 
             const response = await fetch('/api/cart', {
                 method: 'GET',
                 headers: {
-                    
                     'Content-Type': 'application/json',
                 },
             });
@@ -65,7 +64,6 @@ export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: 
 );
 
 // Асинхронные экшены для работы с адресами
-
 // Получение адресов
 export const fetchAddresses = createAsyncThunk<Address[], void, { rejectValue: string }>(
     'cart/fetchAddresses',
@@ -75,7 +73,6 @@ export const fetchAddresses = createAsyncThunk<Address[], void, { rejectValue: s
             const response = await fetch('/api/address', {
                 method: 'GET',
                 headers: {
-                    
                     'Content-Type': 'application/json',
                 },
             });
@@ -101,7 +98,6 @@ export const addAddress = createAsyncThunk<Address, Address, { rejectValue: stri
             const response = await fetch('/api/address', {
                 method: 'POST',
                 headers: {
-                    
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(newAddress),
@@ -128,7 +124,6 @@ export const updateAddress = createAsyncThunk<Address, Address, { rejectValue: s
             const response = await fetch(`/api/address/${updatedAddress.id}`, {
                 method: 'PUT',
                 headers: {
-                    
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(updatedAddress),
@@ -154,7 +149,6 @@ export const deleteAddress = createAsyncThunk<string, string, { rejectValue: str
             const response = await fetch(`/api/address/${addressId}`, {
                 method: 'DELETE',
                 headers: {
-                   
                     'Content-Type': 'application/json',
                 },
             });
@@ -174,61 +168,76 @@ const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
+        // Добавление товара в корзину
         addItemToCart(state, action: PayloadAction<CartItem>) {
             const existingItem = state.items.find(item => item.id === action.payload.id);
             if (existingItem) {
+                // Если товар уже есть в корзине, увеличиваем количество и пересчитываем общую стоимость
                 existingItem.quantity += action.payload.quantity;
                 existingItem.totalPrice = existingItem.quantity * existingItem.price;
             } else {
+                // Если товара нет в корзине, добавляем его
                 state.items.push(action.payload);
             }
         },
+        // Обновление товара в корзине
         updateCartItem(state, action: PayloadAction<CartItem>) {
             const index = state.items.findIndex(item => item.id === action.payload.id);
             if (index !== -1) {
                 state.items[index] = action.payload;
             }
         },
+        // Удаление товара из корзины
         removeItemFromCart(state, action: PayloadAction<string>) {
             state.items = state.items.filter(item => item.id !== action.payload);
         },
+        // Очистка корзины
         clearCart(state) {
             state.items = [];
         },
     },
     extraReducers: (builder) => {
         builder
+            // Обработка состояния во время загрузки товаров корзины
             .addCase(fetchCartItems.pending, (state) => {
                 state.status = 'loading';
             })
+            // Обработка успешного получения товаров корзины
             .addCase(fetchCartItems.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.items = action.payload;
             })
+            // Обработка ошибки при получении товаров корзины
             .addCase(fetchCartItems.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload || 'Could not fetch cart items';
             })
+            // Обработка состояния во время загрузки адресов
             .addCase(fetchAddresses.pending, (state) => {
                 state.status = 'loading';
             })
+            // Обработка успешного получения адресов
             .addCase(fetchAddresses.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.addresses = action.payload;
             })
+            // Обработка ошибки при получении адресов
             .addCase(fetchAddresses.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload || 'Could not fetch addresses';
             })
+            // Обработка успешного добавления адреса
             .addCase(addAddress.fulfilled, (state, action) => {
                 state.addresses.push(action.payload);
             })
+            // Обработка успешного обновления адреса
             .addCase(updateAddress.fulfilled, (state, action) => {
                 const index = state.addresses.findIndex(address => address.id === action.payload.id);
                 if (index !== -1) {
                     state.addresses[index] = action.payload;
                 }
             })
+            // Обработка успешного удаления адреса
             .addCase(deleteAddress.fulfilled, (state, action) => {
                 state.addresses = state.addresses.filter(address => address.id !== action.payload);
             });
