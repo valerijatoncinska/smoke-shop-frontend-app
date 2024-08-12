@@ -70,7 +70,7 @@ export const loginUser = createAsyncThunk<
           case 403:
             return rejectWithValue("Forbidden: Access denied")
           case 404:
-            return rejectWithValue("Email not registered")
+            return rejectWithValue("Email or password is incorrect")
           default:
             return rejectWithValue(
               "Account is not active. Please check your email.",
