@@ -81,16 +81,55 @@ const UserProfilePage: React.FC = () => {
         </div>
         <div className="profile-section">
           <h2>Address</h2>
-          <p>City: {userData.city || "N/A"}</p>
-          <p>Zip code: {userData.zipCode || "N/A"}</p>
-          <p>Street: {userData.street || "N/A"}</p>
-          <p>Apartment number: {userData.apartmentNumber || "N/A"}</p>
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                name="city"
+                value={userData.city || ""}
+                placeholder="City"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                name="zipCode"
+                value={userData.zipCode || ""}
+                placeholder="Zip Code"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                name="street"
+                value={userData.street || ""}
+                placeholder="Street"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                name="apartmentNumber"
+                value={userData.apartmentNumber || ""}
+                placeholder="Apartment Number"
+                onChange={handleChange}
+              />
+              <button onClick={handleSave}>Save</button>
+              <button onClick={() => setIsEditing(false)}>Cancel</button>
+            </>
+          ) : (
+            <>
+              <p>City: {userData.city || "N/A"}</p>
+              <p>Zip code: {userData.zipCode || "N/A"}</p>
+              <p>Street: {userData.street || "N/A"}</p>
+              <p>Apartment number: {userData.apartmentNumber || "N/A"}</p>
+            </>
+          )}
         </div>
       </div>
       <div className="buttons">
-        <button className="delete-profile">Delete profile</button>
         <button className="edit-profile" onClick={handleEdit}>
           Edit profile
+        </button>
+        <button className="logout" onClick={handleLogout}>
+          Logout
         </button>
       </div>
     </div>
