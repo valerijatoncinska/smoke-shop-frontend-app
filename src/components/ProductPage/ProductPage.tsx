@@ -49,10 +49,10 @@ const ProductPage: React.FC = () => {
   const handleAddToCart = async () => {
     const token = Cookies.get('accessToken'); // Get token from cookies
 
-    if (!token) {
+   /*  if (!token) {
       alert('You must be registered to add items to the cart.');
       return;
-    }
+    } */
 
     if (product) {
       // Check if the product is already in the cart

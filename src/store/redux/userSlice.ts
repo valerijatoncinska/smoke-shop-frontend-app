@@ -117,11 +117,9 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   async (_, { rejectWithValue }) => {
     try {
       const token = Cookies.get('accessToken');
-      const response = await axios.get("/api/author/logout", {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get("/api/author/logout"
+      
+      )
 
       if (response.status !== 200) {
         throw new Error("Failed to logout");
