@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom"
 import styles from "./styles/LoginPage.module.css"
 import { useAppDispatch, useAppSelector } from "../../app/hook"
 import { clearError, loginUser } from "../../store/redux/userSlice"
-import axios from "axios"
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("")
