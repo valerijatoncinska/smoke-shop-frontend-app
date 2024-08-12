@@ -64,23 +64,25 @@ const LoginPage: React.FC = () => {
       const roles = userData.roles
         .map(element => element.authority)
         .filter(element => element.includes("ROLE_ADMIN"))
-        console.log(roles);
-        
+      console.log(roles)
+
       if (roles[0] === "ROLE_ADMIN") {
-          navigate("/admin")
+        navigate("/admin")
       } else {
         navigate("/")
       }
     } catch (error) {
       // Обработка ошибок от сервера
-      if (error === "Email not registered") {
-        setEmailError("Email is not registered");
-      } else if (error === "Incorrect email or password") {
-        setPasswordError("Incorrect email or password");
+      const errorMessage = error as string
+
+      if (errorMessage === "Email or password is incorrect") {
+        setPasswordError("Incorrect email or password")
+      } else if (errorMessage === "Email is not registered") {
+        setEmailError("Email is not registered")
       } else {
-        setGeneralError("An unexpected error occurred.");
+        setGeneralError("An unexpected error occurred.")
       }
-      console.log("Ошибка входа:", error);
+      console.log("Ошибка входа:", error)
     }
   }
 
