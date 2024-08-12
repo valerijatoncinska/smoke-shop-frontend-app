@@ -49,11 +49,6 @@ const UserProfilePage: React.FC = () => {
             locality: userData.city,
             phone: userData.phone,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${userData.accessToken}`,
-            },
-          }
         );
 
         if (response.status === 200) {
