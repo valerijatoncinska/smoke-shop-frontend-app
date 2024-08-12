@@ -137,6 +137,7 @@ export const activateAccount = createAsyncThunk<string, string, { rejectValue: s
   async (uuid, { rejectWithValue }) => {
     try {
       const response = await axios.get<ActivationResponse>(`/api/author/account-activate/${uuid}`);
+      console.log('Response from server:', response.data);
       return response.data.message || "Account successfully activated!";
     } catch (error) {
       if (axios.isAxiosError(error)) {
