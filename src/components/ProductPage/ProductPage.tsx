@@ -18,7 +18,7 @@ const ProductPage: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState<number>(1); // Initial quantity set to 1
+  const [quantity, setQuantity] = useState<number>(1);
 
   const { id } = useParams<{ id: string }>();
   const dispatch: AppDispatch = useDispatch();
@@ -34,8 +34,8 @@ const ProductPage: React.FC = () => {
         }
 
         const data = await response.json();
-        setProduct(data.data); // Accessing the 'data' object from the response
-        setQuantity(1); // Resetting quantity to 1 when a new product is loaded
+        setProduct(data);
+        setQuantity(1);
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -55,32 +55,46 @@ const ProductPage: React.FC = () => {
     }
 
     if (product) {
-      // Check if the product is already in the cart
-      const existingCartItem = cartItems.find((item) => item.id === product.id);
+      try {
+        const response = await fetch(`/api/products/${id}/addition-to-cart`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ quantity }),
+        });
 
-      if (existingCartItem) {
-        // If it is, update the quantity
-        await dispatch(updateCartItem({ 
-          ...existingCartItem, 
-          quantity: existingCartItem.quantity + quantity 
-        }));
-      } else {
-        // If not, add the product to the cart
-        await dispatch(addItemToCart({
-          id: product.id,
-          title: product.title,
-          stock: product.quantity,
-          quantity: quantity,
-          productId: product.id,
-          price: product.price,
-          totalPrice: product.price * quantity,
-        }));
+        if (!response.ok) {
+          throw new Error('Failed to add product to cart');
+        }
+
+        const existingCartItem = cartItems.find((item) => item.id === product.id);
+
+        if (existingCartItem) {
+          await dispatch(updateCartItem({ 
+            ...existingCartItem, 
+            quantity: existingCartItem.quantity + quantity 
+          }));
+        } else {
+          await dispatch(addItemToCart({
+            id: product.id,
+            title: product.title,
+            stock: product.quantity,
+            quantity: quantity,
+            productId: product.id,
+            price: product.price,
+            totalPrice: product.price * quantity,
+          }));
+        }
+
+        await dispatch(fetchCartItems());
+
+        alert('Product added to cart successfully!');
+      } catch (error) {
+        console.error('Error adding product to cart:', error);
+        alert('Failed to add product to cart.');
       }
-
-      // Fetch cart items again to refresh the state
-      await dispatch(fetchCartItems());
-
-      alert('Product added to cart successfully!');
     }
   };
 
@@ -110,7 +124,7 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
-      <Link to="/catalog" className="back-link">Come back</Link> {/* Use Link for navigation */}
+      <Link to="/catalog" className="back-link">Come back</Link>
       <div className="product-container">
         <div className="product-image-section">
           <div className="main-image-placeholder" />
