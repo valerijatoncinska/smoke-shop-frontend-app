@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import { updateUser, logoutUser, clearError } from "../../store/redux/userSlice";
+import axios from "axios";
 import "./UserProfilePage.css";
 
 interface User {
@@ -11,6 +12,7 @@ interface User {
   zipCode?: string;
   street?: string;
   apartmentNumber?: string;
+  phone?: string;
   accessToken: string;
   refreshToken: string;
 }
@@ -36,8 +38,33 @@ const UserProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     if (userData) {
-      await dispatch(updateUser(userData));
-      setIsEditing(false);
+      try {
+        const response = await axios.put(
+          `/api/user/profile`, // Replace with the correct endpoint
+          {
+            name: userData.name,
+            street: userData.street,
+            house: userData.apartmentNumber,
+            postalCode: userData.zipCode,
+            locality: userData.city,
+            phone: userData.phone,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${userData.accessToken}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          await dispatch(updateUser(userData));
+          setIsEditing(false);
+        } else {
+          console.error("Failed to update profile.");
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
     }
   };
 
@@ -76,13 +103,15 @@ const UserProfilePage: React.FC = () => {
       <div className="profile-container">
         <div className="profile-section">
           <h2>Details</h2>
-          <p>Name: {userData.name || "N/A"}</p>
-          <p>Email: {userData.email}</p>
-        </div>
-        <div className="profile-section">
-          <h2>Address</h2>
           {isEditing ? (
             <>
+              <input
+                type="text"
+                name="name"
+                value={userData.name || ""}
+                placeholder="Name"
+                onChange={handleChange}
+              />
               <input
                 type="text"
                 name="city"
@@ -111,15 +140,25 @@ const UserProfilePage: React.FC = () => {
                 placeholder="Apartment Number"
                 onChange={handleChange}
               />
+              <input
+                type="text"
+                name="phone"
+                value={userData.phone || ""}
+                placeholder="Phone Number"
+                onChange={handleChange}
+              />
               <button onClick={handleSave}>Save</button>
               <button onClick={() => setIsEditing(false)}>Cancel</button>
             </>
           ) : (
             <>
+              <p>Name: {userData.name || "N/A"}</p>
+              <p>Email: {userData.email}</p>
               <p>City: {userData.city || "N/A"}</p>
               <p>Zip code: {userData.zipCode || "N/A"}</p>
               <p>Street: {userData.street || "N/A"}</p>
               <p>Apartment number: {userData.apartmentNumber || "N/A"}</p>
+              <p>Phone number: {userData.phone || "N/A"}</p>
             </>
           )}
         </div>
