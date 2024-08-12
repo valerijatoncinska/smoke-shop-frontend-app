@@ -181,6 +181,19 @@ const ProductDetails: FC = () => {
       })
   }
 
+  const handleDeleteProduct = () => {
+
+    axios
+    .delete(`/api/products/${id}`)
+    .then(response => {
+      console.log("Response", response.data)
+      !productActive ? navigate("/admin/archivated-products") : navigate("/admin/catalog")
+    })
+    .catch(error => {
+      console.log("Error", error)
+    })
+  }
+
   return (
     <div>
       {isEdit ? (
@@ -285,7 +298,7 @@ const ProductDetails: FC = () => {
               >
                 Add Product to archive
               </button>
-              <button className="cardButtonDelete">Delete Product</button>
+              <button className="cardButtonDelete" onClick={handleDeleteProduct}>Delete Product</button>
               <button
                 className="cardButtonEdit ms-5 p-3 px-5"
                 onClick={() => setIsEdit(true)}
@@ -301,7 +314,7 @@ const ProductDetails: FC = () => {
               >
                 Add Product to catalog
               </button>
-              <button className="cardButtonDelete">Delete Product</button>
+              <button className="cardButtonDelete" onClick={handleDeleteProduct}>Delete Product</button>
               <button
                 className="cardButtonEdit ms-5 p-3 px-5"
                 onClick={() => setIsEdit(true)}
