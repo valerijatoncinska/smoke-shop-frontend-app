@@ -3,24 +3,22 @@ import { useAppDispatch } from "../../app/hook"
 import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { RootState } from "../../store/store"
-import { activateAccount, clearError } from "../../store/redux/userSlice"
+import { activateAccount } from "../../store/redux/userSlice"
 import styles from "./styles/AccountActivation.module.css"
 
 const AccountActivation = () => {
-  const dispatch = useAppDispatch()
-  const activationStatus = useSelector(
-    (state: RootState) => state.user.activationStatus,
-  )
+  const dispatch = useAppDispatch();
+
+  const activationStatus = useSelector((state: RootState) => state.user.activationStatus);
+  const activationMessage = useSelector((state: RootState) => state.user.messageState.message);
+
   const navigate = useNavigate()
+
   const { uuid } = useParams<{ uuid: string }>()
 
   useEffect(() => {
     if (uuid) {
       dispatch(activateAccount(uuid))
-    }
-
-    return () => {
-      dispatch(clearError())
     }
   }, [dispatch, uuid])
 
@@ -51,7 +49,7 @@ const AccountActivation = () => {
         {activationStatus === "success" && (
           <div className={styles.successContainer}>
             <h2 className={styles.successTitle}>
-              Your registration was successful :)
+            {activationMessage || "Account successfully activated!"}
             </h2>
             <p className={styles.successMessage}>
               To log into your account, go to the login page.
@@ -70,8 +68,7 @@ const AccountActivation = () => {
           <div className={styles.errorContainer}>
             <h2 className={styles.errorTitle}>Activation Failed</h2>
             <p className={styles.errorMessage}>
-              There was an issue with your account activation. Please try again
-              later.
+            {activationMessage || "An error occurred. Please try again later."}
             </p>
             <button
               type="button"

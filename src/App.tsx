@@ -32,10 +32,10 @@ const App: React.FC = () => {
           <Route index element={<HomePage />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/register" element={<RegisterPage />} />
-          <Route path="/auth/account-activated/:uuid" element={<AccountActivation />} />
+          <Route path="/auth/account-activate/:uuid" element={<AccountActivation />} />
           <Route path="/catalog" element={<CatalogProductPage />} />
           <Route path="/orders" element={<OrderPage />} />
-          <Route path="/products/new" element={<AddProductForm />} />
+          {/* <Route path="/products/new" element={<AddProductForm />} /> */}
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/products/edit/:id" element={<EditProductPage />} />
           <Route path="/order-history" element={<OrderHistoryPage />} />
