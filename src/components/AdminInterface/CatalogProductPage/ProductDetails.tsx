@@ -73,7 +73,7 @@ const ProductDetails: FC = () => {
   // ]
 
   const { id } = useParams() as { id: string }
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const adminProducts = adminProductsFetch.filter(product => product.id === +id)
   const [initialProduct, setInitialProduct] = useState(adminProducts[0])
   // const initialProduct = adminProducts[0]
@@ -93,9 +93,11 @@ const ProductDetails: FC = () => {
   const [productCharacteristics, setProductCharacteristics] = useState<
     string | undefined
   >(adminProducts[0].characteristics)
+  const [productActive, setProductActive] = useState<boolean | undefined>(
+    adminProducts[0].active,
+  )
 
   const handleArchiveProduct = () => {
-
     const data = {
       // id: +id,
       title: productTitle,
@@ -111,6 +113,7 @@ const ProductDetails: FC = () => {
       .then(response => {
         console.log("Response", response.data)
         navigate("/admin/catalog")
+        setProductActive(false)
       })
       .catch(error => {
         console.log("Error", error)
@@ -124,7 +127,7 @@ const ProductDetails: FC = () => {
       title: productTitle,
       price: productPrice,
       quantity: productQuantity,
-      active: true,
+      active: productActive,
       // description: productDescription,
       // characteristics: productCharacteristics,
     }
@@ -134,13 +137,16 @@ const ProductDetails: FC = () => {
       .put(`/api/products/${id}`, data)
       .then(response => {
         console.log("Response", response.data)
-        setInitialProduct({...initialProduct, title: productTitle, price: productPrice, quantity: productQuantity})
+        setInitialProduct({
+          ...initialProduct,
+          title: productTitle,
+          price: productPrice,
+          quantity: productQuantity,
+        })
       })
       .catch(error => {
         console.log("Error", error)
       })
-
-
 
     setIsEdit(false)
   }
@@ -153,6 +159,26 @@ const ProductDetails: FC = () => {
     setProductCharacteristics(initialProduct.characteristics)
 
     setIsEdit(false)
+  }
+
+  const handleAddProductToCatalog = () => {
+    const data = {
+      title: productTitle,
+      price: productPrice,
+      quantity: productQuantity,
+      active: true,
+    }
+
+    axios
+      .put(`/api/products/${id}`, data)
+      .then(response => {
+        console.log("Response", response.data)
+        navigate("/admin/archivated-products")
+        setProductActive(true)
+      })
+      .catch(error => {
+        console.log("Error", error)
+      })
   }
 
   return (
@@ -251,21 +277,39 @@ const ProductDetails: FC = () => {
               </div>
             </div>
           </div>
-          <div className="serviceButtons">
-            <button
-              className="cardButtonArchive me-5 p-3 px-5"
-              onClick={handleArchiveProduct}
-            >
-              Add Product to archive
-            </button>
-            <button className="cardButtonDelete">Delete Product</button>
-            <button
-              className="cardButtonEdit ms-5 p-3 px-5"
-              onClick={() => setIsEdit(true)}
-            >
-              Edit
-            </button>
-          </div>
+          {productActive ? (
+            <div className="serviceButtons">
+              <button
+                className="cardButtonArchive me-5 p-3 px-5"
+                onClick={handleArchiveProduct}
+              >
+                Add Product to archive
+              </button>
+              <button className="cardButtonDelete">Delete Product</button>
+              <button
+                className="cardButtonEdit ms-5 p-3 px-5"
+                onClick={() => setIsEdit(true)}
+              >
+                Edit
+              </button>
+            </div>
+          ) : (
+            <div className="serviceButtons">
+              <button
+                className="addButton me-5 p-3 px-5"
+                onClick={handleAddProductToCatalog}
+              >
+                Add Product to catalog
+              </button>
+              <button className="cardButtonDelete">Delete Product</button>
+              <button
+                className="cardButtonEdit ms-5 p-3 px-5"
+                onClick={() => setIsEdit(true)}
+              >
+                Edit
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
