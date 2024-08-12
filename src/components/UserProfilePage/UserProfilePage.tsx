@@ -9,9 +9,9 @@ interface User {
   name?: string;
   email: string;
   city?: string;
-  zipCode?: string;
+  postalCode?: string;
   street?: string;
-  apartmentNumber?: string;
+  house?: string;
   phone?: string;
   accessToken: string;
   refreshToken: string;
@@ -44,8 +44,8 @@ const UserProfilePage: React.FC = () => {
           {
             name: userData.name,
             street: userData.street,
-            house: userData.apartmentNumber,
-            postalCode: userData.zipCode,
+            house: userData.house,
+            postalCode: userData.postalCode,
             locality: userData.city,
             phone: userData.phone,
           },
@@ -121,9 +121,9 @@ const UserProfilePage: React.FC = () => {
               />
               <input
                 type="text"
-                name="zipCode"
-                value={userData.zipCode || ""}
-                placeholder="Zip Code"
+                name="postalCode"
+                value={userData.postalCode || ""}
+                placeholder="Postal Code"
                 onChange={handleChange}
               />
               <input
@@ -135,9 +135,9 @@ const UserProfilePage: React.FC = () => {
               />
               <input
                 type="text"
-                name="apartmentNumber"
-                value={userData.apartmentNumber || ""}
-                placeholder="Apartment Number"
+                name="houseNumber"
+                value={userData.house || ""}
+                placeholder="House Number"
                 onChange={handleChange}
               />
               <input
@@ -155,9 +155,9 @@ const UserProfilePage: React.FC = () => {
               <p>Name: {userData.name || "N/A"}</p>
               <p>Email: {userData.email}</p>
               <p>City: {userData.city || "N/A"}</p>
-              <p>Zip code: {userData.zipCode || "N/A"}</p>
+              <p>Postal code: {userData.postalCode || "N/A"}</p>
               <p>Street: {userData.street || "N/A"}</p>
-              <p>Apartment number: {userData.apartmentNumber || "N/A"}</p>
+              <p>House number: {userData.house || "N/A"}</p>
               <p>Phone number: {userData.phone || "N/A"}</p>
             </>
           )}
