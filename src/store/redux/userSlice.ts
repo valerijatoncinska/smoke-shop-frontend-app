@@ -65,21 +65,23 @@ export const loginUser = createAsyncThunk<
 
     return userData
   } catch (error) {
-    if (axios.isAxiosError(error)) {
+    if (axios.isAxiosError(error) && error.response) {
+      const errorMessage = error.response.data.message || "";
       // Проверяем код ответа от сервера
-      if (error.response) {
         switch (error.response.status) {
           case 401:
             return rejectWithValue("Incorrect email or password")
           case 403:
             return rejectWithValue("Forbidden: Access denied")
           case 404:
-            return rejectWithValue("Email not registered")
+            if (errorMessage.toLowerCase().includes("password")) {
+              return rejectWithValue("Incorrect email or password");
+            }
+            return rejectWithValue("Email not registered");
           default:
             return rejectWithValue(
               "Account is not active. Please check your email.",
             )
-        }
       }
     }
     return rejectWithValue("An unexpected error occurred")

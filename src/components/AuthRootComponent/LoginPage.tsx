@@ -74,13 +74,13 @@ const LoginPage: React.FC = () => {
     } catch (error) {
       // Обработка ошибок от сервера
       if (error === "Email not registered") {
-        setEmailError("Email is not registered")
+        setEmailError("Email is not registered");
       } else if (error === "Incorrect email or password") {
-        setPasswordError("Incorrect password")
+        setPasswordError("Incorrect email or password");
       } else {
-        setGeneralError("An unexpected error occurred.")
+        setGeneralError("An unexpected error occurred.");
       }
-      console.log("Ошибка входа:", error)
+      console.log("Ошибка входа:", error);
     }
   }
 
