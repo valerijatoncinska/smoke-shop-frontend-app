@@ -36,7 +36,8 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const emailValidation = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+    const emailValidation =
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
     const passwordValidation =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{11,}$/
 
@@ -44,8 +45,10 @@ const LoginPage: React.FC = () => {
     setPasswordError(null)
 
     if (!emailValidation.test(String(email).toLowerCase())) {
-      setEmailError("Email must be in a valid format. Example: user@example.com")
-      return;
+      setEmailError(
+        "Email must be in a valid format. Example: user@example.com",
+      )
+      return
     }
 
     if (!passwordValidation.test(String(password))) {
@@ -56,8 +59,18 @@ const LoginPage: React.FC = () => {
     }
 
     try {
-      await dispatch(loginUser({ email, password })).unwrap()
-      navigate("/")
+      const userData = await dispatch(loginUser({ email, password })).unwrap()
+      console.log(userData)
+      const roles = userData.roles
+        .map(element => element.authority)
+        .filter(element => element.includes("ROLE_ADMIN"))
+        console.log(roles);
+        
+      if (roles[0] === "ROLE_ADMIN") {
+          navigate("/admin")
+      } else {
+        navigate("/")
+      }
     } catch (error) {
       // Обработка ошибок от сервера
       if (error === "Email not registered") {

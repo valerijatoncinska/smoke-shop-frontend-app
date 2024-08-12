@@ -9,6 +9,9 @@ interface User {
   subscribe?: boolean
   accessToken: string
   refreshToken: string
+  roles: [{
+    authority: string
+  }]
 }
 
 export interface ActivationResponse {
@@ -47,7 +50,7 @@ export const loginUser = createAsyncThunk<
       },
     })
 
-    const { email, accessToken, refreshToken } = response.data
+    const { email, accessToken, refreshToken, roles } = response.data
 
     Cookies.set("ACCESS_TOKEN", accessToken, { expires: 1 })
     Cookies.set("REFRESH_TOKEN", refreshToken, { expires: 3 })
@@ -57,6 +60,7 @@ export const loginUser = createAsyncThunk<
       email,
       accessToken,
       refreshToken,
+      roles
     }
 
     return userData
@@ -137,6 +141,7 @@ export const activateAccount = createAsyncThunk<string, string, { rejectValue: s
   async (uuid, { rejectWithValue }) => {
     try {
       const response = await axios.get<ActivationResponse>(`/api/author/account-activate/${uuid}`);
+      console.log('Response from server:', response.data);
       return response.data.message || "Account successfully activated!";
     } catch (error) {
       if (axios.isAxiosError(error)) {
