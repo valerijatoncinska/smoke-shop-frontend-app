@@ -47,7 +47,7 @@ export const fetchCartItems = createAsyncThunk<CartItem[], void, { rejectValue: 
             const response = await fetch('/api/cart', {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ${token}',
+                    
                     'Content-Type': 'application/json',
                 },
             });
@@ -75,7 +75,7 @@ export const fetchAddresses = createAsyncThunk<Address[], void, { rejectValue: s
             const response = await fetch('/api/address', {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ${token}',
+                    
                     'Content-Type': 'application/json',
                 },
             });
@@ -101,7 +101,7 @@ export const addAddress = createAsyncThunk<Address, Address, { rejectValue: stri
             const response = await fetch('/api/address', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer ${token}',
+                    
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(newAddress),
@@ -128,7 +128,7 @@ export const updateAddress = createAsyncThunk<Address, Address, { rejectValue: s
             const response = await fetch(`/api/address/${updatedAddress.id}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': 'Bearer ${token}',
+                    
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(updatedAddress),
@@ -154,7 +154,7 @@ export const deleteAddress = createAsyncThunk<string, string, { rejectValue: str
             const response = await fetch(`/api/address/${addressId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': 'Bearer ${token}',
+                   
                     'Content-Type': 'application/json',
                 },
             });
