@@ -30,9 +30,11 @@
   background-color: white;
 }
 
-.squareThree h1, h2, h5, h6{
+.squareThree h1,
+h2,
+h5,
+h6 {
   color: black;
-
 }
 
 .squareFour {
@@ -49,17 +51,17 @@
   background-color: white;
 }
 
-.quantity{
+.quantity {
   margin-left: 20px;
 }
 
-.serviceButtons{
+.serviceButtons {
   position: absolute;
   right: 70px;
   bottom: 60px;
 }
 
-.cardButtonEdit{
+.cardButtonEdit {
   width: 300px;
   padding: 15px;
   font-size: 20px;
@@ -72,7 +74,7 @@
   transition: background-color 0.3s;
 }
 
-.cardButtonDelete{
+.cardButtonDelete {
   width: 300px;
   padding: 15px;
   font-size: 20px;
@@ -85,7 +87,7 @@
   transition: background-color 0.3s;
 }
 
-.cardButtonArchive{
+.cardButtonArchive {
   width: 300px;
   padding: 15px;
   font-size: 20px;
@@ -98,10 +100,22 @@
   transition: background-color 0.3s;
 }
 
-.descriptionInput, .characteristicsInput{
+.descriptionInput,
+.characteristicsInput {
   width: 1000px;
   height: auto;
 }
 
-
-
+.addButton {
+  font-family: "Inria Serif", serif;
+  background-color: #1b8b57;
+  width: 300px;
+  padding: 15px;
+  font-size: 20px;
+  font-family: "Inria Serif", serif;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}

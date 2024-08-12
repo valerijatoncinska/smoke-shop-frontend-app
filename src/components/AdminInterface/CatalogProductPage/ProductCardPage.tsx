@@ -1,10 +1,11 @@
 import React from "react"
-import { NavLink } from "react-router-dom"
-import { addProduct, Product } from "../../../store/redux/productSlice"
+import { NavLink, useNavigate } from "react-router-dom"
+import { addProduct, fetchProducts, Product } from "../../../store/redux/productSlice"
 import "./ProductCardPage.css"
 import { useAppDispatch } from "../../../app/hook"
-import { useSelector } from "react-redux"
-import { RootState } from "store/store"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "store/store"
+import axios from "axios"
 
 interface ProductCardPageProps {
   product: Product
@@ -12,8 +13,25 @@ interface ProductCardPageProps {
 
 const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
   const { products } = useSelector((state: RootState) => state.products)
-  const dispatch = useAppDispatch()
   const productToAdd = products.filter(item => item.id === product.id)
+  const dispatch: AppDispatch = useDispatch()
+
+  const handleAddProductToCatalog = () => {
+    console.log(productToAdd[0])
+
+    axios
+      .put(`/api/products/${productToAdd[0].id}`, {
+        ...productToAdd[0],
+        active: true,
+      })
+      .then(response => {
+        console.log("Response", response.data)
+        dispatch(fetchProducts())
+      })
+      .catch(error => {
+        console.log("Error", error)
+      })
+  }
 
   return (
     // <div className="card mb-3">
@@ -57,10 +75,7 @@ const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
             <NavLink to={`/admin/product/${product.id}`}>
               <button className="cardButtonText">View Details</button>
             </NavLink>
-            <button
-              className="addButton"
-              onClick={() => dispatch(addProduct(productToAdd[0]))}
-            >
+            <button className="addButton" onClick={handleAddProductToCatalog}>
               Add to catalog
             </button>
           </div>

@@ -27,18 +27,6 @@ const AdminArchivatedProductsPage: React.FC = () => {
 
   useEffect(() => {dispatch(fetchProducts())}, [])
 
-  const handleSortAsc = () => {
-    dispatch(sortByPriceAsc())
-  }
-
-  const handleSortDesc = () => {
-    dispatch(sortByPriceDesc())
-  }
-
-  const handleAddProductClick = () => {
-    dispatch(setIsAddedTrue())
-  }
-
   return (
     <>
       <div className={`mt-0 ${styles.containerCatalog} w-100`}>
