@@ -40,7 +40,7 @@ const UserProfilePage: React.FC = () => {
     if (userData) {
       try {
         const response = await axios.put(
-          `/api/user/profile`, // Replace with the correct endpoint
+          `/api/user/profile`,
           {
             name: userData.name,
             street: userData.street,
@@ -57,13 +57,22 @@ const UserProfilePage: React.FC = () => {
         );
 
         if (response.status === 200) {
-          await dispatch(updateUser(userData));
+          const updatedUser = { ...userData, ...response.data };
+
+          // Обновляем состояние в Redux
+          await dispatch(updateUser(updatedUser));
+          
+          // Обновляем локальное состояние
+          setUserData(updatedUser);
+
           setIsEditing(false);
+          alert("Profile updated successfully!");
         } else {
           console.error("Failed to update profile.");
         }
       } catch (error) {
         console.error("Error updating profile:", error);
+        alert("Error updating profile. Please try again later.");
       }
     }
   };
@@ -135,7 +144,7 @@ const UserProfilePage: React.FC = () => {
               />
               <input
                 type="text"
-                name="houseNumber"
+                name="house"
                 value={userData.house || ""}
                 placeholder="House Number"
                 onChange={handleChange}
@@ -164,9 +173,11 @@ const UserProfilePage: React.FC = () => {
         </div>
       </div>
       <div className="buttons">
-        <button className="edit-profile" onClick={handleEdit}>
-          Edit profile
-        </button>
+        {!isEditing && (
+          <button className="edit-profile" onClick={handleEdit}>
+            Edit profile
+          </button>
+        )}
         <button className="logout" onClick={handleLogout}>
           Logout
         </button>
