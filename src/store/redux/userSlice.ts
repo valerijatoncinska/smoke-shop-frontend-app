@@ -9,6 +9,9 @@ interface User {
   subscribe?: boolean
   accessToken: string
   refreshToken: string
+  roles: [{
+    authority: string
+  }]
 }
 
 export interface ActivationResponse {
@@ -47,7 +50,7 @@ export const loginUser = createAsyncThunk<
       },
     })
 
-    const { email, accessToken, refreshToken } = response.data
+    const { email, accessToken, refreshToken, roles } = response.data
 
     Cookies.set("ACCESS_TOKEN", accessToken, { expires: 1 })
     Cookies.set("REFRESH_TOKEN", refreshToken, { expires: 3 })
@@ -57,6 +60,7 @@ export const loginUser = createAsyncThunk<
       email,
       accessToken,
       refreshToken,
+      roles
     }
 
     return userData
