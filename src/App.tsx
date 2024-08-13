@@ -1,5 +1,5 @@
-import React from "react"
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import React, { useEffect } from "react"
+import { BrowserRouter as Router, Route, Routes, useAsyncError } from "react-router-dom"
 import OrderPage from "./components/OrderPage/OrderPage"
 import AddProductForm from "./components/AddProductForm/AddProductForm"
 import CheckoutPage from "./components/CheckoutPage/CheckoutPage"
@@ -23,7 +23,19 @@ import ProductDetails from "./components/AdminInterface/CatalogProductPage/Produ
 import AccountAdmin from "./components/AdminInterface/AccountAdmin/AccountAdmin"
 import AccountActivation from "./components/AuthRootComponent/AccountActivation"
 
+
+import { useAppDispatch, useAppSelector } from "../src/app/hook"
+import { getCurrentUser } from "../src/store/redux/userSlice"
+
 const App: React.FC = () => {
+  const user = useAppSelector(state => state.user.user)
+  const isLoggedIn = useAppSelector(state => state.user.isLoggedIn)
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(getCurrentUser())
+    }
+  },[isLoggedIn])
   return (
     <div className="App">
       <header className="App-header"></header>

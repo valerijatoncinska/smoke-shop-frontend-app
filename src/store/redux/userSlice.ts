@@ -1,3 +1,4 @@
+
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 import Cookies from "js-cookie"
@@ -92,7 +93,7 @@ export const registerUser = createAsyncThunk<
   { rejectValue: string }
 >("user/registerUser", async (userData, { rejectWithValue }) => {
   try {
-     await axios.post("/api/author/reg", userData, {
+    await axios.post("/api/author/reg", userData, {
       headers: { "Content-Type": "application/json" },
     })
 
@@ -118,7 +119,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
     try {
       const token = Cookies.get('accessToken');
       const response = await axios.get("/api/author/logout"
-      
+
       )
 
       if (response.status !== 200) {
@@ -155,7 +156,25 @@ export const activateAccount = createAsyncThunk<string, string, { rejectValue: s
   }
 );
 
+export const getCurrentUser = createAsyncThunk<User, void>(
+  "user/getCurrentUser",
+  async (_) => {
+    try {
 
+      const response = await axios.get("/api/author/profile"
+
+      )
+
+      if (response.status !== 200) {
+        throw new Error("Failed to logout");
+      }
+      return response.data;
+
+    } catch (error) {
+
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -195,6 +214,8 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "error"
         state.error = action.payload as string
+        state.isLoggedIn = false
+        state.user = null
       })
 
       // Регистрация
@@ -229,9 +250,13 @@ const userSlice = createSlice({
         state.activationStatus = 'loading';
         state.messageState.message = null;
       })
+
       .addCase(activateAccount.fulfilled, (state, action) => {
         state.activationStatus = 'success';
         state.messageState.message = action.payload;
+      })
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.user = action.payload;
       })
       .addCase(activateAccount.rejected, (state, action) => {
         state.activationStatus = 'error';
@@ -239,6 +264,7 @@ const userSlice = createSlice({
       });
   },
 })
+
 
 export const { login, logout, updateUser, clearError } = userSlice.actions
 export default userSlice.reducer
