@@ -206,23 +206,23 @@ const ProductDetails: FC = () => {
             <div className="rightColumn ms-5">
               <div className="squareThree">
                 <input
-                  className="py-3 ps-5"
+                  className="titleInput"
                   value={productTitle}
                   onChange={e => setProductTitle(e.target.value)}
                 />
                 <div className="ps-5 py-3 d-flex">
-                  <h6 className="me-5">Price of product:</h6>
+                  <h6 className="me-5 mt-2">Price of product:</h6>
                   <input
-                    className="ms-5"
+                    className="priceInput"
                     value={productPrice}
                     onChange={e => setProductPrice(+e.target.value)}
                   />
-                  €
+                   <span className="input-group-text">€</span>
                 </div>
                 <div className="ps-5 pt-1 d-flex">
                   <h6 className="me-5">Quantity of product:</h6>
                   <input
-                    className="quantity"
+                    className="quantityInput"
                     value={productQuantity}
                     onChange={e => setProductQuantity(+e.target.value)}
                   />
@@ -230,7 +230,7 @@ const ProductDetails: FC = () => {
               </div>
               <div className="squareFour p-3 ps-5">
                 <h5>Description</h5>
-                <input
+                <textarea
                   className="descriptionInput"
                   value={productDescription}
                   onChange={e => setProductDescription(e.target.value)}
@@ -238,7 +238,7 @@ const ProductDetails: FC = () => {
               </div>
               <div className="squareFive p-3 ps-5">
                 <h5>Characteristics</h5>
-                <input
+                <textarea
                   className="characteristicsInput"
                   value={productCharacteristics}
                   onChange={e => setProductCharacteristics(e.target.value)}

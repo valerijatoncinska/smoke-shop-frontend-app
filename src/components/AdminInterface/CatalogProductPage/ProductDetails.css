@@ -103,7 +103,7 @@ h6 {
 .descriptionInput,
 .characteristicsInput {
   width: 1000px;
-  height: auto;
+  height: 150px;
 }
 
 .addButton {
@@ -118,4 +118,24 @@ h6 {
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
+}
+
+.titleInput{
+  margin-top: 3%;
+  margin-left: 4%;
+  border: 1px solid rgba(0, 0, 0, .3);
+  padding: 10px;
+  width: 1000px;
+}
+
+.priceInput{
+  margin-left: 2.5%;
+}
+
+.cardButtonArchive:hover, .addButton:hover, .cardButtonDelete:hover, .cardButtonEdit:hover {
+  background-color: #353535;
+}
+
+.titleInput:hover, .quantityInput:hover, .priceInput:hover, .characteristicsInput:hover, .descriptionInput:hover{
+  background-color: #bebebe;
 }

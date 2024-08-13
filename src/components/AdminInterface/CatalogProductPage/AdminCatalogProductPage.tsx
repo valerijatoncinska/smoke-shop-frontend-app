@@ -6,10 +6,7 @@ import ProductCardPage from "./ProductCardPage"
 import { setIsAddedTrue } from "../../../store/redux/openAddProductFormSlice"
 import AddProductForm from "../../../components/AddProductForm/AddProductForm"
 import React, { useEffect, useState } from "react"
-import {
-  fetchProducts,
-  Product,
-} from "../../../store/redux/productSlice"
+import { fetchProducts, Product } from "../../../store/redux/productSlice"
 
 const AdminCatalogProductPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("")
@@ -24,6 +21,10 @@ const AdminCatalogProductPage: React.FC = () => {
   useEffect(() => {
     setFilteredProducts(products) // Устанавливаем все продукты как изначально отображаемые
   }, [products])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  })
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
@@ -52,14 +53,14 @@ const AdminCatalogProductPage: React.FC = () => {
     dispatch(setIsAddedTrue())
   }
 
-  const handleProductAdded  = () => {
+  const handleProductAdded = () => {
     dispatch(fetchProducts())
   }
 
   return (
     <>
       <div className={`z-1 container ${styles1.addProductContainer}`}>
-        <AddProductForm onProductAdded={handleProductAdded}/>
+        <AddProductForm onProductAdded={handleProductAdded} />
       </div>
 
       <div className={`mt-0 ${styles.containerCatalog} w-100`}>

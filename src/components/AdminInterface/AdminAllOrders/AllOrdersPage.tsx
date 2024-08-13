@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./AllOrdersPage.css"
-import { useSelector } from "react-redux"
-import { RootState } from "../../../store/store"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../../store/store"
 import OrderComponent from "./OrderComponent"
 import { useAppDispatch } from "../../../app/hook"
 import { fetchOrders } from "../../../store/redux/orderSlice"
@@ -93,7 +93,16 @@ const AllOrdersPage = () => {
   //   // Add more orders as needed
   // ]
 
+  const dispatch: AppDispatch = useDispatch()
   const { orders } = useSelector((state: RootState) => state.order)
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  })
+
+  // useEffect(() => {
+  //   dispatch(fetchOrders())
+  // }, [])
   // const status = useSelector((state: RootState) => state.user.status)
   // const dispatch = useAppDispatch();
 

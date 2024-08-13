@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store" // Свойство объявлено, но его значение не было прочитано.
 import { setIsAddedFalse } from "../../store/redux/openAddProductFormSlice"
 import axios from "axios"
+import "./AddProductForm.css"
 
 interface AddProductFormProps {
   onProductAdded: () => void
@@ -57,7 +58,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
   return (
     <form onSubmit={handleSubmit}>
       <h1>Add Product Form</h1>
-      <div>
+      <div className="fo">
         <label>
           Product Name:
           <input
