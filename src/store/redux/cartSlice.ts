@@ -170,21 +170,29 @@ const cartSlice = createSlice({
     reducers: {
         // Добавление товара в корзину
         addItemToCart(state, action: PayloadAction<CartItem>) {
+            // Находим товар в корзине по ID, если он уже есть
             const existingItem = state.items.find(item => item.id === action.payload.id);
             if (existingItem) {
                 // Если товар уже есть в корзине, увеличиваем количество и пересчитываем общую стоимость
                 existingItem.quantity += action.payload.quantity;
-                existingItem.totalPrice = existingItem.quantity * existingItem.price;
+                existingItem.totalPrice = parseFloat((existingItem.quantity * existingItem.price).toFixed(2)); // Округляем сумму до 2 знаков после запятой
             } else {
                 // Если товара нет в корзине, добавляем его
-                state.items.push(action.payload);
+                state.items.push({
+                    ...action.payload,
+                    totalPrice: parseFloat((action.payload.quantity * action.payload.price).toFixed(2)) // Округляем сумму до 2 знаков после запятой
+                });
             }
         },
+
         // Обновление товара в корзине
         updateCartItem(state, action: PayloadAction<CartItem>) {
+            // Находим индекс товара в корзине по ID
             const index = state.items.findIndex(item => item.id === action.payload.id);
             if (index !== -1) {
-                state.items[index] = action.payload;
+                // Если товар найден, обновляем количество и пересчитываем общую стоимость
+                state.items[index].quantity = action.payload.quantity;
+                state.items[index].totalPrice = parseFloat((action.payload.quantity * state.items[index].price).toFixed(2)); // Округляем сумму до 2 знаков после запятой
             }
         },
         // Удаление товара из корзины
