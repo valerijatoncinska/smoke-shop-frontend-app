@@ -63,16 +63,16 @@ const CartPage: React.FC = () => {
                         <span>{item.quantity}</span>
                         <span>{item.totalPrice}</span>
                         {/* Используем handleAddItemToCart для обработки нажатия на "+" */}
-                        <button onClick={() => handleAddItemToCart(item)}>+</button>
-                        <button onClick={() => dispatch(updateCartItem({ ...item, quantity: item.quantity - 1 }))}>-</button>
-                        <button onClick={() => dispatch(removeItemFromCart(item.id))}>Delete</button>
+                        <button onClick={() => handleAddItemToCart(item)}>+</button> {/*Кнопка для добавления товара в корзину */}
+                        <button onClick={() => dispatch(updateCartItem({ ...item, quantity: item.quantity - 1 }))}>-</button> {/* Кнопка для уменьшения количества товара в корзине */}
+                        <button onClick={() => dispatch(removeItemFromCart(item.id))}>Delete</button> {/* Кнопка для удаления товара из корзины */}
                     </div>
                 ))}
             </div>
-            <footer className="cart-footer">
-                <span>Total Price: {cartItems.reduce((total, item) => total + item.totalPrice, 0).toFixed(2)}</span>
-                <button onClick={() => dispatch(clearCart())}>Clear Cart</button>
-                <button onClick={handleProceedToPayment}>Proceed to Payment</button>
+            <footer className="cart-footer"> {/* Отображение общей суммы корзины */}
+                <span>Total Price: {cartItems.reduce((total, item) => total + item.totalPrice, 0).toFixed(2)}</span> {/* Логика округления 2 знаков после запятой, если количество товара изменилось, сумма будет пересчитана автоматически */}
+                <button onClick={() => dispatch(clearCart())}>Clear Cart</button> {/* Кнопка для очистки корзины */}
+                <button onClick={handleProceedToPayment}>Proceed to Payment</button> {/* Кнопка для перехода к оплате */}
             </footer>
         </div>
     );
