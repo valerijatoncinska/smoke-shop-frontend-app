@@ -1,71 +1,85 @@
 .card {
   border-radius: 10px;
   overflow: hidden;
-  margin: 10px; 
-  width: 18rem; 
-  height: 22rem; 
+  margin: 10px;
+  width: 18rem;
+  height: 23rem;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   background-color: #d9d9d9;
-  position: relative; 
+  position: relative;
+  box-sizing: border-box;
 }
 
 .cardImage {
   width: 100%;
-  height: 65%;
+  height: 60%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .cardImage img {
-  max-width: 85%; 
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 2px;
+}
+
+.noImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e9e6e6;
+  color: #888;
+  font-size: 1.2em;
 }
 
 .cardBody {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   flex: 1;
+  padding: 0 10px; 
+  background-color: #d9d9d9;
 }
 
 .cardTitle {
   font-size: 20px;
   text-align: center;
-  margin-top: 70%;
-  margin-bottom: 10px;
   font-family: "Inria Serif", serif;
   color: black;
+  margin: 0;
 }
 
-.cardText {
-  font-size: 18px; 
-  margin-bottom: 20%; 
+.cardPrice {
+  font-size: 18px;
   text-align: center;
   font-family: "Inria Serif", serif;
   color: black;
+  margin: 0;
 }
 
 .cardButton {
-  position: absolute; 
   bottom: 0;
   left: 0;
   width: 100%;
 }
 
 .cardButtonText {
-  width: 100%; 
-  padding: 15px; 
-  font-size: 20px; 
+  width: 100%;
+  padding: 15px;
+  font-size: 20px;
   font-family: "Inria Serif", serif;
-  background-color: #774136; 
-  color: white; 
-  border: none; 
-  cursor: pointer; 
+  background-color: #774136;
+  color: white;
+  border: none;
+  cursor: pointer;
   transition: background-color 0.3s;
+  border-radius: 0 0 5px 5px;
 }
 
 .cardButtonText:hover {
-  background-color: #333; 
+  background-color: #333;
 }
