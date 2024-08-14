@@ -10,6 +10,7 @@ import {
   selectAddresses,
   CartItem,
   deleteCartItem,
+  clearCartReducer,
 } from "../../store/redux/cartSlice"
 import { useNavigate } from "react-router-dom"
 import "./CartPage.css"
@@ -66,6 +67,13 @@ const CartPage: React.FC = () => {
     return <div>Loading...</div>
   }
 
+  const handleClearCart = () => {
+    dispatch(clearCart())
+    dispatch(clearCartReducer())
+  }
+
+
+
   return (
     <div className="cart-page">
       <header className="cart-header">
@@ -104,7 +112,7 @@ const CartPage: React.FC = () => {
             .toFixed(2)}
         </span>
         {/* Логика округления 2 знаков после запятой, если количество товара изменилось, сумма будет пересчитана автоматически */}
-        <button onClick={() => dispatch(clearCart())}>Clear Cart</button>{" "}
+        <button onClick={handleClearCart}>Clear Cart</button>{" "}
         {/* Кнопка для очистки корзины */}
         <button onClick={handleProceedToPayment}>
           Proceed to Payment

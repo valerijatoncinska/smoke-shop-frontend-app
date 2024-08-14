@@ -248,6 +248,29 @@ CartItem,
   }
 })
 
+export const clearCart = createAsyncThunk<
+  void,
+  void,
+  { rejectValue: string }
+>("cart/clearCart", async (_, { rejectWithValue }) => {
+  try {
+    const response = await fetch(`/api/cart/clear`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to delete address")
+    }
+
+    return response.json();
+  } catch (error: any) {
+    return rejectWithValue(error.message)
+  }
+})
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -279,7 +302,7 @@ const cartSlice = createSlice({
     //   state.items = state.items.filter(item => item.id !== action.payload)
     // },
     // Очистка корзины
-    clearCart(state) {
+    clearCartReducer(state) {
       state.items = []
     },
   },
@@ -353,13 +376,16 @@ const cartSlice = createSlice({
       .addCase(addItemToCart.fulfilled, (state, action) => {
         state.items.push(action.payload)
       })
+      .addCase(clearCart.fulfilled, (state) => {
+        state.items = []
+      })
   },
 })
 
 export const {
 //   addItemToCart,
   /* updateCartItem, */ /* removeItemFromCart, */
-  clearCart,
+  clearCartReducer,
 } = cartSlice.actions
 
 export const selectCart = (state: RootState) => state.cart.items
