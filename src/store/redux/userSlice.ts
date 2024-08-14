@@ -80,7 +80,7 @@ export const loginUser = createAsyncThunk<
         }
       }
     }
-    return rejectWithValue("An unexpected error occurred")
+    return rejectWithValue("Email or password is incorrect")
   }
 })
 
@@ -132,7 +132,6 @@ export const activateAccount = createAsyncThunk<
     const response = await axios.get<ActivationResponse>(
       `/api/author/account-activate/${uuid}`,
     )
-    console.log("Response from server:", response.data)
     return response.data.message || "Account successfully activated!"
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -27,6 +27,7 @@
   color: #000;
   font-size: 24px;
   margin-bottom: 20px;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .formGroup {
@@ -39,6 +40,7 @@
   display: block;
   margin-bottom: 8px;
   font-size: 16px;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .input {
@@ -49,6 +51,7 @@
   border: 1px solid #000000;
   border-radius: 8px;
   background-color: #d9d9d9;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .button {
@@ -61,6 +64,7 @@
   font-size: 16px;
   cursor: pointer;
   margin-top: 20px;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .button:hover {
@@ -95,6 +99,7 @@
   border-radius: 10px;
   font-size: 12px;
   cursor: pointer;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .goHomeButton:hover {
@@ -115,6 +120,7 @@
   cursor: pointer;
   font-size: 14px;
   color: #007bff;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .errorContainer {
@@ -131,6 +137,7 @@
   margin-bottom: 5px;
   font-size: 14px;
   color: rgb(255, 0, 0);
+  font-family: "Inria Serif", sans-serif;
 }
 
 /* Медиазапросы для разных размеров экрана */

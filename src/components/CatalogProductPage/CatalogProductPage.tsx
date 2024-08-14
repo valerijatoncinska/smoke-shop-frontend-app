@@ -16,7 +16,7 @@ import { RootState } from "../../store/store"
 const CatalogProductPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const { status, filteredProducts } = useSelector(
-    (state: RootState) => state.products
+    (state: RootState) => state.products,
   )
   const [searchQuery, setSearchQuery] = useState<string>("")
   const navigate = useNavigate()
@@ -48,59 +48,75 @@ const CatalogProductPage: React.FC = () => {
   }
 
   return (
-    <div className={styles.containerCatalog}>
-      <div className={styles.searchContainer}>
-        <div className={styles.searchInput}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Search product by name"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <button onClick={() => dispatch(filterProductsByName(searchQuery))}>
-            Search
+    <>
+      <div className={styles.backgroundImageContainer}>
+        <img src="/img/img.jpg" alt="Main Background" />
+      </div>
+      <div className={styles.containerCatalog}>
+        <div className={styles.searchContainer}>
+          <div className={styles.searchInput}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Search product by name"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <button onClick={() => dispatch(filterProductsByName(searchQuery))}>
+              Search
+            </button>
+          </div>
+          <button
+            type="button"
+            className={styles.goHomeButton}
+            onClick={handleGoHome}
+          >
+            Go to Home
           </button>
         </div>
-        <button
-          type="button"
-          className={styles.goHomeButton}
-          onClick={handleGoHome}
-        >
-          Go to Home
-        </button>
-      </div>
-      <div className={styles.sortButtons}>
-        <button onClick={handleSortAsc}>Sort by Price Ascending</button>
-        <button onClick={handleSortDesc}>Sort by Price Descending</button>
-      </div>
-      <h3 className={styles.catalogTitle}>Product Catalog</h3>
-      <div className={styles.separator}></div>
+        <div className={styles.sortButtons}>
+          <button onClick={handleSortAsc}>Sort by Price Ascending</button>
+          <button onClick={handleSortDesc}>Sort by Price Descending</button>
+        </div>
+        <h3 className={styles.catalogTitle}>Product Catalog</h3>
+        <div className={styles.separator}></div>
 
-      {status === "loading" && (
-        <div className="text-center">
-          <div className="spinner-border text-white" role="status">
-            <span className="visually-hidden">Loading...</span>
+        {status === "loading" && (
+          <div className="text-center">
+            <div className="spinner-border text-white" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {status === "success" && (
-        <div className={styles.cardContainer}>
-          {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <ProductCardPage key={product.id} product={product} />
-            ))
-          ) : (
-            <p style={{ color: "white", fontSize: "1.5rem", textAlign: 'center' }}>
-              No products available
-            </p>
-          )}
-        </div>
-      )}
+        {status === "success" && (
+          <div className={styles.cardContainer}>
+            {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
+              filteredProducts.map((product, index) => (
+                <ProductCardPage key={product.id} product={product} />
+              ))
+            ) : (
+              <p
+                style={{
+                  color: "white",
+                  fontSize: "1.5rem",
+                  textAlign: "center",
+                }}
+              >
+                No products available
+              </p>
+            )}
+          </div>
+        )}
 
-      {status === "error" && <p style={{ color: 'white', fontSize: '1.5rem' }}>Error!</p>}
-    </div>
+        {status === "error" && (
+          <p style={{ color: "white", fontSize: "1.5rem" }}>Error!</p>
+        )}
+      </div>
+      <footer className={styles.footer}>
+        <p className={styles.pBottom}>Have a good day!</p>
+      </footer>
+    </>
   )
 }
 
