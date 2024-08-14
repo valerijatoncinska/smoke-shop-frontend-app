@@ -22,23 +22,23 @@ const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
 
   return (
     <div className={styles.card}>
-  <div className={styles.cardImage}>
-    {productImage ? (
-      <img src={productImage} alt={product.title} />
-    ) : (
-      <div className={styles.noImagePlaceholder}>
-        No Image Available
+      <div className={styles.cardImage}>
+        {productImage ? (
+          <img src={productImage} alt={product.title} />
+        ) : (
+          <div className={styles.noImagePlaceholder}>No Image Available</div>
+        )}
       </div>
-    )}
-  </div>
-  <div className={styles.cardBody}>
-    <h5 className={styles.cardTitle}>{product.title}</h5>
-    <p className={styles.cardPrice}>{product.price} $</p>
-  </div>
-  <div className={styles.cardButton}>
-    <button className={styles.cardButtonText} onClick={handleViewDetails}>View Details</button>
-  </div>
-</div>
+      <div className={styles.cardBody}>
+        <h5 className={styles.cardTitle}>{product.title}</h5>
+        <p className={styles.cardPrice}>{product.price} $</p>
+      </div>
+      <div className={styles.cardButton}>
+        <button className={styles.cardButtonText} onClick={handleViewDetails}>
+          View Details
+        </button>
+      </div>
+    </div>
   )
 }
 

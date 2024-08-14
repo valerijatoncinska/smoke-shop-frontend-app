@@ -78,7 +78,7 @@ const LoginPage: React.FC = () => {
       if (errorMessage === "Incorrect email or password") {
         setPasswordError("Incorrect email or password")
       } else if (
-        errorMessage === "Account is not active. Please check your email."
+        errorMessage === "There is no such account. Please register."
       ) {
         setEmailError("Please confirm your email address.")
       } else if (errorMessage === "Email or password is incorrect") {

@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
-import Cookies from "js-cookie"
 
 interface User {
   id?: number
@@ -68,13 +67,13 @@ export const loginUser = createAsyncThunk<
       if (error.response) {
         switch (error.response.status) {
           case 401:
-            return rejectWithValue("Incorrect email or password");
+            return rejectWithValue("Incorrect email or password")
           case 403:
-            return rejectWithValue("Account is not active. Please check your email.");
+            return rejectWithValue("There is no such account. Please register.")
           case 404:
-            return rejectWithValue("Email or password is incorrect");
+            return rejectWithValue("Email or password is incorrect")
           default:
-            return rejectWithValue("An unexpected error occurred.");
+            return rejectWithValue("An unexpected error occurred.")
         }
       }
     }
@@ -217,6 +216,7 @@ const userSlice = createSlice({
         state.status = "error"
         state.error = action.payload
       })
+      
       // Выход
       .addCase(logoutUser.pending, state => {
         state.status = "loading"
@@ -231,18 +231,15 @@ const userSlice = createSlice({
         state.status = "error"
         state.error = action.payload
       })
+
       // Активация аккаунта
       .addCase(activateAccount.pending, state => {
         state.activationStatus = "loading"
         state.messageState.message = undefined
       })
-
       .addCase(activateAccount.fulfilled, (state, action) => {
         state.activationStatus = "success"
         state.messageState.message = action.payload
-      })
-      .addCase(getCurrentUser.fulfilled, (state, action) => {
-        state.user = action.payload
       })
       .addCase(activateAccount.rejected, (state, action) => {
         state.activationStatus = "error"
