@@ -26,6 +26,9 @@ const AdminArchivatedProductsPage: React.FC = () => {
   const status = useSelector((state: RootState) => state.products.status)
 
   useEffect(() => {dispatch(fetchProducts())}, [])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  })
 
   return (
     <>

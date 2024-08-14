@@ -75,7 +75,7 @@ const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
             <NavLink to={`/admin/product/${product.id}`}>
               <button className="cardButtonText">View Details</button>
             </NavLink>
-            <button className="addButton" onClick={handleAddProductToCatalog}>
+            <button className="addToCatalogButton" onClick={handleAddProductToCatalog}>
               Add to catalog
             </button>
           </div>

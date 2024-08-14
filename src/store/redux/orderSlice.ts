@@ -22,12 +22,16 @@ const initialState: OrdersState = {
 }
 
 export const fetchOrders = createAsyncThunk<
-  { data: Order[] },
+  Order[],
   void,
   { state: RootState }
->("orders/fetchOrders", async () => {
-  const response = await axios.get<{ data: Order[] }>("/api/orders")
-  return response.data
+>("products/fetchProducts", async () => {
+  try {
+    const response = await axios.get<{ data: Order[] }>("/api/products");
+    return response.data.data;
+  } catch (error) {
+    throw new Error("Failed to fetch products");
+  }
 })
 
 const orderSlice = createSlice({
@@ -56,8 +60,8 @@ const orderSlice = createSlice({
       })
       .addCase(
         fetchOrders.fulfilled,
-        (state, action: PayloadAction<{ data: Order[] }>) => {
-          state.orders = action.payload.data
+        (state, action: PayloadAction<Order[]>) => {
+          state.orders = action.payload
         },
       )
       .addCase(fetchOrders.rejected, state => {
