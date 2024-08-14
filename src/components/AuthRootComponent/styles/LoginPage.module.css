@@ -3,64 +3,69 @@
   justify-content: center;
   align-items: center;
   background-attachment: fixed;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 8.125rem);
   margin-top: 2%;
-  padding: 0 20px;
+  padding: 0 1.25rem;
   z-index: 1;
   text-align: center; 
 }
 
 .card {
   width: 100%;
-  max-width: 550px;
+  max-width: 34.375rem;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
   background-color: #e4cabf;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .title {
   color: #000;
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .formGroup {
-  width: 100%; 
-  margin-bottom: 16px;
-  text-align: left; 
+  width: 100%;
+  margin-bottom: 1rem;
+  text-align: left;
 }
 
 .label {
   display: block;
-  margin-bottom: 8px;
-  font-size: 16px;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .input {
-  height: 39px;
+  height: 2rem;
   width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #000000;
-  border-radius: 8px;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  border: 0.0625rem solid #000000;
+  border-radius: 0.5rem;
   background-color: #d9d9d9;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .button {
-  height: 46px;
+  height: 2.25rem;
   width: 100%;
   background-color: #090908;
   color: #fff;
   border: none;
-  border-radius: 15px;
-  font-size: 16px;
+  border-radius: 0.9375rem;
+  font-size: 0.875rem;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 1.25rem;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .button:hover {
@@ -74,7 +79,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(8px);
+  filter: blur(0.5rem);
   z-index: -1;
 }
 
@@ -82,19 +87,20 @@
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  padding: 0 20px;
-  margin-top: 10px;
+  padding: 0 1.25rem;
+  margin-top: 0.625rem;
 }
 
 .goHomeButton {
-  height: 40px;
-  width: 130px;
+  height: 2.5rem;
+  width: 8.125rem;
   background-color: #e4cabf;
   color: #000;
   border: none;
-  border-radius: 10px;
-  font-size: 12px;
+  border-radius: 0.625rem;
+  font-size: 0.75rem;
   cursor: pointer;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .goHomeButton:hover {
@@ -107,61 +113,92 @@
 
 .togglePasswordButton {
   position: absolute;
-  right: 10px;
+  right: 0.625rem;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.75rem;
   color: #007bff;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .errorContainer {
-  margin-bottom: 20px;
-  padding: 10px;
+  margin-bottom: 1.25rem;
+  padding: 0.625rem;
   background-color: rgb(211, 201, 201);
-  border-radius: 4px;
+  border-radius: 0.25rem;
   max-width: 100%;
   box-sizing: border-box;
 }
 
 .error {
   text-align: center;
-  margin-bottom: 5px;
-  font-size: 14px;
+  margin-bottom: 0.3125rem;
+  font-size: 0.75rem;
   color: rgb(255, 0, 0);
+  font-family: "Inria Serif", sans-serif;
 }
 
-/* Медиазапросы для разных размеров экрана */
 @media (max-width: 768px) {
   .card {
-    padding: 30px 20px;
+    padding: 1.875rem 1.25rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .label {
+    font-size: 0.875rem;
   }
 
   .input {
-    height: 40px;
-    font-size: 14px;
+    height: 1.875rem;
+    font-size: 0.75rem;
   }
 
   .button {
-    height: 40px;
-    font-size: 14px;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .goHomeButton {
+    height: 1.875rem;
+    width: 6.25rem;
+    font-size: 0.625rem;
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    padding: 20px 10px;
+    padding: 1.25rem 0.625rem;
+  }
+
+  .title {
+    font-size: 1.125rem;
+  }
+
+  .label {
+    font-size: 0.75rem;
   }
 
   .input {
-    height: 36px;
-    font-size: 12px;
+    height: 1.625rem;
+    font-size: 0.625rem;
   }
 
   .button {
-    height: 36px;
-    font-size: 12px;
+    height: 1.75rem;
+    font-size: 0.625rem;
+  }
+
+  .goHomeButton {
+    height: 1.625rem;
+    width: 5rem;
+    font-size: 0.5rem;
   }
 }
+
+

@@ -25,10 +25,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 26px;
+  font-size: 1.6rem; /* Заменил 26px на rem */
   text-align: center;
   text-decoration: none;
-  font-family: "Inria Serif", serif;
+  font-family: "Inria Serif", sans-serif;
   font-weight: regular;
   transition: background-color 0.3s ease;
 }
@@ -45,7 +45,7 @@
 
 .error {
   color: rgb(0, 0, 0);
-  font-size: 1.2rem;
+  font-size: 1.2rem; /* Заменил 1.2rem на 1.2rem */
   text-align: center;
   margin-top: 20px;
 }
@@ -74,11 +74,10 @@
   color: white; 
   padding: 10px;
   border-radius: 5px; 
-  font-size: 50px;
+  font-size: 5rem; /* Заменил 50px на rem */
   margin-top: 8%;
   margin-right: 30%;
-  font-size: 5em;
-  font-family: "Inria Serif", serif;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .blackBottom {
@@ -95,12 +94,83 @@
 .pBottom {
   margin: 0;
   padding: 0;
-  font-size: 2em;
-  font-family: "Inria Serif", serif;
+  font-size: 2rem; /* Заменил 2em на rem */
+  font-family: "Inria Serif", sans-serif;
 }
 
-@keyframes spinner-border {
-  to {
-    transform: rotate(360deg);
+/* Медиазапросы для разных размеров экрана */
+@media (max-width: 768px) {
+  .button-container {
+    gap: 40px;
+  }
+
+  .button {
+    height: 60px;
+    width: 200px;
+    font-size: 1.3rem; /* Заменил 20px на rem */
+  }
+
+  .error {
+    font-size: 1rem; /* Заменил 1rem на rem */
+  }
+
+  .spinner-border {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .p {
+    font-size: 3rem; /* Заменил 4em на rem */
+    left: 10%;
+    top: 40%;
+    margin-right: 20%;
+  }
+
+  .blackBottom {
+    height: 80px;
+  }
+
+  .pBottom {
+    font-size: 1.5rem; /* Заменил 1.5em на rem */
   }
 }
+
+@media (max-width: 480px) {
+  .button-container {
+    gap: 20px;
+  }
+
+  .button {
+    height: 50px;
+    width: 140px;
+    font-size: 1.2rem; /* Заменил 18px на rem */
+  }
+
+  .error {
+    font-size: 0.9rem; /* Заменил 0.9rem на rem */
+  }
+
+  .spinner-border {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .p {
+    font-size: 2rem; /* Заменил 3em на rem */
+    left: 10%;
+    top: 20%;
+    margin-right: 15%;
+  }
+
+  .blackBottom {
+    height: 60px;
+  }
+
+  .pBottom {
+    font-size: 1rem; /* Заменил 1.2em на rem */
+  }
+}
+
+
+
+

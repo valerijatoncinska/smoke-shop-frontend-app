@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
-import Cookies from "js-cookie"
 
 interface User {
   id?: number
@@ -70,17 +69,15 @@ export const loginUser = createAsyncThunk<
           case 401:
             return rejectWithValue("Incorrect email or password")
           case 403:
-            return rejectWithValue("Forbidden: Access denied")
+            return rejectWithValue("There is no such account. Please register.")
           case 404:
             return rejectWithValue("Email or password is incorrect")
           default:
-            return rejectWithValue(
-              "Account is not active. Please check your email.",
-            )
+            return rejectWithValue("An unexpected error occurred.")
         }
       }
     }
-    return rejectWithValue("An unexpected error occurred")
+    return rejectWithValue("Email or password is incorrect")
   }
 })
 
@@ -132,7 +129,6 @@ export const activateAccount = createAsyncThunk<
     const response = await axios.get<ActivationResponse>(
       `/api/author/account-activate/${uuid}`,
     )
-    console.log("Response from server:", response.data)
     return response.data.message || "Account successfully activated!"
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -220,6 +216,7 @@ const userSlice = createSlice({
         state.status = "error"
         state.error = action.payload
       })
+      
       // Выход
       .addCase(logoutUser.pending, state => {
         state.status = "loading"
@@ -234,18 +231,15 @@ const userSlice = createSlice({
         state.status = "error"
         state.error = action.payload
       })
+
       // Активация аккаунта
       .addCase(activateAccount.pending, state => {
         state.activationStatus = "loading"
         state.messageState.message = undefined
       })
-
       .addCase(activateAccount.fulfilled, (state, action) => {
         state.activationStatus = "success"
         state.messageState.message = action.payload
-      })
-      .addCase(getCurrentUser.fulfilled, (state, action) => {
-        state.user = action.payload
       })
       .addCase(activateAccount.rejected, (state, action) => {
         state.activationStatus = "error"
