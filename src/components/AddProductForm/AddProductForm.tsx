@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store" // Свойство объявлено, но его значение не было прочитано.
 import { setIsAddedFalse } from "../../store/redux/openAddProductFormSlice"
 import axios from "axios"
-import "./AddProductForm.css"
+import "./AddProductForm.module.css"
 
 interface AddProductFormProps {
   onProductAdded: () => void
@@ -64,7 +64,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
           <input
             type="text"
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </label>
         <label>
@@ -72,7 +72,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
           <input
             type="number"
             value={price}
-            onChange={e => setPrice(e.target.value)}
+            onChange={(e) => setPrice(e.target.value)}
           />
         </label>
         <label>
@@ -80,14 +80,16 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
           <input
             type="number"
             value={quantity}
-            onChange={e => setQuantity(e.target.value)}
+            onChange={(e) => setQuantity(e.target.value)}
           />
         </label>
       </div>
-      <button type="button" onClick={handleCancelButton}>
-        Cancel
-      </button>
-      <button type="submit">Add Product</button>
+      <div>
+        <button type="button" onClick={handleCancelButton}>
+          Cancel
+        </button>
+        <button type="submit">Add Product</button>
+      </div>
     </form>
   )
 }
