@@ -68,15 +68,13 @@ export const loginUser = createAsyncThunk<
       if (error.response) {
         switch (error.response.status) {
           case 401:
-            return rejectWithValue("Incorrect email or password")
+            return rejectWithValue("Incorrect email or password");
           case 403:
-            return rejectWithValue("Forbidden: Access denied")
+            return rejectWithValue("Account is not active. Please check your email.");
           case 404:
-            return rejectWithValue("Email or password is incorrect")
+            return rejectWithValue("Email or password is incorrect");
           default:
-            return rejectWithValue(
-              "Account is not active. Please check your email.",
-            )
+            return rejectWithValue("An unexpected error occurred.");
         }
       }
     }

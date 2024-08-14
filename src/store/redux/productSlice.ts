@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
-import { Root } from "react-dom/client"
 import { RootState } from "store/store"
 
 export interface Product {
@@ -39,21 +38,6 @@ export const fetchProducts = createAsyncThunk<
   }
 })
 
-// export const fetchProducts = createAsyncThunk<Product[]>(
-//   "products/fetchProducts",
-//   async () => {
-//     const mockData: Product[] = [
-//       { id: 1, title: "Product 1", price: 100 },
-//       { id: 2, title: "Product 2", price: 200 },
-//       { id: 2, title: "Product 3", price: 200 },
-//       { id: 2, title: "Product 4", price: 5 },
-//       { id: 2, title: "Product 5", price: 200 },
-//       { id: 2, title: "Product 6", price: 200 },
-//       { id: 2, title: "Product 7", price: 200 }
-//     ];
-//     return new Promise((resolve) => setTimeout(() => resolve(mockData), 1000));
-//   }
-// );
 
 const productSlice = createSlice({
   name: "products",
@@ -111,3 +95,4 @@ const productSlice = createSlice({
 export const { addProduct, removeProduct, sortByPriceAsc, sortByPriceDesc, filterProductsByName, resetFilter, archiveProduct } = productSlice.actions
 
 export default productSlice.reducer
+

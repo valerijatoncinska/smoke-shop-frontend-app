@@ -73,12 +73,16 @@ const LoginPage: React.FC = () => {
       }
     } catch (error) {
       // Обработка ошибок от сервера
-      const errorMessage = error as string
+      const errorMessage = error as string;
 
-      if (errorMessage === "Email or password is incorrect") {
+      if (errorMessage === "Incorrect email or password") {
         setPasswordError("Incorrect email or password")
-      } else if (errorMessage === "Email is not registered") {
-        setEmailError("Email is not registered")
+      } else if (
+        errorMessage === "Account is not active. Please check your email."
+      ) {
+        setEmailError("Please confirm your email address.")
+      } else if (errorMessage === "Email or password is incorrect") {
+        setEmailError("Email or password is incorrect")
       } else {
         setGeneralError("An unexpected error occurred.")
       }
