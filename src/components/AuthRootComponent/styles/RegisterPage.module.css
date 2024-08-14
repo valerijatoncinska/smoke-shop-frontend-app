@@ -200,32 +200,45 @@
 /* Медиазапросы для разных размеров экрана */
 @media (max-width: 768px) {
   .card {
-    padding: 30px 20px;
+    padding: 2rem 1.25rem;
   }
 
   .input {
-    height: 36px;
-    font-size: 14px;
+    height: 2.25rem;
+    font-size: 0.875rem;
   }
 
   .button {
-    height: 40px;
-    font-size: 14px;
+    height: 2.875rem;
+    font-size: 0.875rem;
+  }
+
+  .goHomeButton {
+    height: 2.5rem;
+    width: 6.25rem;
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    padding: 20px 10px;
+    padding: 1.25rem 0.625rem;
   }
 
   .input {
-    height: 34px;
-    font-size: 12px;
+    height: 2rem;
+    font-size: 0.75rem;
   }
 
   .button {
-    height: 36px;
-    font-size: 12px;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .goHomeButton {
+    height: 1.875rem;
+    width: 5rem;
+    font-size: 0.625rem;
   }
 }
+

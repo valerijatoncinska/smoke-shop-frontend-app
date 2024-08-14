@@ -94,7 +94,7 @@ const RegisterPage: React.FC = () => {
   }
 
   const errors = [emailError, passwordError, repeatPasswordError, error].filter(
-    err => err !== null,
+    err => err && err.trim() !== "",
   )
 
   return (
@@ -109,12 +109,6 @@ const RegisterPage: React.FC = () => {
         </div>
       )}
 
-      {ageError && (
-        <div className={styles.errorContainer}>
-          <div className={styles.error}>{ageError}</div>
-        </div>
-      )}
-
       <div className={styles.container}>
         <img
           src="/img/unsplash_PzXqG8f2rrE.jpg"
@@ -125,7 +119,7 @@ const RegisterPage: React.FC = () => {
           {registration ? (
             <div className={styles.successContainer}>
               <h2 className={styles.successTitle}>
-              To complete your registration, check your email to confirm!
+                To complete your registration, check your email to confirm!
               </h2>
               <button
                 type="button"
