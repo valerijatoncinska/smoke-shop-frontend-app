@@ -1,6 +1,5 @@
 .card {
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   margin: 10px; 
   width: 18rem; 
@@ -11,10 +10,19 @@
   position: relative; 
 }
 
-.cardImgTop {
+.cardImage {
   width: 100%;
-  height: 200px;
+  height: 65%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardImage img {
+  max-width: 85%; 
+  max-height: 100%;
   object-fit: cover;
+  border-radius: 2px;
 }
 
 .cardBody {
