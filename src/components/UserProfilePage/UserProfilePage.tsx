@@ -40,7 +40,7 @@ const UserProfilePage: React.FC = () => {
     if (userData) {
       try {
         const response = await axios.put(
-          `/api/address/{id}`,
+          `/api/address/${user?.id}`,
           {
             name: userData.name,
             street: userData.street,
