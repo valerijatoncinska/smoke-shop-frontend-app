@@ -31,14 +31,17 @@ const UserProfilePage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get("/api/address", {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
         });
 
         if (response.status === 200) {
-          setUserData({ 
-            ...response.data, 
-            email: user?.email, 
-            accessToken: user?.accessToken, 
-            refreshToken: user?.refreshToken 
+          setUserData({
+            ...response.data,
+            email: user?.email,
+            accessToken: user?.accessToken,
+            refreshToken: user?.refreshToken,
           });
         } else {
           console.error("Failed to fetch user data.");
@@ -61,22 +64,27 @@ const UserProfilePage: React.FC = () => {
     if (userData) {
       try {
         const response = await axios.put(
-          `/api/address}`,
+          `/api/address/${userData.id}`,
           {
-            name: userData?.name,
-            street: userData?.street,
-            house: userData?.house,
-            postalCode: userData?.postalCode,
-            locality: userData?.city,
-            phone: userData?.phone,
+            name: userData.name,
+            street: userData.street,
+            house: userData.house,
+            postalCode: userData.postalCode,
+            city: userData.city,
+            phone: userData.phone,
           },
+          {
+            headers: {
+              Authorization: `Bearer ${userData.accessToken}`,
+            },
+          }
         );
 
         if (response.status === 200) {
           const updatedUser = { ...userData, ...response.data };
 
           // Обновляем состояние в Redux
-          await dispatch(updateUser(updatedUser));
+          dispatch(updateUser(updatedUser));
 
           // Обновляем локальное состояние
           setUserData(updatedUser);
