@@ -63,12 +63,12 @@ const UserProfilePage: React.FC = () => {
         const response = await axios.put(
           `/api/address/}`,
           {
-            name: userData?.name,
-            street: userData?.street,
-            house: userData?.house,
-            postalCode: userData?.postalCode,
-            city: userData?.city,
-            phone: userData?.phone,
+            name: userData.name,
+            street: userData.street,
+            house: userData.house,
+            postalCode: userData.postalCode,
+            city: userData.city,
+            phone: userData.phone,
           },
         );
 
