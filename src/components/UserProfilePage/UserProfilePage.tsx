@@ -31,9 +31,6 @@ const UserProfilePage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get("/api/address", {
-          headers: {
-            Authorization: `Bearer ${user?.accessToken}`,
-          },
         });
 
         if (response.status === 200) {
@@ -64,7 +61,7 @@ const UserProfilePage: React.FC = () => {
     if (userData) {
       try {
         const response = await axios.put(
-          `/api/address/${userData.id}`,
+          `/api/address/}`,
           {
             name: userData.name,
             street: userData.street,
@@ -73,11 +70,6 @@ const UserProfilePage: React.FC = () => {
             city: userData.city,
             phone: userData.phone,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${userData.accessToken}`,
-            },
-          }
         );
 
         if (response.status === 200) {

@@ -81,54 +81,55 @@ const CartPage: React.FC = () => {
       <header className="cart-header">
         <h1 className="title">Your Cart</h1>
       </header>
-      <button type="button" className="goHomeButton" onClick={handleGoHome}>
-        Go to Home
-      </button>
       <div className="cart-items-container">
         {cartItems.map(item => (
           <div key={item.id} className="cart-item">
-            <span>{item.title}</span>
-            <span>{item.quantity}</span>
-            <span>{item.totalPrice}</span>
-            {/* Используем handleAddItemToCart для обработки нажатия на "+" */}
-            {<button onClick={() => handleAddItemToCart(item)}>+</button>}
-            {/*Кнопка для добавления товара в корзину */}
-            <button onClick={() => handleRemoveOneItemFromCart(item)}>-</button>
-            {<button
-              onClick={() =>
-                handleRemoveOneItemFromCart(item)
-              }
+            {/* Контейнер для изображения товара */}
+            <div className="item-image-container">
+              <div className="item-image"></div>
+            </div>
+            {/* Детали товара */}
+            <div className="item-details">
+              <span className="item-title">{item.title}</span>
+              <span className="item-price">${item.totalPrice.toFixed(2)}</span>
+            </div>
+            {/* Контроллер количества товара */}
+            <div className="quantity-control">
+              <button onClick={() => handleRemoveOneItemFromCart(item)}>
+                -
+              </button>
+              <span>{item.quantity}</span>
+              <button onClick={() => handleAddItemToCart(item)}>+</button>
+            </div>
+            {/* Кнопка удаления товара из корзины */}
+            <button
+              onClick={() => dispatch(deleteCartItem(item.id))}
+              className="delete-button"
             >
-              -
-            </button>}
-            {/* Кнопка для уменьшения количества товара в корзине */}
-            <button onClick={() => dispatch(deleteCartItem(item.id))}>
               Delete
             </button>
-            {/* Кнопка для удаления товара из корзины */}
           </div>
         ))}
+        {/* Кнопка для очистки корзины */}
         <button onClick={handleClearCart} className="clear-cart-button">
           Clear Cart
-        </button>{" "}
-        {/* Кнопка для очистки корзины */}
+        </button>
       </div>
       <footer className="cart-footer">
         {/* Отображение общей суммы корзины */}
         <span>
-          Total Price:
+          Total Price: $
           {cartItems
             .reduce((total, item) => total + item.totalPrice, 0)
             .toFixed(2)}
         </span>
-        {/* Логика округления 2 знаков после запятой, если количество товара изменилось, сумма будет пересчитана автоматически */}
+        {/* Кнопка для перехода к оплате */}
         <button
           onClick={handleProceedToPayment}
           className="proceed-to-payment-button"
         >
           Proceed to Payment
         </button>
-        {/* Кнопка для перехода к оплате */}
       </footer>
     </div>
   )
