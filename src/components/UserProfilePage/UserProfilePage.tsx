@@ -34,11 +34,11 @@ const UserProfilePage: React.FC = () => {
         });
 
         if (response.status === 200) {
-          setUserData({ 
-            ...response.data, 
-            email: user?.email, 
-            accessToken: user?.accessToken, 
-            refreshToken: user?.refreshToken 
+          setUserData({
+            ...response.data,
+            email: user?.email,
+            accessToken: user?.accessToken,
+            refreshToken: user?.refreshToken,
           });
         } else {
           console.error("Failed to fetch user data.");
@@ -61,13 +61,13 @@ const UserProfilePage: React.FC = () => {
     if (userData) {
       try {
         const response = await axios.put(
-          `/api/address/${userData?.id}`,
+          `/api/address/}`,
           {
             name: userData.name,
             street: userData.street,
             house: userData.house,
             postalCode: userData.postalCode,
-            locality: userData.city,
+            city: userData.city,
             phone: userData.phone,
           },
         );
@@ -76,7 +76,7 @@ const UserProfilePage: React.FC = () => {
           const updatedUser = { ...userData, ...response.data };
 
           // Обновляем состояние в Redux
-          await dispatch(updateUser(updatedUser));
+          dispatch(updateUser(updatedUser));
 
           // Обновляем локальное состояние
           setUserData(updatedUser);

@@ -109,6 +109,7 @@ const CartPage: React.FC = () => {
             <div className="item-details">
               <span className="item-title">{item.title}</span>
               <span className="item-price">${item.totalPrice.toFixed(2)}</span>
+              <span>{item.totalPrice}</span>
             </div>
             {/* Контроллер количества товара */}
             <div className="quantity-control">
@@ -153,54 +154,3 @@ const CartPage: React.FC = () => {
 }
 
 export default CartPage
-
-//       <div className="item-details">
-//         <span className="item-title">Product 1</span>
-//         <span className="item-price">$20.00</span>
-//       </div>
-//       <div className="quantity-control">
-//         <button>+</button>
-//         <span>1</span>
-//         <button>-</button>
-//       </div>
-//       <button className="delete-button">Delete</button>
-//     </div>
-//     <div className="cart-item">
-//       <div className="item-image-container">
-//         <div className="item-image"></div>
-//       </div>
-//       <div className="item-details">
-//         <span className="item-title">Product 2</span>
-//         <span className="item-price">$15.50</span>
-//       </div>
-//       <div className="quantity-control">
-//         <button>+</button>
-//         <span>2</span>
-//         <button>-</button>
-//       </div>
-//       <button className="delete-button">Delete</button>
-//     </div>
-//     <div className="cart-item">
-//       <div className="item-image-container">
-//         <div className="item-image"></div>
-//       </div>
-//       <div className="item-details">
-//         <span className="item-title">Product 3</span>
-//         <span className="item-price">$7.99</span>
-//       </div>
-//       <div className="quantity-control">
-//         <button>+</button>
-//         <span>3</span>
-//         <button>-</button>
-//       </div>
-//       <button className="delete-button">Delete</button>
-//     </div>
-//     <button className="clear-cart-button">Clear Cart</button>
-//   </div>
-//   <footer className="cart-footer">
-//     <span>
-//       Total Price: $58.49
-//     </span>
-//     <button className="proceed-to-payment-button">Proceed to Payment</button>
-//   </footer>
-// </div> */}
