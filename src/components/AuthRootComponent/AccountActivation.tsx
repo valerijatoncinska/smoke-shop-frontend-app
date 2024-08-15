@@ -1,32 +1,41 @@
-import { useEffect } from "react"
-import { useAppDispatch } from "../../app/hook"
-import { useSelector } from "react-redux"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { RootState } from "../../store/store"
-import { activateAccount } from "../../store/redux/userSlice"
 import styles from "./styles/AccountActivation.module.css"
+import axios from "axios"
 
 const AccountActivation = () => {
-  const dispatch = useAppDispatch()
-
-  const activationStatus = useSelector(
-    (state: RootState) => state.user.activationStatus,
-  )
-  const activationMessage = useSelector(
-    (state: RootState) => state.user.messageState.message,
-  )
-
+  const [message, setMessage] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+  const { uuid } = useParams<{ uuid: string }>()
   const navigate = useNavigate()
 
-  const { uuid } = useParams<{ uuid: string }>()
-
   useEffect(() => {
-    if (uuid) {
-      dispatch(activateAccount(uuid))
+    const activateAccount = async () => {
+      try {
+        const response = await axios.get(`/api/author/account-activate/${uuid}`)
+        setMessage(response.data.message || "Account successfully activated!")
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          setError(
+            error.response?.data?.message ||
+              "An unexpected error occurred during activation.",
+          )
+        } else {
+          setError("An unexpected error occurred.")
+        }
+      } finally {
+        setLoading(false)
+      }
     }
-    console.log("Activation status:", activationStatus)
-    console.log("Activation message:", activationMessage)
-  }, [dispatch, uuid])
+
+    if (uuid) {
+      activateAccount()
+    } else {
+      setError("Invalid activation link.")
+      setLoading(false)
+    }
+  }, [uuid])
 
   const handleSignIn = () => {
     navigate("/auth/login")
@@ -44,19 +53,27 @@ const AccountActivation = () => {
         className={styles.backgroundImage}
       />
       <div className={styles.card}>
-        {activationStatus === "loading" && (
+        {loading ? (
           <div className="text-center">
             <div className="spinner-border text-black" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-        )}
-
-        {activationStatus === "success" && (
+        ) : error ? (
+          <div className={styles.errorContainer}>
+            <h2 className={styles.errorTitle}>Activation Failed</h2>
+            <p className={styles.errorMessage}>{error}</p>
+            <button
+              type="button"
+              className={styles.buttonGoHome}
+              onClick={handleGoHome}
+            >
+              Go to Home
+            </button>
+          </div>
+        ) : (
           <div className={styles.successContainer}>
-            <h2 className={styles.successTitle}>
-              {activationMessage || "Account successfully activated!"}
-            </h2>
+            <h2 className={styles.successTitle}>{message}</h2>
             <p className={styles.successMessage}>
               To log into your account, go to the login page.
             </p>
@@ -66,23 +83,6 @@ const AccountActivation = () => {
               onClick={handleSignIn}
             >
               Sign in
-            </button>
-          </div>
-        )}
-
-        {activationStatus === "error" && (
-          <div className={styles.errorContainer}>
-            <h2 className={styles.errorTitle}>Activation Failed</h2>
-            <p className={styles.errorMessage}>
-              {activationMessage ||
-                "An error occurred. Please try again later."}
-            </p>
-            <button
-              type="button"
-              className={styles.buttonGoHome}
-              onClick={handleGoHome}
-            >
-              Go to Home
             </button>
           </div>
         )}

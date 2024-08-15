@@ -2,7 +2,7 @@
 .card {
   border-radius: 10px;
   overflow: hidden;
-  margin: 10px;
+  margin: 10px 0;
   width: 100%;
   max-width: 18rem;
   height: auto;
@@ -11,6 +11,8 @@
   background-color: #d9d9d9;
   position: relative;
   box-sizing: border-box;
+  /* Адаптивные стили для ширины карточек */
+  flex: 1 1 calc(25% - 20px);
 }
 
 /* Стили изображения карточки */
@@ -87,108 +89,23 @@
   background-color: #333;
 }
 
-/* Адаптивные медиа-запросы */
-
-/* Для экранов шириной 992px и выше */
-@media (min-width: 992px) {
-  .cardContainer {
-    grid-template-columns: repeat(4, 1fr); 
+/* Для экранов от 768px до 991px (3 колонки) */
+@media (max-width: 991px) {
+  .card {
+    flex: 1 1 calc(33.333% - 20px); /* 3 колонки */
   }
 }
 
-/* Для экранов от 768px до 991px */
-@media (min-width: 768px) and (max-width: 991px) {
-  .cardContainer {
-    grid-template-columns: repeat(3, 1fr); 
-  }
-
-  /* Уменьшение размера шрифтов и элементов */
-  .searchInput input {
-    font-size: 0.85rem;
-    padding: 8px;
-  }
-
-  .searchInput button {
-    font-size: 0.85rem;
-    padding: 8px 16px;
-  }
-
-  .goHomeButton {
-    font-size: 0.7rem;
-    width: 100px;
-    height: 30px;
-    padding: 5px;
-  }
-
-  .sortButtons button {
-    font-size: 0.85rem;
-    padding: 8px;
-    max-width: 20%;
+/* Для экранов от 576px до 767px (2 колонки) */
+@media (max-width: 767px) {
+  .card {
+    flex: 1 1 calc(50% - 20px); /* 2 колонки */
   }
 }
 
-/* Для экранов от 576px до 767px */
-@media (min-width: 576px) and (max-width: 767px) {
-  .cardContainer {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* Уменьшение размера шрифтов и элементов */
-  .searchInput input {
-    font-size: 0.75rem;
-    padding: 7px;
-  }
-
-  .searchInput button {
-    font-size: 0.75rem;
-    padding: 7px 14px;
-  }
-
-  .goHomeButton {
-    font-size: 0.6rem;
-    width: 90px;
-    height: 25px;
-    padding: 4px;
-  }
-
-  .sortButtons button {
-    font-size: 0.75rem;
-    padding: 7px;
-    max-width: 25%;
-  }
-}
-
-/* Для экранов менее 576px */
+/* Для экранов менее 576px (1 колонка) */
 @media (max-width: 575px) {
-  .cardContainer {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  /* Уменьшение размера шрифтов и элементов */
-  .catalogTitle {
-    font-size: 1rem;
-  }
-
-  .searchInput input {
-    font-size: 0.65rem;
-    padding: 6px;
-  }
-
-  .searchInput button {
-    font-size: 0.65rem;
-    padding: 6px 12px;
-  }
-
-  .goHomeButton {
-    font-size: 0.5rem;
-    width: 80px;
-    height: 20px;
-    padding: 3px;
-  }
-
-  .sortButtons button {
-    font-size: 0.65rem;
-    padding: 6px;
-    max-width: 30%;
+  .card {
+    flex: 1 1 100%; /* 1 колонка */
   }
 }

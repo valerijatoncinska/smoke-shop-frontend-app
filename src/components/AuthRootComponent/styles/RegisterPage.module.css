@@ -1,22 +1,21 @@
+/* Общие стили для контейнера и формы */
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   background-attachment: fixed;
-  height: calc(100vh - 150px);
-  margin-top: 5%;
-  margin-bottom: 5%;
-  padding: 0 20px;
+  height: calc(100vh - 100px); 
+  padding: 0 10px;
   z-index: 1;
+  margin: 0;
 }
 
 .card {
   width: 100%;
-  max-width: 600px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding-bottom: 30px;
+  max-width: 500px; 
+  border-radius: 8px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
   background-color: #e4cabf;
   display: flex;
   flex-direction: column;
@@ -24,48 +23,49 @@
 }
 
 .title {
-  margin: 20px;
+  margin: 10px 0;
   color: #000;
-  font-size: 24px;
+  font-size: 20px; 
   font-family: "Inria Serif", sans-serif;
 }
 
 .formGroup {
-  margin-bottom: 16px;
+  margin-bottom: 12px; 
+  width: 100%;
 }
 
 .label {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
-  font-size: 16px;
-  padding-left: 5px;
+  margin-bottom: 6px;
+  font-size: 14px; 
+  padding-left: 3px; 
   font-family: "Inria Serif", sans-serif;
 }
 
 .checkbox {
-  margin-right: 10px;
+  margin-right: 8px; 
 }
 
 .input {
-  height: 39px;
+  height: 30px; 
   width: 100%;
-  padding: 8px;
-  font-size: 16px;
+  padding: 6px; 
+  font-size: 14px; 
   border: 1px solid #000;
-  border-radius: 8px;
+  border-radius: 6px; 
   background-color: #d9d9d9;
   font-family: "Inria Serif", sans-serif;
 }
 
 .button {
-  height: 46px;
+  height: 40px; 
   width: 100%;
   background-color: #090908;
   color: #fff;
   border: none;
-  border-radius: 15px;
-  font-size: 16px;
+  border-radius: 12px; 
+  font-size: 14px; 
   cursor: pointer;
   font-family: "Inria Serif", sans-serif;
 }
@@ -91,15 +91,15 @@
 .formGroupCheckbox {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 15px; 
 }
 
 .formGroupCheckbox input[type="checkbox"] {
-  margin-right: 14px;
+  margin-right: 10px; 
 }
 
 .formGroupCheckbox .checkboxLabel {
-  font-size: 16px;
+  font-size: 14px; 
   font-family: "Inria Serif", sans-serif;
 }
 
@@ -107,18 +107,18 @@
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  padding: 0 20px;
-  margin-top: 20px;
+  padding: 0 10px; 
+  margin-top: 15px;
 }
 
 .goHomeButton {
-  height: 40px;
-  width: 130px;
+  height: 35px; 
+  width: 120px; 
   background-color: #e4cabf;
   color: #000;
   border: none;
-  border-radius: 10px;
-  font-size: 12px;
+  border-radius: 8px; 
+  font-size: 11px;
   cursor: pointer;
   font-family: "Inria Serif", sans-serif;
 }
@@ -133,20 +133,20 @@
 
 .togglePasswordButton {
   position: absolute;
-  right: 10px;
+  right: 8px; 
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px; 
   color: #007bff;
   font-family: "Inria Serif", sans-serif;
 }
 
 .errorContainer {
-  margin-bottom: 20px;
-  padding: 10px;
+  margin-bottom: 15px;
+  padding: 8px; 
   background-color: rgb(211, 201, 201);
   border-radius: 4px;
   max-width: 100%;
@@ -155,19 +155,19 @@
 
 .error {
   text-align: center;
-  margin-bottom: 5px;
-  font-size: 14px;
+  margin-bottom: 4px; 
+  font-size: 12px;
   color: rgb(255, 0, 0);
   font-family: "Inria Serif", sans-serif;
 }
 
 .p {
   color: #6d420a;
-  font-size: 0.8rem;
-  padding: 10px;
+  font-size: 0.75rem; 
+  padding: 8px; 
   border-radius: 5px;
   border: 1px solid #dcdcdc;
-  max-width: 400px;
+  max-width: 300px; 
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   font-family: "Inria Serif", sans-serif;
 }
@@ -177,68 +177,80 @@
 }
 
 .successTitle {
-  font-size: 1.3rem;
-  margin: 50px;
+  font-size: 1.1rem;
+  margin: 30px; 
   color: #252323;
   font-family: "Inria Serif", sans-serif;
 }
 
 .buttonHome {
-  width: 80%;
-  padding: 10px;
+  width: 70%;
+  padding: 8px;
   background-color: black;
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  margin-top: 10px;
+  font-size: 1rem; 
+  margin-top: 8px; 
   margin-bottom: 0;
-  border-radius: 15px;
+  border-radius: 12px;
   font-family: "Inria Serif", sans-serif;
 }
 
 /* Медиазапросы для разных размеров экрана */
 @media (max-width: 768px) {
   .card {
-    padding: 2rem 1.25rem;
+    max-width: 100%; 
+    padding: 1rem; 
+  }
+
+  .title {
+    font-size: 1.5rem;
   }
 
   .input {
-    height: 2.25rem;
-    font-size: 0.875rem;
+    height: 2rem; 
+    font-size: 0.75rem;
   }
 
   .button {
-    height: 2.875rem;
-    font-size: 0.875rem;
+    height: 2.25rem; 
+    font-size: 0.75rem;
   }
 
   .goHomeButton {
-    height: 2.5rem;
-    width: 6.25rem;
-    font-size: 0.75rem;
+    height: 1.875rem; 
+    width: 5.5rem;
+    font-size: 0.625rem; 
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    padding: 1.25rem 0.625rem;
+    max-width: 100%;
+    padding: 0.75rem; 
+  }
+
+  .title {
+    font-size: 1.25rem; 
   }
 
   .input {
-    height: 2rem;
-    font-size: 0.75rem;
+    height: 1.75rem;
+    font-size: 0.65rem; 
   }
 
   .button {
-    height: 2rem;
-    font-size: 0.75rem;
+    height: 1.75rem;
+    font-size: 0.65rem; 
   }
 
   .goHomeButton {
-    height: 1.875rem;
-    width: 5rem;
-    font-size: 0.625rem;
+    height: 1.5rem; 
+    width: 4.5rem; 
+    font-size: 0.5rem; 
   }
 }
+
+
 
