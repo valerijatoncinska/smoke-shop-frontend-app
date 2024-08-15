@@ -92,7 +92,6 @@ const CartPage: React.FC = () => {
             <div className="item-details">
               <span className="item-title">{item.title}</span>
               <span className="item-price">${item.totalPrice.toFixed(2)}</span>
-              <span>{item.totalPrice}</span>
             </div>
             {/* Контроллер количества товара */}
             <div className="quantity-control">
