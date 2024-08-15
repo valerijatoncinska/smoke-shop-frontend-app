@@ -15,6 +15,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
   const [quantity, setQuantity] = useState("")
   const dispatch = useDispatch()
   const { isAdded } = useSelector((state: RootState) => state.addNewProduct)
+  const [modalShow, setModalShow] = useState(false)
+  const [modalMessage, setModalMessage] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,6 +35,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
       })
       .catch(error => {
         console.log("Error", error)
+
+        alert("Failed to add a product!")
       })
 
     setTitle("")
@@ -64,7 +68,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={e => setTitle(e.target.value)}
           />
         </label>
         <label>
@@ -72,7 +76,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
           <input
             type="number"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={e => setPrice(e.target.value)}
           />
         </label>
         <label>
@@ -80,7 +84,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
           <input
             type="number"
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={e => setQuantity(e.target.value)}
           />
         </label>
       </div>
