@@ -22,11 +22,11 @@ const Navigation = () => {
             Archived Products
           </NavLink>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <NavLink className="nav-link" to="/admin/view-orders">
             View Orders
           </NavLink>
-        </li>
+        </li> */}
       </ul>
       <NavLink to="/auth/login">
         <button

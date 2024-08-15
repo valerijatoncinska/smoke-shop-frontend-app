@@ -90,11 +90,11 @@ const ProductPage: React.FC = () => {
         <div className="product-details-section">
           <h1>{product.title}</h1>
           <div className="product-price">Price: {product.price}€</div>
-          <div className="product-quantity">
+{/*           <div className="product-quantity">
             <button onClick={decreaseQuantity}>-</button>
             <input type="number" value={quantity} readOnly />
             <button onClick={increaseQuantity}>+</button>
-          </div>
+          </div> */}
           <button onClick={() => handleAddToCart(+product.id)} className="add-to-basket-button">Add to Cart</button>
           <div className="product-description">
             <h2>Description</h2>

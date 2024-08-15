@@ -91,9 +91,16 @@ const CartPage: React.FC = () => {
             <span>{item.quantity}</span>
             <span>{item.totalPrice}</span>
             {/* Используем handleAddItemToCart для обработки нажатия на "+" */}
-            <button onClick={() => handleAddItemToCart(item)}>+</button>
+            {<button onClick={() => handleAddItemToCart(item)}>+</button>}
             {/*Кнопка для добавления товара в корзину */}
             <button onClick={() => handleRemoveOneItemFromCart(item)}>-</button>
+            {<button
+              onClick={() =>
+                handleRemoveOneItemFromCart(item)
+              }
+            >
+              -
+            </button>}
             {/* Кнопка для уменьшения количества товара в корзине */}
             <button onClick={() => dispatch(deleteCartItem(item.id))}>
               Delete
