@@ -15,23 +15,6 @@ import {
 import { useNavigate } from "react-router-dom"
 import "./CartPage.css"
 
-const cartItems = [
-  {
-    id: 1,
-    title: "Stylish Watch",
-    quantity: 2,
-    totalPrice: 150.0,
-    image: "/img/tob1.jpg", // Ссылка на изображение товара
-  },
-  {
-    id: 2,
-    title: "Elegant Sunglasses",
-    quantity: 1,
-    totalPrice: 75.0,
-    image: "/img/tob1.jpg", // Ссылка на изображение товара
-  },
-]
-
 const CartPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
   const cartItems = useSelector((state: RootState) => state.cart.items)
