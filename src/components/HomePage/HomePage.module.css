@@ -25,7 +25,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.6rem; /* Заменил 26px на rem */
+  font-size: 1.6rem; 
   text-align: center;
   text-decoration: none;
   font-family: "Inria Serif", sans-serif;
@@ -45,7 +45,7 @@
 
 .error {
   color: rgb(0, 0, 0);
-  font-size: 1.2rem; /* Заменил 1.2rem на 1.2rem */
+  font-size: 1.2rem; 
   text-align: center;
   margin-top: 20px;
 }
@@ -74,7 +74,7 @@
   color: white; 
   padding: 10px;
   border-radius: 5px; 
-  font-size: 5rem; /* Заменил 50px на rem */
+  font-size: 5rem; 
   margin-top: 8%;
   margin-right: 30%;
   font-family: "Inria Serif", sans-serif;
@@ -94,7 +94,7 @@
 .pBottom {
   margin: 0;
   padding: 0;
-  font-size: 2rem; /* Заменил 2em на rem */
+  font-size: 2rem; 
   font-family: "Inria Serif", sans-serif;
 }
 
@@ -107,11 +107,11 @@
   .button {
     height: 60px;
     width: 200px;
-    font-size: 1.3rem; /* Заменил 20px на rem */
+    font-size: 1.3rem;
   }
 
   .error {
-    font-size: 1rem; /* Заменил 1rem на rem */
+    font-size: 1rem; 
   }
 
   .spinner-border {
@@ -120,7 +120,7 @@
   }
 
   .p {
-    font-size: 3rem; /* Заменил 4em на rem */
+    font-size: 3rem; 
     left: 10%;
     top: 40%;
     margin-right: 20%;
@@ -131,23 +131,24 @@
   }
 
   .pBottom {
-    font-size: 1.5rem; /* Заменил 1.5em на rem */
+    font-size: 1.5rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 575px) {
   .button-container {
-    gap: 20px;
+    gap: 10px;
   }
 
   .button {
-    height: 50px;
-    width: 140px;
-    font-size: 1.2rem; /* Заменил 18px на rem */
+    height: 40px;
+    width: 110px;
+    font-size: 0.9rem; 
+
   }
 
   .error {
-    font-size: 0.9rem; /* Заменил 0.9rem на rem */
+    font-size: 0.9rem; 
   }
 
   .spinner-border {
@@ -156,9 +157,9 @@
   }
 
   .p {
-    font-size: 2rem; /* Заменил 3em на rem */
-    left: 10%;
-    top: 20%;
+    font-size: 1.5rem; 
+    left: 4%;
+    top: 35%;
     margin-right: 15%;
   }
 
@@ -167,7 +168,7 @@
   }
 
   .pBottom {
-    font-size: 1rem; /* Заменил 1.2em на rem */
+    font-size: 1rem; 
   }
 }
 

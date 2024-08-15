@@ -121,12 +121,13 @@
   background-color: #333;
 }
 
-/* Контейнер для карточек */
 .cardContainer {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 колонки по умолчанию */
-  gap: 20px;
+  display: flex;
+  flex-wrap: wrap; /* Позволяет карточкам переноситься на новую строку */
+  gap: 20px; /* Отступ между карточками */
+  justify-content: space-between; /* Равномерное распределение карточек */
   margin-top: 20px;
+  padding: 0 10px; /* Немного отступов по бокам контейнера для равномерности */
 }
 
 /* Нижний блок страницы */
@@ -190,5 +191,129 @@
   margin-left: auto;
   margin-right: auto; 
 }
+
+/* Для экранов от 768px до 991px */
+@media (min-width: 768px) and (max-width: 991px) {
+  .searchInput input {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
+  .searchInput button {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+  }
+
+  .goHomeButton {
+    font-size: 0.7rem;
+    width: 100px;
+    height: 30px;
+    padding: 5px;
+  }
+
+  .sortButtons button {
+    font-size: 0.85rem;
+    padding: 8px;
+    max-width: 20%;
+  }
+}
+
+/* Для экранов от 576px до 767px */
+@media (min-width: 576px) and (max-width: 767px) {
+  .searchInput input {
+    font-size: 0.75rem;
+    padding: 7px;
+  }
+
+  .searchInput button {
+    font-size: 0.75rem;
+    padding: 7px 14px;
+  }
+
+  .goHomeButton {
+    font-size: 0.6rem;
+    width: 90px;
+    height: 25px;
+    padding: 4px;
+  }
+
+  .sortButtons button {
+    font-size: 0.75rem;
+    padding: 7px;
+    max-width: 25%;
+  }
+}
+
+/* Для экранов менее 576px */
+@media (max-width: 575px) {
+  .catalogTitle {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+  }
+
+  /* Контейнер для поиска */
+  .searchContainer {
+    display: flex;
+    align-items: center; /* Вертикальное центрирование элементов */
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  /* Строка поиска */
+  .searchInput {
+    display: flex;
+    align-items: center; /* Вертикальное центрирование элементов */
+    width: calc(100% - 90px); /* Уменьшаем ширину на размер кнопки Go Home и отступ */
+    margin-right: 10px; /* Отступ справа для кнопки Go Home */
+  }
+
+  /* Поле ввода в строке поиска */
+  .searchInput input {
+    width: 80%; /* Уменьшаем ширину поля ввода */
+    font-size: 0.6rem; /* Уменьшаем размер шрифта */
+    padding: 6px; /* Увеличиваем внутренние отступы */
+    box-sizing: border-box; /* Учитываем padding в ширину */
+  }
+
+  /* Кнопка поиска */
+  .searchInput button {
+    width: 20%;
+    font-size: 0.6rem;
+    padding: 6px 10px;
+    margin-left: 0;
+  }
+
+  /* Кнопка "Go to Home" */
+  .goHomeButton {
+    position: absolute;
+    top: 50%;
+    right: 0; 
+    transform: translateY(-50%);
+    background-color: rgba(179, 168, 162, 0.1);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.3rem;
+    width: 45px;
+    height: 20px;
+    padding: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .goHomeButton:hover {
+    background-color: #774136;
+  }
+
+  .sortButtons button {
+    font-size: 0.4rem;
+    padding: 5px;
+    max-width: 30%;
+  }
+}
+
+
 
 

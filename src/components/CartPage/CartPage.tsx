@@ -72,13 +72,18 @@ const CartPage: React.FC = () => {
     dispatch(clearCartReducer())
   }
 
-
+  const handleGoHome = () => {
+    navigate("/")
+  }
 
   return (
     <div className="cart-page">
       <header className="cart-header">
         <h1 className="title">Your Cart</h1>
       </header>
+      <button type="button" className="goHomeButton" onClick={handleGoHome}>
+        Go to Home
+      </button>
       <div className="cart-items-container">
         {cartItems.map(item => (
           <div key={item.id} className="cart-item">
@@ -88,6 +93,7 @@ const CartPage: React.FC = () => {
             {/* Используем handleAddItemToCart для обработки нажатия на "+" */}
             {<button onClick={() => handleAddItemToCart(item)}>+</button>}
             {/*Кнопка для добавления товара в корзину */}
+            <button onClick={() => handleRemoveOneItemFromCart(item)}>-</button>
             {<button
               onClick={() =>
                 handleRemoveOneItemFromCart(item)
@@ -102,6 +108,10 @@ const CartPage: React.FC = () => {
             {/* Кнопка для удаления товара из корзины */}
           </div>
         ))}
+        <button onClick={handleClearCart} className="clear-cart-button">
+          Clear Cart
+        </button>{" "}
+        {/* Кнопка для очистки корзины */}
       </div>
       <footer className="cart-footer">
         {/* Отображение общей суммы корзины */}
@@ -112,9 +122,10 @@ const CartPage: React.FC = () => {
             .toFixed(2)}
         </span>
         {/* Логика округления 2 знаков после запятой, если количество товара изменилось, сумма будет пересчитана автоматически */}
-        <button onClick={handleClearCart}>Clear Cart</button>{" "}
-        {/* Кнопка для очистки корзины */}
-        <button onClick={handleProceedToPayment}>
+        <button
+          onClick={handleProceedToPayment}
+          className="proceed-to-payment-button"
+        >
           Proceed to Payment
         </button>
         {/* Кнопка для перехода к оплате */}
