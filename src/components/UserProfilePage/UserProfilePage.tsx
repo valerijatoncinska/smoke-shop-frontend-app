@@ -8,11 +8,13 @@ import "./UserProfilePage.css";
 interface User {
   id?: string;
   name?: string;
-  email: string;
-  city?: string;
-  postalCode?: string;
   street?: string;
   house?: string;
+  postalCode?: string;
+  locality?: string;
+  region?: string;
+  country?: string;
+  email: string;
   phone?: string;
   accessToken: string;
   refreshToken: string;
@@ -84,10 +86,12 @@ const UserProfilePage: React.FC = () => {
           <h2>Details</h2>
           <p>Name: {userData.name || "N/A"}</p>
           <p>Email: {userData.email}</p>
-          <p>City: {userData.city || "N/A"}</p>
-          <p>Postal code: {userData.postalCode || "N/A"}</p>
           <p>Street: {userData.street || "N/A"}</p>
           <p>House number: {userData.house || "N/A"}</p>
+          <p>Postal code: {userData.postalCode || "N/A"}</p>
+          <p>Locality: {userData.locality || "N/A"}</p>
+          <p>Region: {userData.region || "N/A"}</p>
+          <p>Country: {userData.country || "N/A"}</p>
           <p>Phone number: {userData.phone || "N/A"}</p>
         </div>
       </div>
