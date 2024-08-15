@@ -120,28 +120,28 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   },
 )
 
-export const activateAccount = createAsyncThunk<
-  string,
-  string,
-  { rejectValue: string }
->("user/activateAccount", async (uuid, { rejectWithValue }) => {
-  try {
-    const response = await axios.get<ActivationResponse>(
-      `/api/author/account-activate/${uuid}`,
-    )
-    return response.data.message || "Account successfully activated!"
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (error.response?.status === 404) {
-        return rejectWithValue("Activation link is invalid or expired.")
-      }
-      if (error.response?.data?.message) {
-        return rejectWithValue(error.response.data.message)
-      }
-    }
-    return rejectWithValue("An unexpected error occurred during activation.")
-  }
-})
+// export const activateAccount = createAsyncThunk<
+//   string,
+//   string,
+//   { rejectValue: string }
+// >("user/activateAccount", async (uuid, { rejectWithValue }) => {
+//   try {
+//     const response = await axios.get<ActivationResponse>(
+//       `/api/author/account-activate/${uuid}`,
+//     )
+//     return response.data.message || "Account successfully activated!"
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       if (error.response?.status === 404) {
+//         return rejectWithValue("Activation link is invalid or expired.")
+//       }
+//       if (error.response?.data?.message) {
+//         return rejectWithValue(error.response.data.message)
+//       }
+//     }
+//     return rejectWithValue("An unexpected error occurred during activation.")
+//   }
+// })
 
 export const getCurrentUser = createAsyncThunk<User, void>(
   "user/getCurrentUser",
@@ -233,18 +233,18 @@ const userSlice = createSlice({
       })
 
       // Активация аккаунта
-      .addCase(activateAccount.pending, state => {
-        state.activationStatus = "loading"
-        state.messageState.message = undefined
-      })
-      .addCase(activateAccount.fulfilled, (state, action) => {
-        state.activationStatus = "success"
-        state.messageState.message = action.payload
-      })
-      .addCase(activateAccount.rejected, (state, action) => {
-        state.activationStatus = "error"
-        state.messageState.message = action.payload as string
-      })
+      // .addCase(activateAccount.pending, state => {
+      //   state.activationStatus = "loading"
+      //   state.messageState.message = undefined
+      // })
+      // .addCase(activateAccount.fulfilled, (state, action) => {
+      //   state.activationStatus = "success";
+      //   state.messageState.message = action.payload;
+      // })
+      // .addCase(activateAccount.rejected, (state, action) => {
+      //   state.activationStatus = "error";
+      //   state.messageState.message = action.payload;
+      // })
   },
 })
 
