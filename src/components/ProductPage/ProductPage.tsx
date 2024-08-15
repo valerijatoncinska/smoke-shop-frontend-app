@@ -46,42 +46,8 @@ const ProductPage: React.FC = () => {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = async () => {
-    const token = Cookies.get('accessToken'); // Get token from cookies
-
-   /*  if (!token) {
-      alert('You must be registered to add items to the cart.');
-      return;
-    } */
-
-    if (product) {
-      // Check if the product is already in the cart
-      const existingCartItem = cartItems.find((item) => item.id === product.id);
-
-      if (existingCartItem) {
-        // If it is, update the quantity
-        await dispatch(updateCartItem({ 
-          ...existingCartItem, 
-          quantity: existingCartItem.quantity + quantity 
-        }));
-      } else {
-        // If not, add the product to the cart
-        await dispatch(addItemToCart({
-          id: product.id,
-          title: product.title,
-          stock: product.quantity,
-          quantity: quantity,
-          productId: product.id,
-          price: product.price,
-          totalPrice: product.price * quantity,
-        }));
-      }
-
-      // Fetch cart items again to refresh the state
-      await dispatch(fetchCartItems());
-
-      alert('Product added to cart successfully!');
-    }
+  const handleAddToCart = (productId: number) => {
+    dispatch(addItemToCart(productId))
   };
 
   const increaseQuantity = () => {
@@ -124,12 +90,12 @@ const ProductPage: React.FC = () => {
         <div className="product-details-section">
           <h1>{product.title}</h1>
           <div className="product-price">Price: {product.price}€</div>
-          <div className="product-quantity">
+{/*           <div className="product-quantity">
             <button onClick={decreaseQuantity}>-</button>
             <input type="number" value={quantity} readOnly />
             <button onClick={increaseQuantity}>+</button>
-          </div>
-          <button onClick={handleAddToCart} className="add-to-basket-button">Add to Cart</button>
+          </div> */}
+          <button onClick={() => handleAddToCart(+product.id)} className="add-to-basket-button">Add to Cart</button>
           <div className="product-description">
             <h2>Description</h2>
             <p>This is a placeholder description for the product "{product.title}".</p>

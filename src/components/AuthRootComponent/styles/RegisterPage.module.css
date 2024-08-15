@@ -27,6 +27,7 @@
   margin: 20px;
   color: #000;
   font-size: 24px;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .formGroup {
@@ -39,6 +40,7 @@
   margin-bottom: 8px;
   font-size: 16px;
   padding-left: 5px;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .checkbox {
@@ -53,6 +55,7 @@
   border: 1px solid #000;
   border-radius: 8px;
   background-color: #d9d9d9;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .button {
@@ -64,6 +67,7 @@
   border-radius: 15px;
   font-size: 16px;
   cursor: pointer;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .button:hover {
@@ -96,6 +100,7 @@
 
 .formGroupCheckbox .checkboxLabel {
   font-size: 16px;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .goHomeContainer {
@@ -115,6 +120,7 @@
   border-radius: 10px;
   font-size: 12px;
   cursor: pointer;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .goHomeButton:hover {
@@ -135,6 +141,7 @@
   cursor: pointer;
   font-size: 14px;
   color: #007bff;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .errorContainer {
@@ -151,6 +158,7 @@
   margin-bottom: 5px;
   font-size: 14px;
   color: rgb(255, 0, 0);
+  font-family: "Inria Serif", sans-serif;
 }
 
 .p {
@@ -161,6 +169,7 @@
   border: 1px solid #dcdcdc;
   max-width: 400px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-family: "Inria Serif", sans-serif;
 }
 
 .successContainer {
@@ -171,6 +180,7 @@
   font-size: 1.3rem;
   margin: 50px;
   color: #252323;
+  font-family: "Inria Serif", sans-serif;
 }
 
 .buttonHome {
@@ -184,37 +194,51 @@
   margin-top: 10px;
   margin-bottom: 0;
   border-radius: 15px;
+  font-family: "Inria Serif", sans-serif;
 }
 
 /* Медиазапросы для разных размеров экрана */
 @media (max-width: 768px) {
   .card {
-    padding: 30px 20px;
+    padding: 2rem 1.25rem;
   }
 
   .input {
-    height: 36px;
-    font-size: 14px;
+    height: 2.25rem;
+    font-size: 0.875rem;
   }
 
   .button {
-    height: 40px;
-    font-size: 14px;
+    height: 2.875rem;
+    font-size: 0.875rem;
+  }
+
+  .goHomeButton {
+    height: 2.5rem;
+    width: 6.25rem;
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    padding: 20px 10px;
+    padding: 1.25rem 0.625rem;
   }
 
   .input {
-    height: 34px;
-    font-size: 12px;
+    height: 2rem;
+    font-size: 0.75rem;
   }
 
   .button {
-    height: 36px;
-    font-size: 12px;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .goHomeButton {
+    height: 1.875rem;
+    width: 5rem;
+    font-size: 0.625rem;
   }
 }
+
