@@ -6,6 +6,7 @@ import axios from "axios";
 import "./UserProfilePage.css";
 
 interface User {
+  id?: string;
   name?: string;
   email: string;
   city?: string;
@@ -24,11 +25,31 @@ const UserProfilePage: React.FC = () => {
   const error = useSelector((state: RootState) => state.user.error);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [userData, setUserData] = useState<User | null>(user);
+  const [userData, setUserData] = useState<User | null>(null);
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("/api/address", {
+        });
+
+        if (response.status === 200) {
+          setUserData({ 
+            ...response.data, 
+            email: user?.email, 
+            accessToken: user?.accessToken, 
+            refreshToken: user?.refreshToken 
+          });
+        } else {
+          console.error("Failed to fetch user data.");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
     if (user) {
-      setUserData(user);
+      fetchUserData();
     }
   }, [user]);
 
@@ -40,7 +61,7 @@ const UserProfilePage: React.FC = () => {
     if (userData) {
       try {
         const response = await axios.put(
-          `/api/address/${user?.id}`,
+          `/api/address/${userData.id}`,
           {
             name: userData.name,
             street: userData.street,
@@ -56,7 +77,7 @@ const UserProfilePage: React.FC = () => {
 
           // Обновляем состояние в Redux
           await dispatch(updateUser(updatedUser));
-          
+
           // Обновляем локальное состояние
           setUserData(updatedUser);
 
