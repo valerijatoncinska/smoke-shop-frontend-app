@@ -10,7 +10,7 @@ import {
   updateAddress,
 } from "../../store/redux/addressSlice"
 import axios from "axios"
-import { useAppDispatch } from "app/hook"
+import { useAppDispatch } from "../../app/hook"
 
 
 interface Address {
