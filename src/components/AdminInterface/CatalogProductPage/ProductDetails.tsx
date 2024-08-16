@@ -97,6 +97,8 @@ const ProductDetails: FC = () => {
     adminProducts[0].active,
   )
 
+
+
   const handleArchiveProduct = () => {
     const data = {
       // id: +id,
@@ -116,7 +118,6 @@ const ProductDetails: FC = () => {
         setProductActive(false)
       })
       .catch(error => {
-        console.log("Error", error)
       })
   }
 
@@ -182,16 +183,17 @@ const ProductDetails: FC = () => {
   }
 
   const handleDeleteProduct = () => {
-
     axios
-    .delete(`/api/products/${id}`)
-    .then(response => {
-      console.log("Response", response.data)
-      !productActive ? navigate("/admin/archivated-products") : navigate("/admin/catalog")
-    })
-    .catch(error => {
-      console.log("Error", error)
-    })
+      .delete(`/api/products/${id}`)
+      .then(response => {
+        console.log("Response", response.data)
+        !productActive
+          ? navigate("/admin/archivated-products")
+          : navigate("/admin/catalog")
+      })
+      .catch(error => {
+        console.log("Error", error)
+      })
   }
 
   return (
@@ -214,10 +216,12 @@ const ProductDetails: FC = () => {
                   <h6 className="me-5 mt-2">Price of product:</h6>
                   <input
                     className="priceInput"
+                    type="number"
                     value={productPrice}
-                    onChange={e => setProductPrice(+e.target.value)}
+                    min="0"
+                    onChange={e => setProductPrice(parseFloat(e.target.value))}
                   />
-                   <span className="input-group-text">€</span>
+                  <span className="input-group-text">€</span>
                 </div>
                 <div className="ps-5 pt-1 d-flex">
                   <h6 className="me-5">Quantity of product:</h6>
@@ -298,7 +302,12 @@ const ProductDetails: FC = () => {
               >
                 Add Product to archive
               </button>
-              <button className="cardButtonDelete" onClick={handleDeleteProduct}>Delete Product</button>
+              <button
+                className="cardButtonDelete"
+                onClick={handleDeleteProduct}
+              >
+                Delete Product
+              </button>
               <button
                 className="cardButtonEdit ms-5 p-3 px-5"
                 onClick={() => setIsEdit(true)}
@@ -314,7 +323,12 @@ const ProductDetails: FC = () => {
               >
                 Add Product to catalog
               </button>
-              <button className="cardButtonDelete" onClick={handleDeleteProduct}>Delete Product</button>
+              <button
+                className="cardButtonDelete"
+                onClick={handleDeleteProduct}
+              >
+                Delete Product
+              </button>
               <button
                 className="cardButtonEdit ms-5 p-3 px-5"
                 onClick={() => setIsEdit(true)}
@@ -325,6 +339,7 @@ const ProductDetails: FC = () => {
           )}
         </div>
       )}
+
     </div>
   )
 }

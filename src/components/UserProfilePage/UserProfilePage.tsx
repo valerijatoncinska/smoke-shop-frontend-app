@@ -52,7 +52,6 @@ const UserProfilePage: React.FC = () => {
         });
 
         if (response.status === 200) {
-          // Учитываем, что адреса могут быть частью ответа
           const addresses = response.data;
           setUserData(prevUserData => ({
             ...prevUserData!,

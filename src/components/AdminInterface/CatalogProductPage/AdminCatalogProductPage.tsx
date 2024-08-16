@@ -13,6 +13,7 @@ const AdminCatalogProductPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
   const { products, status } = useSelector((state: RootState) => state.products)
 
+
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
   useEffect(() => {
     dispatch(fetchProducts())
@@ -63,6 +64,8 @@ const AdminCatalogProductPage: React.FC = () => {
         <AddProductForm onProductAdded={handleProductAdded} />
       </div>
 
+
+
       <div className={`mt-0 ${styles.containerCatalog} w-100`}>
         <div className={styles.searchContainer}>
           <div className={styles.searchInput}>
@@ -111,6 +114,7 @@ const AdminCatalogProductPage: React.FC = () => {
           {status === "error" && <>Error!</>}
         </div>
       </div>
+
     </>
   )
 }

@@ -33,6 +33,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
       })
       .catch(error => {
         console.log("Error", error)
+
+        alert("Failed to add a product!")
       })
 
     setTitle("")
@@ -58,37 +60,40 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
   return (
     <form onSubmit={handleSubmit}>
       <h1>Add Product Form</h1>
-      <div className="fo">
-        <label>
+      <div className="mb-3">
+        <label className="form-label">
           Product Name:
           <input
+          className="form-control"
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={e => setTitle(e.target.value)}
           />
         </label>
-        <label>
+        <label className="form-label">
           Price:
           <input
+          className="form-control"
             type="number"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={e => setPrice(e.target.value)}
           />
         </label>
-        <label>
+        <label className="form-label">
           Quantity:
           <input
+          className="form-control"
             type="number"
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={e => setQuantity(e.target.value)}
           />
         </label>
       </div>
-      <div>
-        <button type="button" onClick={handleCancelButton}>
+      <div className="my-3">
+        <button className="btn btn-secondary" type="button" onClick={handleCancelButton}>
           Cancel
         </button>
-        <button type="submit">Add Product</button>
+        <button className="btn btn-success mx-4" type="submit">Add Product</button>
       </div>
     </form>
   )
