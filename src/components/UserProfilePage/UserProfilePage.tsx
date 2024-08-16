@@ -41,6 +41,8 @@ const UserProfilePage: React.FC = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editAddress, setEditAddress] = useState<Address | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -58,10 +60,10 @@ const UserProfilePage: React.FC = () => {
             addresses: addresses
           }));
         } else {
-          console.error("Failed to fetch user data.");
+          setApiError("Failed to fetch user data.");
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        setApiError("Error fetching user data. Please try again later.");
       }
     };
 
@@ -81,10 +83,10 @@ const UserProfilePage: React.FC = () => {
       try {
         await dispatch(updateAddress(editAddress));
         setIsEditing(false);
-        alert("Address updated successfully!");
-      } catch (error) {
-        console.error("Error updating address:", error);
-        alert("Error updating address. Please try again later.");
+        setSuccessMessage("Address updated successfully!");
+      } catch {
+        console.error("Error updating address:", error); 
+        setApiError("Error updating address. Please try again later.");
       }
     }
   };
@@ -99,10 +101,10 @@ const UserProfilePage: React.FC = () => {
   const handleDelete = async (addressId: number) => {
     try {
       await dispatch(deleteAddress(addressId));
-      alert("Address deleted successfully!");
-    } catch (error) {
+      setSuccessMessage("Address deleted successfully!");
+    } catch {
       console.error("Error deleting address:", error);
-      alert("Error deleting address. Please try again later.");
+      setApiError("Error deleting address. Please try again later.");
     }
   };
 
@@ -114,17 +116,14 @@ const UserProfilePage: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return (
-      <div>
-        Error: {error}
-        <button onClick={() => dispatch(clearError())}>Clear Error</button>
-      </div>
-    );
-  }
-
   return (
     <div className="user-profile-page">
+      {(apiError || successMessage) && (
+        <div className="message-container">
+          {apiError && <p className="error-message">{apiError}</p>}
+          {successMessage && <p className="success-message">{successMessage}</p>}
+        </div>
+      )}
       <h1>My Profile</h1>
       <div className="profile-container">
         <div className="profile-section">
@@ -198,12 +197,12 @@ const UserProfilePage: React.FC = () => {
                 ) : (
                   <>
                     <p>Street: {address.street || "N/A"}</p>
-                    <p>House number: {address.house || "N/A"}</p>
-                    <p>Postal code: {address.postalCode || "N/A"}</p>
+                    <p>House Number: {address.house || "N/A"}</p>
+                    <p>Postal Code: {address.postalCode || "N/A"}</p>
                     <p>Locality: {address.locality || "N/A"}</p>
                     <p>Region: {address.region || "N/A"}</p>
                     <p>Country: {address.country || "N/A"}</p>
-                    <p>Phone number: {address.phone || "N/A"}</p>
+                    <p>Phone Number: {address.phone || "N/A"}</p>
                     <button onClick={() => handleEdit(address)}>Edit</button>
                     <button onClick={() => handleDelete(address.id)}>Delete</button>
                   </>
