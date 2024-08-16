@@ -65,6 +65,32 @@ button {
   color: #fff;
 }
 
+.message-container {
+  margin-bottom: 1.25rem;
+  padding: 0.625rem;
+  background-color: rgb(55, 46, 46);
+  border-radius: 0.25rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.75rem;
+  text-align: center;
+  font-family: "Inria Serif", sans-serif;
+  margin-bottom: 0.3125rem;
+}
+
+.success-message {
+  color: green;
+  font-size: 0.75rem;
+  text-align: center;
+  font-family: "Inria Serif", sans-serif;
+  margin-bottom: 0.3125rem;
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   /* Tablet and small screens */

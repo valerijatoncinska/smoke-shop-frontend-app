@@ -5,6 +5,7 @@ import userReducer from './redux/userSlice';
 import orderHistoryReducer from './redux/orderHistorySlice';
 import addNewProductReducer from './redux/openAddProductFormSlice';
 import cartReducer from './redux/cartSlice';
+import addressReducer from './redux/addressSlice';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     orderHistory: orderHistoryReducer,
     addNewProduct: addNewProductReducer,
     cart: cartReducer,
+    address: addressReducer
   },
 });
 

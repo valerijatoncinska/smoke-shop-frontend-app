@@ -73,7 +73,7 @@ export const loginUser = createAsyncThunk<
           case 404:
             return rejectWithValue("Email or password is incorrect")
           default:
-            return rejectWithValue("An unexpected error occurred.")
+            return rejectWithValue("Email must be in a valid format. Example: user@example.com")
         }
       }
     }
