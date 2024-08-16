@@ -84,7 +84,7 @@ const LoginPage: React.FC = () => {
       } else if (errorMessage === "Email or password is incorrect") {
         setEmailError("Email or password is incorrect")
       } else {
-        setGeneralError("An unexpected error occurred.")
+        setGeneralError("Email must be in a valid format. Example: user@example.com")
       }
       console.log("Ошибка входа:", error)
     }

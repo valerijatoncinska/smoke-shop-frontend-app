@@ -36,6 +36,7 @@ const App: React.FC = () => {
       dispatch(getCurrentUser())
     }
   },[isLoggedIn])
+  
   return (
     <div className="App">
       <header className="App-header"></header>
