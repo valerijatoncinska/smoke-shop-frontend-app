@@ -33,9 +33,9 @@ const UserProfilePage: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        await dispatch(fetchAddresses()).unwrap();
-        if (addresses.length > 0) {
-          setUserData(addresses[0]); // Установить первый адрес из списка
+        const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
+        if (fetchedAddresses) {
+          setUserData(fetchedAddresses);
         } else {
           setUserData({
             name: '',
@@ -46,15 +46,15 @@ const UserProfilePage: React.FC = () => {
             region: '',
             phone: '',
             email: user?.email || '',
-          }); // Если адресов нет, создать пустой объект с email
+          }); // Если данных нет, создать пустой объект с email
         }
       } catch (error) {
-        console.log("Error loading addresses. Please try again later.");
+        setApiError("Error loading address. Please try again later.");
       }
     };
-
+  
     fetchUserData();
-  }, [dispatch, addresses, user?.email]);
+  }, [dispatch, user?.email]);
 
   const handleEdit = () => {
     setIsEditing(true);
