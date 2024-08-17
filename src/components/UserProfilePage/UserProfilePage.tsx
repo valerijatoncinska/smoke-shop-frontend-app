@@ -5,64 +5,40 @@ import { logoutUser, clearError } from "../../store/redux/userSlice"
 import "./UserProfilePage.css"
 import { useAppDispatch } from "../../app/hook"
 import {
+  addAddress,
   Address,
   deleteAddress,
   fetchAddresses,
   updateAddress,
 } from "../../store/redux/addressSlice"
-import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
 const UserProfilePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  
+
   const user = useSelector((state: RootState) => state.user.user);
   const status = useSelector((state: RootState) => state.user.status);
   const error = useSelector((state: RootState) => state.user.error);
-  const userId = useSelector((state: RootState) => state.user.user?.id);
-  
+  const addresses = useSelector((state: RootState) => state.address.addresses);
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [userData, setUserData] = useState<Address | null>(null);
+  const [userData, setUserData] = useState<Address | null>(addresses[0] || null);
   const [apiError, setApiError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!userId) return;
-
       try {
-        const response = await axios.get(`/api/address/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${user?.accessToken}`,
-          },
-        });
-
-        if (response.status === 200) {
-          setUserData(response.data);
-        } else {
-          setApiError("Failed to fetch user data.");
-        }
+        await dispatch(fetchAddresses()).unwrap();
+        setUserData(addresses[0] || null);
       } catch (error) {
-        setApiError("Error fetching user data. Please try again later.");
-        console.error("Error fetching user data:", error);
+        console.log("Error loading addresses. Please try again later.");
       }
     };
 
     fetchUserData();
-  }, [userId, user?.accessToken]);
-
-  useEffect(() => {
-    const fetchAddressesData = async () => {
-      try {
-        await dispatch(fetchAddresses()).unwrap();
-      } catch (error) {
-        console.error("Error fetching addresses. Please try again later.");
-      }
-    };
-
-    fetchAddressesData();
-  }, [dispatch]);
+  }, [dispatch, addresses]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -70,47 +46,40 @@ const UserProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     if (!userData) {
-      setApiError("Address data is required.");
+      setApiError("Please enter address data.");
       return;
     }
 
     try {
-      await dispatch(updateAddress({ id: userId, ...userData })).unwrap();
+      if (userData.id) {
+        await dispatch(updateAddress(userData)).unwrap();
+        setSuccessMessage("Address updated successfully!");
+      } else {
+        await dispatch(addAddress(userData)).unwrap();
+        setSuccessMessage("Address added successfully!");
+      }
       setIsEditing(false);
-      setSuccessMessage("Address updated successfully!");
     } catch (error) {
-      console.error("Error updating address:", error);
-      setApiError("Error updating address. Please try again later.");
+      setApiError("Error saving address. Please try again later.");
     }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData(prevUser => {
+    setUserData((prevUser) => {
       if (!prevUser) return null;
       return { ...prevUser, [name]: value };
     });
   };
 
   const handleDelete = async () => {
-    if (userId === undefined || !userData) return;
+    if (!userData?.id) return;
 
     try {
-      const response = await axios.delete(`/api/address/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${user?.accessToken}`,
-        },
-      });
-
-      if (response.status === 200) {
-        await dispatch(deleteAddress(userId)).unwrap();
-        setUserData(null);
-        setSuccessMessage("Address deleted successfully!");
-      } else {
-        setApiError("Error deleting address. Please try again later.");
-      }
+      await dispatch(deleteAddress(userData.id)).unwrap();
+      setUserData(null);
+      setSuccessMessage("Address deleted successfully!");
     } catch (error) {
-      console.error("Error deleting address:", error);
       setApiError("Error deleting address. Please try again later.");
     }
   };
@@ -118,9 +87,9 @@ const UserProfilePage: React.FC = () => {
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Failed to logout:', error);
+      console.error("Error logging out:", error);
     }
   };
 
@@ -137,14 +106,16 @@ const UserProfilePage: React.FC = () => {
     );
   }
 
+  if (!userData) {
+    return <div>No user data available</div>;
+  }
+
   return (
     <div className="user-profile-page">
       {(apiError || successMessage) && (
         <div className="message-container">
           {apiError && <p className="error-message">{apiError}</p>}
-          {successMessage && (
-            <p className="success-message">{successMessage}</p>
-          )}
+          {successMessage && <p className="success-message">{successMessage}</p>}
         </div>
       )}
       <h1>My Profile</h1>
@@ -219,14 +190,14 @@ const UserProfilePage: React.FC = () => {
             </>
           ) : (
             <div className="paragraph">
-              <p>Name: {userData?.name || "Not available"}</p>
-              <p>Email: {userData?.email || "Not available"}</p>
-              <p>Street: {userData?.street || "Not available"}</p>
-              <p>House Number: {userData?.house || "Not available"}</p>
-              <p>Postal Code: {userData?.postalCode || "Not available"}</p>
-              <p>Locality: {userData?.locality || "Not available"}</p>
-              <p>Region: {userData?.region || "Not available"}</p>
-              <p>Phone Number: {userData?.phone || "Not available"}</p>
+              <p>Name: {userData?.name || "must be filled out"}</p>
+              <p>Email: {userData.email}</p>
+              <p>Street: {userData?.street || "must be filled out"}</p>
+              <p>House Number: {userData?.house || "must be filled out"}</p>
+              <p>Postal Code: {userData?.postalCode || "must be filled out"}</p>
+              <p>Locality: {userData?.locality || "must be filled out"}</p>
+              <p>Region: {userData?.region || "must be filled out"}</p>
+              <p>Phone Number: {userData?.phone || "must be filled out"}</p>
             </div>
           )}
         </div>
@@ -267,6 +238,12 @@ const UserProfilePage: React.FC = () => {
 };
 
 export default UserProfilePage;
+
+
+
+// if (!userData) {
+//   return <div>No user data available</div>;
+// }
 
 // {isEditing ? (
 //   <>

@@ -25,14 +25,16 @@ const initialState: AddressState = {
   error: null,
 };
 
+
 export const fetchAddresses = createAsyncThunk('address/fetchAddresses', async () => {
   try {
     const response = await axios.get('/api/address');
     return response.data;
   } catch (error) {
-    throw new Error('Failed to fetch addresses.');
+    throw new Error('Failed to load addresses.');
   }
 });
+
 
 export const addAddress = createAsyncThunk('address/addAddress', async (newAddress: Address) => {
   try {
@@ -53,6 +55,7 @@ export const updateAddress = createAsyncThunk('address/updateAddress', async (pa
     throw new Error('Failed to update address.');
   }
 });
+
 
 export const deleteAddress = createAsyncThunk('address/deleteAddress', async (id: number) => {
   try {
@@ -83,7 +86,7 @@ const addressSlice = createSlice({
       })
       .addCase(fetchAddresses.rejected, (state) => {
         state.status = 'failed';
-        state.error = 'Failed to fetch addresses.';
+        state.error = 'Failed to load addresses.';
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.addresses.push(action.payload);
