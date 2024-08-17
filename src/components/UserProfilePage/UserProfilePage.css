@@ -1,74 +1,163 @@
 .user-profile-page {
-  text-align: center;
-  font-family: "Arial", sans-serif;
-  background-color: #f5e8e3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
-}
-
-/* Responsive typography */
-h1 {
-  font-size: 2rem;
-  color: #5a2f27;
-  margin-bottom: 20px;
+  background-color: #ede8e8;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  min-height: 100vh; 
+  font-family: "Inria Serif", sans-serif;
 }
 
 .profile-container {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap; /* Allow flex items to wrap on smaller screens */
-  margin-bottom: 20px;
-}
-
-.profile-section {
-  background-color: #fff;
-  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  min-height: 460px;
   padding: 20px;
+  border: 3px solid #000;
   border-radius: 8px;
-  width: 45%;
-  text-align: left;
-  margin-bottom: 20px; /* Add margin for spacing between sections on small screens */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 45px;
 }
 
-.profile-section h2 {
-  font-size: 1.5rem;
-  color: #5a2f27;
-  margin-bottom: 10px;
+.profile-container input {
+  display: block;
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 8px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  font-family: "Inria Serif", sans-serif;
 }
 
-.profile-section p {
-  font-size: 1rem;
-  margin: 5px 0;
-  color: #333;
+.profile-container button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: #587758;
+  width: 190px;
+  height: 52px;
+  font-family: "Inria Serif", sans-serif;
+  color: #fff;
+  transition: background-color 0.3s ease;
+  border: none;
+  border-radius: 5px;
+}
+
+.cancel-button {
+  background-color: #B34934; 
+  width: 190px;
+  height: 52px;
+  font-family: "Inria Serif", sans-serif;
+  color: #fff;
+  transition: background-color 0.3s ease;
+  border: none;
+  border-radius: 5px;
+}
+
+.save-button:hover {
+  background-color: #466746;
+}
+
+.cancel-button:hover {
+  background-color: #8a3c29;
+}
+
+.logout-button {
+  background-color: #774136;
+  width: 190px;
+  height: 52px;
+  font-family: "Inria Serif", sans-serif;
+  color: #fff;
+  transition: background-color 0.3s ease;
+  border: none;
+  border-radius: 5px;
+}
+
+.edit-button {
+  background-color: #363A36;
+  width: 190px;
+  height: 52px;
+  font-family: "Inria Serif", sans-serif;
+  color: #fff;
+  transition: background-color 0.3s ease;
+  border: none;
+  border-radius: 5px;
+}
+
+.delete-button {
+  background-color: #B34934;
+  width: 190px;
+  height: 52px;
+  font-family: "Inria Serif", sans-serif;
+  color: #fff;
+  transition: background-color 0.3s ease;
+  border: none;
+  border-radius: 5px;
+}
+
+.logout-button:hover {
+  background-color: #5f3b28;
+}
+
+.edit-button:hover {
+  background-color: #2b2e2b;
+}
+
+.delete-button:hover {
+  background-color: #9e5b46;
 }
 
 .buttons {
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+  bottom: 20px;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-button {
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
+.buttons .left-buttons {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  left: 0;
 }
 
-.edit-profile {
-  background-color: #3d3d3d;
-  color: #fff;
+.buttons .right-buttons {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  right: 0;
 }
 
-.delete-profile {
-  background-color: #d9534f;
-  color: #fff;
+.profile-container .paragraph p {
+  color: #333;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin: 20px;
+  padding: 0;
+  font-family: "Inria Serif", sans-serif;
 }
+
+
+
 
 .message-container {
   margin-bottom: 1.25rem;
   padding: 0.625rem;
-  background-color: rgb(55, 46, 46);
+  background-color: rgb(106, 91, 91);
   border-radius: 0.25rem;
   max-width: 100%;
   box-sizing: border-box;
