@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export interface Address {
-  id?: string;
+  id?: number;
   name: string;
   street: string;
   house: string;
@@ -43,19 +43,18 @@ export const addAddress = createAsyncThunk('address/addAddress', async (newAddre
   }
 });
 
-export const updateAddress = createAsyncThunk('address/updateAddress', async (updatedAddress: Address) => {
-  if (!updatedAddress.id) {
-    throw new Error('Address ID is required for updating.');
-  }
+export const updateAddress = createAsyncThunk('address/updateAddress', async (payload: Address) => {
   try {
-    const response = await axios.put(`/api/address/${updatedAddress.id}`, updatedAddress);
+    if (payload.id === undefined) throw new Error('Address ID is required for update.');
+    const { id, ...data } = payload;
+    const response = await axios.put(`/api/address/${id}`, data);
     return response.data;
   } catch (error) {
     throw new Error('Failed to update address.');
   }
 });
 
-export const deleteAddress = createAsyncThunk('address/deleteAddress', async (id: string) => {
+export const deleteAddress = createAsyncThunk('address/deleteAddress', async (id: number) => {
   try {
     await axios.delete(`/api/address/${id}`);
     return id;
@@ -63,6 +62,7 @@ export const deleteAddress = createAsyncThunk('address/deleteAddress', async (id
     throw new Error('Failed to delete address.');
   }
 });
+
 
 const addressSlice = createSlice({
   name: 'address',
@@ -78,7 +78,7 @@ const addressSlice = createSlice({
         state.addresses = action.payload;
         state.error = null;
       })
-      .addCase(fetchAddresses.rejected, (state, action) => {
+      .addCase(fetchAddresses.rejected, (state) => {
         state.status = 'failed';
         state.error = 'Failed to fetch addresses.';
       })

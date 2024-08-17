@@ -5,19 +5,23 @@ import { logoutUser, clearError } from "../../store/redux/userSlice"
 import "./UserProfilePage.css"
 
 import { useAppDispatch } from "../../app/hook"
-import { deleteAddress, fetchAddresses, updateAddress } from "../../store/redux/addressSlice"
+import {
+  deleteAddress,
+  fetchAddresses,
+  updateAddress,
+} from "../../store/redux/addressSlice"
 import axios from "axios"
 
 interface Address {
-  id?: string;
-  name: string;
-  street: string;
-  house: string;
-  postalCode: string;
-  locality: string;
-  region: string;
-  email: string;
-  phone: string;
+  id?: number
+  name: string
+  street: string
+  house: string
+  postalCode: string
+  locality: string
+  region: string
+  email: string
+  phone: string
 }
 
 const UserProfilePage: React.FC = () => {
@@ -25,16 +29,16 @@ const UserProfilePage: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user)
   const status = useSelector((state: RootState) => state.user.status)
   const error = useSelector((state: RootState) => state.user.error)
+  const userId = useSelector((state: RootState) => state.user.user?.id)
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [userData, setUserData] = useState<Address | null>(null)
   const [apiError, setApiError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!userId) return; // Проверка наличия ID
+      if (!userId) return // Проверка наличия ID
       try {
         const response = await axios.get("/api/address", {
           headers: {
@@ -43,12 +47,17 @@ const UserProfilePage: React.FC = () => {
         })
 
         if (response.status === 200) {
-          setUserData(response.data as Address)
+          setUserData({
+            ...response.data,
+            email: user?.email,
+            accessToken: user?.accessToken,
+            refreshToken: user?.refreshToken,
+          })
         } else {
-          setApiError("Failed to fetch user data.")
+          console.error("Failed to fetch user data.")
         }
       } catch (error) {
-        setApiError("Error fetching user data. Please try again later.")
+        console.error("Error fetching user data:", error)
       }
     }
 
@@ -60,32 +69,35 @@ const UserProfilePage: React.FC = () => {
   useEffect(() => {
     const fetchAddressesData = async () => {
       try {
-        await dispatch(fetchAddresses()).unwrap();
+        await dispatch(fetchAddresses()).unwrap()
       } catch (error) {
         // setApiError("Error fetching addresses. Please try again later.");
         console.log("Error fetching addresses. Please try again later.")
       }
-    };
+    }
 
-    fetchAddressesData();
-  }, [dispatch]);
+    fetchAddressesData()
+  }, [dispatch])
 
   const handleEdit = () => {
     setIsEditing(true)
   }
 
   const handleSave = async () => {
-    if (!userData) return;
+    if (!userData) {
+      setApiError("Address data is required.")
+      return
+    }
 
     try {
-      await dispatch(updateAddress(userData)).unwrap();
-      setIsEditing(false);
-      setSuccessMessage("Address updated successfully!");
+      await dispatch(updateAddress({ id: userId, ...userData })).unwrap()
+      setIsEditing(false)
+      setSuccessMessage("Address updated successfully!")
     } catch (error) {
-      console.error("Error updating address:", error);
-      setApiError("Error updating address. Please try again later.");
+      console.error("Error updating address:", error)
+      setApiError("Error updating address. Please try again later.")
     }
-  };
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -96,28 +108,28 @@ const UserProfilePage: React.FC = () => {
   }
 
   const handleDelete = async () => {
-    if (!userId || !userData) return;
+    if (userId === undefined || !userData) return
 
     try {
       const response = await axios.delete(`/api/address/${userId}`, {
         headers: {
           Authorization: `Bearer ${user?.accessToken}`,
         },
-      });
+      })
 
       if (response.status === 200) {
-        await dispatch(deleteAddress(userId));
+        await dispatch(deleteAddress(userId))
 
-        setUserData(null);
-        setSuccessMessage("Address deleted successfully!");
+        setUserData(null)
+        setSuccessMessage("Address deleted successfully!")
       } else {
-        setApiError("Error deleting address. Please try again later.");
+        setApiError("Error deleting address. Please try again later.")
       }
     } catch (error) {
-      console.error("Error deleting address:", error);
-      setApiError("Error deleting address. Please try again later.");
+      console.error("Error deleting address:", error)
+      setApiError("Error deleting address. Please try again later.")
     }
-  };
+  }
 
   const handleLogout = async () => {
     await dispatch(logoutUser())
@@ -145,7 +157,9 @@ const UserProfilePage: React.FC = () => {
       {(apiError || successMessage) && (
         <div className="message-container">
           {apiError && <p className="error-message">{apiError}</p>}
-          {successMessage && <p className="success-message">{successMessage}</p>}
+          {successMessage && (
+            <p className="success-message">{successMessage}</p>
+          )}
         </div>
       )}
       <h1>My Profile</h1>
@@ -244,7 +258,10 @@ const UserProfilePage: React.FC = () => {
               <button className="save save-button" onClick={handleSave}>
                 Save
               </button>
-              <button className="cancel cancel-button" onClick={() => setIsEditing(false)}>
+              <button
+                className="cancel cancel-button"
+                onClick={() => setIsEditing(false)}
+              >
                 Cancel
               </button>
             </>
