@@ -25,7 +25,6 @@ const initialState: AddressState = {
   error: null,
 };
 
-
 export const fetchAddresses = createAsyncThunk('address/fetchAddresses', async () => {
   try {
     const response = await axios.get('/api/address');
@@ -34,7 +33,6 @@ export const fetchAddresses = createAsyncThunk('address/fetchAddresses', async (
     throw new Error('Failed to load addresses.');
   }
 });
-
 
 export const addAddress = createAsyncThunk('address/addAddress', async (newAddress: Address) => {
   try {
@@ -56,7 +54,6 @@ export const updateAddress = createAsyncThunk('address/updateAddress', async (pa
   }
 });
 
-
 export const deleteAddress = createAsyncThunk('address/deleteAddress', async (id: number) => {
   try {
     await axios.delete(`/api/address/${id}`);
@@ -72,7 +69,7 @@ const addressSlice = createSlice({
   reducers: {
     clearError(state) {
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -84,16 +81,16 @@ const addressSlice = createSlice({
         state.addresses = action.payload;
         state.error = null;
       })
-      .addCase(fetchAddresses.rejected, (state) => {
+      .addCase(fetchAddresses.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = 'Failed to load addresses.';
+        state.error = action.error.message || 'Failed to load addresses.';
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.addresses.push(action.payload);
         state.error = null;
       })
-      .addCase(addAddress.rejected, (state) => {
-        state.error = 'Failed to add address.';
+      .addCase(addAddress.rejected, (state, action) => {
+        state.error = action.error.message || 'Failed to add address.';
       })
       .addCase(updateAddress.fulfilled, (state, action) => {
         const index = state.addresses.findIndex(address => address.id === action.payload.id);
@@ -102,15 +99,15 @@ const addressSlice = createSlice({
         }
         state.error = null;
       })
-      .addCase(updateAddress.rejected, (state) => {
-        state.error = 'Failed to update address.';
+      .addCase(updateAddress.rejected, (state, action) => {
+        state.error = action.error.message || 'Failed to update address.';
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.addresses = state.addresses.filter(address => address.id !== action.payload);
         state.error = null;
       })
-      .addCase(deleteAddress.rejected, (state) => {
-        state.error = 'Failed to delete address.';
+      .addCase(deleteAddress.rejected, (state, action) => {
+        state.error = action.error.message || 'Failed to delete address.';
       });
   },
 });
