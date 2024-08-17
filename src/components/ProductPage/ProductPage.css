@@ -2,6 +2,8 @@
   font-family: 'Arial', sans-serif;
   color: #fff;
   background-color: #2c2c2c;
+  min-height: 900px;
+  height: auto;
   padding: 20px;
 }
 
@@ -122,6 +124,26 @@
   font-size: 18px;
   color: #b99b87;
 }
+
+
+.added-message {
+  color: green;
+  font-weight: bold;
+  text-align: center;
+  font-family: "Inria Serif", sans-serif;
+  font-size: 0.75rem;
+  margin-bottom: 0.3125rem;
+}
+
+.added-message-container {
+  margin-bottom: 1.25rem;
+  padding: 0.625rem;
+  background-color: rgb(237, 228, 228);
+  border-radius: 0.25rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 
 /* Media Queries for Responsiveness */
 @media (max-width: 1024px) {
