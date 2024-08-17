@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export interface Address {
-  id?: string
+  id?: string;
   name: string;
   street: string;
   house: string;
@@ -30,9 +30,6 @@ export const fetchAddresses = createAsyncThunk('address/fetchAddresses', async (
     const response = await axios.get('/api/address');
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.message);
-    }
     throw new Error('Failed to fetch addresses.');
   }
 });
@@ -42,21 +39,18 @@ export const addAddress = createAsyncThunk('address/addAddress', async (newAddre
     const response = await axios.post('/api/address', newAddress);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.message);
-    }
     throw new Error('Failed to add address.');
   }
 });
 
 export const updateAddress = createAsyncThunk('address/updateAddress', async (updatedAddress: Address) => {
+  if (!updatedAddress.id) {
+    throw new Error('Address ID is required for updating.');
+  }
   try {
     const response = await axios.put(`/api/address/${updatedAddress.id}`, updatedAddress);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.message);
-    }
     throw new Error('Failed to update address.');
   }
 });
@@ -66,9 +60,6 @@ export const deleteAddress = createAsyncThunk('address/deleteAddress', async (id
     await axios.delete(`/api/address/${id}`);
     return id;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.message);
-    }
     throw new Error('Failed to delete address.');
   }
 });
@@ -89,33 +80,33 @@ const addressSlice = createSlice({
       })
       .addCase(fetchAddresses.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch addresses.';
+        state.error = 'Failed to fetch addresses.';
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.addresses.push(action.payload);
         state.error = null;
       })
-      .addCase(addAddress.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to add address.';
+      .addCase(addAddress.rejected, (state) => {
+        state.error = 'Failed to add address.';
       })
       .addCase(updateAddress.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        const index = state.addresses.findIndex(addr => addr.id === action.payload.id);
+        const index = state.addresses.findIndex(address => address.id === action.payload.id);
         if (index !== -1) {
           state.addresses[index] = action.payload;
         }
+        state.error = null;
       })
-      .addCase(updateAddress.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to update address.';
+      .addCase(updateAddress.rejected, (state) => {
+        state.error = 'Failed to update address.';
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.addresses = state.addresses.filter(address => address.id !== action.payload);
         state.error = null;
       })
-      .addCase(deleteAddress.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to delete address.';
+      .addCase(deleteAddress.rejected, (state) => {
+        state.error = 'Failed to delete address.';
       });
-  }
+  },
 });
 
 export default addressSlice.reducer;
