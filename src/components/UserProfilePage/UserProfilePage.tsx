@@ -30,43 +30,37 @@ const UserProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (!user) {
-      // Если user не загружен или равен null, можно вернуться или обработать этот случай
       return;
     }
+  
     const fetchUserData = async () => {
       try {
         console.log("Fetching addresses...");
         const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
         console.log("Fetched addresses:", fetchedAddresses);
     
-        setUserData(prevUserData => {
-          const defaultData: Address = {
+        if (fetchedAddresses && fetchedAddresses.length > 0) {
+          // Выбираем последний адрес для отображения
+          const lastAddress = fetchedAddresses[fetchedAddresses.length - 1];
+          setUserData(lastAddress);
+        } else {
+          console.log("No addresses found for the user.");
+          // Если адресов нет, устанавливаем только email
+          setUserData({
             email: user.email,
-            name: fetchedAddresses?.name || prevUserData?.name || '',
-            street: fetchedAddresses?.street || prevUserData?.street || '',
-            house: fetchedAddresses?.house || prevUserData?.house || '',
-            postalCode: fetchedAddresses?.postalCode || prevUserData?.postalCode || '',
-            locality: fetchedAddresses?.locality || prevUserData?.locality || '',
-            region: fetchedAddresses?.region || prevUserData?.region || '',
-            phone: fetchedAddresses?.phone || prevUserData?.phone || '',
-            id: fetchedAddresses?.id || prevUserData?.id,
-          };
-          return defaultData;
-        });
+            name: '',
+            street: '',
+            house: '',
+            postalCode: '',
+            locality: '',
+            region: '',
+            phone: '',
+          });
+        }
+  
       } catch (error) {
         console.log("Error loading address. Please try again later.", error);
-    
-        setUserData({
-          email: user.email,
-          name: '',
-          street: '',
-          house: '',
-          postalCode: '',
-          locality: '',
-          region: '',
-          phone: '',
-          id: undefined,
-        });
+        setApiError("Error loading user data. Please try again later.");
       }
     };
   
@@ -125,12 +119,41 @@ const UserProfilePage: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    if (!userData?.id) return;
+    if (!user) {
+      return;
+    }
 
+    if (!userData?.id) {
+      setApiError("No address selected for deletion.");
+      return;
+    }
+  
     try {
+      // Логирование перед удалением
+      console.log("Attempting to delete address with ID:", userData.id);
+  
       await dispatch(deleteAddress(userData.id)).unwrap();
       console.log("Address deleted successfully");
-      setUserData(null);
+  
+      // Очистка состояния или установка нового адреса после удаления
+      const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
+      if (fetchedAddresses.length > 0) {
+        // Если остались другие адреса, выбираем последний
+        setUserData(fetchedAddresses[fetchedAddresses.length - 1]);
+      } else {
+        // Если больше нет адресов, очищаем поля
+        setUserData({
+          email: user.email,
+          name: '',
+          street: '',
+          house: '',
+          postalCode: '',
+          locality: '',
+          region: '',
+          phone: '',
+        });
+      }
+  
       setSuccessMessage("Address deleted successfully!");
     } catch (error) {
       console.log("Error deleting address:", error);
@@ -147,9 +170,6 @@ const UserProfilePage: React.FC = () => {
     }
   };
 
-  if (addressStatus === "loading" || userStatus === "loading") {
-    return <div>Loading...</div>;
-  }
 
   if (userError) {
     return (
@@ -162,135 +182,137 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <div className="user-profile-page">
-    {(apiError || successMessage) && (
-      <div className="message-container">
-        {apiError && <p className="error-message">{apiError}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
-      </div>
-    )}
     <h1>My Profile</h1>
     {userData ? (
-      <div className="profile-container">
-        <div className="profile-section">
-          {isEditing ? (
-            <>
-              <input
-                type="text"
-                name="name"
-                value={userData.name || ""}
-                placeholder="Name"
-                onChange={handleChange}
-                className="profile-input"
-              />
-              <input
-                type="text"
-                name="email"
-                value={userData.email}
-                placeholder="Email"
-                className="profile-input"
-                disabled
-              />
-              <input
-                type="text"
-                name="street"
-                value={userData.street || ""}
-                placeholder="Street"
-                onChange={handleChange}
-                className="profile-input"
-              />
-              <input
-                type="text"
-                name="house"
-                value={userData.house || ""}
-                placeholder="House Number"
-                onChange={handleChange}
-                className="profile-input"
-              />
-              <input
-                type="text"
-                name="postalCode"
-                value={userData.postalCode || ""}
-                placeholder="Postal Code"
-                onChange={handleChange}
-                className="profile-input"
-              />
-              <input
-                type="text"
-                name="locality"
-                value={userData.locality || ""}
-                placeholder="Locality"
-                onChange={handleChange}
-                className="profile-input"
-              />
-              <input
-                type="text"
-                name="region"
-                value={userData.region || ""}
-                placeholder="Region"
-                onChange={handleChange}
-                className="profile-input"
-              />
-              <input
-                type="text"
-                name="phone"
-                value={userData.phone || ""}
-                placeholder="Phone Number"
-                onChange={handleChange}
-                className="profile-input"
-              />
-            </>
-          ) : (
-            <div className="paragraph">
-              <p>Name: {userData.name || "must be filled out"}</p>
-              <p>Email: {userData.email}</p>
-              <p>Street: {userData.street || "must be filled out"}</p>
-              <p>House Number: {userData.house || "must be filled out"}</p>
-              <p>Postal Code: {userData.postalCode || "must be filled out"}</p>
-              <p>Locality: {userData.locality || "must be filled out"}</p>
-              <p>Region: {userData.region || "must be filled out"}</p>
-              <p>Phone Number: {userData.phone || "must be filled out"}</p>
-            </div>
-          )}
+      <>
+        {(apiError || successMessage) && (
+          <div className="message-container">
+            {apiError && <p className="error-message">{apiError}</p>}
+            {successMessage && <p className="success-message">{successMessage}</p>}
+          </div>
+        )}
+        <div className="profile-container">
+          <div className="profile-section">
+            {isEditing ? (
+              <>
+                <input
+                  type="text"
+                  name="name"
+                  value={userData.name || ""}
+                  placeholder="Name"
+                  onChange={handleChange}
+                  className="profile-input"
+                />
+                <input
+                  type="text"
+                  name="email"
+                  value={userData.email}
+                  placeholder="Email"
+                  className="profile-input"
+                  disabled
+                />
+                <input
+                  type="text"
+                  name="street"
+                  value={userData.street || ""}
+                  placeholder="Street"
+                  onChange={handleChange}
+                  className="profile-input"
+                />
+                <input
+                  type="text"
+                  name="house"
+                  value={userData.house || ""}
+                  placeholder="House Number"
+                  onChange={handleChange}
+                  className="profile-input"
+                />
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={userData.postalCode || ""}
+                  placeholder="Postal Code"
+                  onChange={handleChange}
+                  className="profile-input"
+                />
+                <input
+                  type="text"
+                  name="locality"
+                  value={userData.locality || ""}
+                  placeholder="Locality"
+                  onChange={handleChange}
+                  className="profile-input"
+                />
+                <input
+                  type="text"
+                  name="region"
+                  value={userData.region || ""}
+                  placeholder="Region"
+                  onChange={handleChange}
+                  className="profile-input"
+                />
+                <input
+                  type="text"
+                  name="phone"
+                  value={userData.phone || ""}
+                  placeholder="Phone Number"
+                  onChange={handleChange}
+                  className="profile-input"
+                />
+              </>
+            ) : (
+              <div className="paragraph">
+                <p>Name: {userData.name || "must be filled out"}</p>
+                <p>Email: {userData.email}</p>
+                <p>Street: {userData.street || "must be filled out"}</p>
+                <p>House Number: {userData.house || "must be filled out"}</p>
+                <p>Postal Code: {userData.postalCode || "must be filled out"}</p>
+                <p>Locality: {userData.locality || "must be filled out"}</p>
+                <p>Region: {userData.region || "must be filled out"}</p>
+                <p>Phone Number: {userData.phone || "must be filled out"}</p>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="buttons">
+          <div className="left-buttons">
+            <button className="logout logout-button" onClick={handleLogout}>
+              Sign out
+            </button>
+          </div>
+          <div className="right-buttons">
+            {isEditing ? (
+              <>
+                <button className="save save-button" onClick={handleSave}>
+                  Save
+                </button>
+                <button
+                  className="cancel cancel-button"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="edit edit-button" onClick={handleEdit}>
+                  Edit
+                </button>
+                <button className="delete delete-button" onClick={handleDelete}>
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </>
+    ) : (
+      <div className="spinner-container">
+        <div className="spinner-border text-black" role="status">
+          <span className="visually-hidden">Loading user data...</span>
         </div>
       </div>
-    ) : (
-      <div className="text-center">
-              <div className="spinner-border text-black" role="status">
-                <span className="visually-hidden">Loading user data...</span>
-              </div>
-            </div>
     )}
-    <div className="buttons">
-      <div className="left-buttons">
-        <button className="logout logout-button" onClick={handleLogout}>
-          Sign out
-        </button>
-      </div>
-      <div className="right-buttons">
-        {isEditing ? (
-          <>
-            <button className="save save-button" onClick={handleSave}>
-              Save
-            </button>
-            <button
-              className="cancel cancel-button"
-              onClick={() => setIsEditing(false)}
-            >
-              Cancel
-            </button>
-          </>
-        ) : (
-          <>
-            <button className="edit edit-button" onClick={handleEdit}>
-              Edit
-            </button>
-            <button className="delete delete-button" onClick={handleDelete}>
-              Delete
-            </button>
-          </>
-        )}
-      </div>
-    </div>
   </div>
   );
 };
