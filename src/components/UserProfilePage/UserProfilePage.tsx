@@ -1,30 +1,44 @@
 import React, { ChangeEvent, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
-import { updateUser, logoutUser, clearError } from "../../store/redux/userSlice"
+import { logoutUser, clearError } from "../../store/redux/userSlice"
 import "./UserProfilePage.css"
 
 import { useAppDispatch } from "../../app/hook"
 import {
-  Address,
   deleteAddress,
   fetchAddresses,
   updateAddress,
 } from "../../store/redux/addressSlice"
 import axios from "axios"
 
+interface Address {
+  id?: number
+  name: string
+  street: string
+  house: string
+  postalCode: string
+  locality: string
+  region: string
+  email: string
+  phone: string
+}
+
 const UserProfilePage: React.FC = () => {
   const dispatch = useAppDispatch()
   const user = useSelector((state: RootState) => state.user.user)
+  const status = useSelector((state: RootState) => state.user.status)
+  const error = useSelector((state: RootState) => state.user.error)
+  const userId = useSelector((state: RootState) => state.user.user?.id)
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [editAddress, setEditAddress] = useState<Address | null>(null)
-  const [userAddress, setUserAddress] = useState<Address | null>(null)
+  const [userData, setUserData] = useState<Address | null>(null)
   const [apiError, setApiError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!userId) return // Проверка наличия ID
       try {
         const response = await axios.get("/api/address", {
           headers: {
@@ -33,83 +47,109 @@ const UserProfilePage: React.FC = () => {
         })
 
         if (response.status === 200) {
-          const address = response.data as Address
-          setUserAddress(prevAddress => prevAddress || address)
+          setUserData({
+            ...response.data,
+            email: user?.email,
+            accessToken: user?.accessToken,
+            refreshToken: user?.refreshToken,
+          })
         } else {
-          setApiError("Failed to fetch user data.")
+          console.error("Failed to fetch user data.")
         }
       } catch (error) {
-        setApiError("Error fetching user data. Please try again later.")
+        console.error("Error fetching user data:", error)
       }
     }
 
-    if (user && !userAddress) {
+    if (user) {
       fetchUserData()
     }
-  }, [user, userAddress])
+  }, [userId, user])
+
+  useEffect(() => {
+    const fetchAddressesData = async () => {
+      try {
+        await dispatch(fetchAddresses()).unwrap()
+      } catch (error) {
+        // setApiError("Error fetching addresses. Please try again later.");
+        console.log("Error fetching addresses. Please try again later.")
+      }
+    }
+
+    fetchAddressesData()
+  }, [dispatch])
 
   const handleEdit = () => {
-    setEditAddress(userAddress)
     setIsEditing(true)
   }
 
   const handleSave = async () => {
-    if (editAddress) {
-      try {
-        const response = await axios.put(`/api/address/${editAddress.id}`, {
-          name: editAddress.name,
-          street: editAddress.street,
-          house: editAddress.house,
-          postalCode: editAddress.postalCode,
-          locality: editAddress.locality,
-          region: editAddress.region,
-          email: editAddress.email,
-          phone: editAddress.phone,
-        })
+    if (!userData) {
+      setApiError("Address data is required.")
+      return
+    }
 
-        if (response.status === 200) {
-          dispatch(updateAddress(response.data))
-          setUserAddress(response.data)
-          setIsEditing(false)
-          setSuccessMessage("Address updated successfully!")
-        } else {
-          setApiError("Failed to update address.")
-        }
-      } catch (error) {
-        setApiError("Error updating address. Please try again later.")
-      }
+    try {
+      await dispatch(updateAddress({ id: userId, ...userData })).unwrap()
+      setIsEditing(false)
+      setSuccessMessage("Address updated successfully!")
+    } catch (error) {
+      console.error("Error updating address:", error)
+      setApiError("Error updating address. Please try again later.")
     }
   }
 
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target
-  //   setEditAddress(prevAddress =>
-  //     prevAddress ? { ...prevAddress, [name]: value } : null,
-  //   )
-  // }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setEditAddress(prevAddress => {
-      if (!prevAddress) return null
-      return { ...prevAddress, [name]: value }
+    setUserData(prevUser => {
+      if (!prevUser) return null
+      return { ...prevUser, [name]: value }
     })
   }
 
   const handleDelete = async () => {
+    if (userId === undefined || !userData) return
+
     try {
-      if (userAddress) {
-        await dispatch(deleteAddress(userAddress.id))
-        setUserAddress(null)
+      const response = await axios.delete(`/api/address/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${user?.accessToken}`,
+        },
+      })
+
+      if (response.status === 200) {
+        await dispatch(deleteAddress(userId))
+
+        setUserData(null)
         setSuccessMessage("Address deleted successfully!")
+      } else {
+        setApiError("Error deleting address. Please try again later.")
       }
     } catch (error) {
+      console.error("Error deleting address:", error)
       setApiError("Error deleting address. Please try again later.")
     }
   }
 
   const handleLogout = async () => {
     await dispatch(logoutUser())
+  }
+
+  if (status === "loading") {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return (
+      <div>
+        Error: {error}
+        <button onClick={() => dispatch(clearError())}>Clear Error</button>
+      </div>
+    )
+  }
+
+  if (!userData) {
+    return <div>No user data available</div>
   }
 
   return (
@@ -124,77 +164,87 @@ const UserProfilePage: React.FC = () => {
       )}
       <h1>My Profile</h1>
       <div className="profile-container">
-        {isEditing ? (
-          <>
-            <input
-              type="text"
-              name="name"
-              value={editAddress?.name || ""}
-              placeholder="Name"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="email"
-              value={editAddress?.email || user?.email || ""}
-              placeholder="Email"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="street"
-              value={editAddress?.street || ""}
-              placeholder="Street"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="house"
-              value={editAddress?.house || ""}
-              placeholder="House Number"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="postalCode"
-              value={editAddress?.postalCode || ""}
-              placeholder="Postal Code"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="locality"
-              value={editAddress?.locality || ""}
-              placeholder="Locality"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="region"
-              value={editAddress?.region || ""}
-              placeholder="Region"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="phone"
-              value={editAddress?.phone || ""}
-              placeholder="Phone Number"
-              onChange={handleChange}
-            />
-          </>
-        ) : (
-          <div className="paragraph">
-            <p>Name: {userAddress?.name || "Not available"}</p>
-            <p>Email: {userAddress?.email || user?.email || "Not available"}</p>
-            <p>Street: {userAddress?.street || "Not available"}</p>
-            <p>House Number: {userAddress?.house || "Not available"}</p>
-            <p>Postal Code: {userAddress?.postalCode || "Not available"}</p>
-            <p>Locality: {userAddress?.locality || "Not available"}</p>
-            <p>Region: {userAddress?.region || "Not available"}</p>
-            <p>Phone Number: {userAddress?.phone || "Not available"}</p>
-          </div>
-        )}
+        <div className="profile-section">
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                name="name"
+                value={userData?.name || ""}
+                placeholder="Name"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="email"
+                value={userData?.email || ""}
+                placeholder="Email"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="street"
+                value={userData?.street || ""}
+                placeholder="Street"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="house"
+                value={userData?.house || ""}
+                placeholder="House Number"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="postalCode"
+                value={userData?.postalCode || ""}
+                placeholder="Postal Code"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="locality"
+                value={userData?.locality || ""}
+                placeholder="Locality"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="region"
+                value={userData?.region || ""}
+                placeholder="Region"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="phone"
+                value={userData?.phone || ""}
+                placeholder="Phone Number"
+                onChange={handleChange}
+                className="profile-input"
+              />
+            </>
+          ) : (
+            <div className="paragraph">
+              <p>Name: {userData?.name || "Not available"}</p>
+              <p>Email: {userData.email}</p>
+              <p>Street: {userData?.street || "Not available"}</p>
+              <p>House Number: {userData?.house || "Not available"}</p>
+              <p>Postal Code: {userData?.postalCode || "Not available"}</p>
+              <p>Locality: {userData?.locality || "Not available"}</p>
+              <p>Region: {userData?.region || "Not available"}</p>
+              <p>Phone Number: {userData?.phone || "Not available"}</p>
+            </div>
+          )}
+        </div>
       </div>
       <div className="buttons">
         <div className="left-buttons">
