@@ -18,21 +18,15 @@ const UserProfilePage: React.FC = () => {
   const navigate = useNavigate();
 
   const user = useSelector((state: RootState) => state.user.user);
-  const status = useSelector((state: RootState) => state.user.status);
-  const error = useSelector((state: RootState) => state.user.error);
+  const userStatus = useSelector((state: RootState) => state.user.status);
+  const userError = useSelector((state: RootState) => state.user.error);
+
   const addresses = useSelector((state: RootState) => state.address.addresses);
+  const addressStatus = useSelector((state: RootState) => state.address.status);
+  const addressError = useSelector((state: RootState) => state.address.error);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [userData, setUserData] = useState<Address | null>({
-    name: '',
-    street: '',
-    house: '',
-    postalCode: '',
-    locality: '',
-    region: '',
-    phone: '',
-    email: user?.email || '',
-  });
+  const [userData, setUserData] = useState<Address | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -40,17 +34,27 @@ const UserProfilePage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         await dispatch(fetchAddresses()).unwrap();
-        setUserData(addresses[0] || {
-          ...userData,
-          email: user?.email || '',  // Если данные загружены, но нет email, используем email из профиля
-        });
+        if (addresses.length > 0) {
+          setUserData(addresses[0]); // Установить первый адрес из списка
+        } else {
+          setUserData({
+            name: '',
+            street: '',
+            house: '',
+            postalCode: '',
+            locality: '',
+            region: '',
+            phone: '',
+            email: user?.email || '',
+          }); // Если адресов нет, создать пустой объект с email
+        }
       } catch (error) {
         console.log("Error loading addresses. Please try again later.");
       }
     };
 
     fetchUserData();
-  }, [dispatch, addresses]);
+  }, [dispatch, addresses, user?.email]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -105,14 +109,14 @@ const UserProfilePage: React.FC = () => {
     }
   };
 
-  if (status === "loading") {
+  if (addressStatus === "loading" || userStatus === "loading") {
     return <div>Loading...</div>;
   }
 
-  if (error) {
+  if (userError) {
     return (
       <div>
-        Error: {error}
+        Error: {userError}
         <button onClick={() => dispatch(clearError())}>Clear Error</button>
       </div>
     );
@@ -121,7 +125,6 @@ const UserProfilePage: React.FC = () => {
   if (!userData?.email) {
     return <div>No user data available</div>;
   }
-
 
   return (
     <div className="user-profile-page">
