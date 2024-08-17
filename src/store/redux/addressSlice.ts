@@ -1,18 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-
-
-// Определение интерфейсов для адресов и состояния
-interface Address {
+export interface Address {
   id: number;
+  name: string;
   street: string;
   house: string;
   postalCode: string;
   locality: string;
   region: string;
-  country: string;
   phone: string;
+  email: string;
 }
 
 interface AddressState {
@@ -21,14 +19,12 @@ interface AddressState {
   error: string | null;
 }
 
-// Начальное состояние
 const initialState: AddressState = {
   addresses: [],
   status: 'idle',
   error: null,
 };
 
-// Асинхронные действия для управления адресами
 export const fetchAddresses = createAsyncThunk('address/fetchAddresses', async () => {
   try {
     const response = await axios.get('/api/address');
@@ -65,7 +61,6 @@ export const deleteAddress = createAsyncThunk('address/deleteAddress', async (ad
   }
 });
 
-// Слайс для управления состоянием адресов
 const addressSlice = createSlice({
   name: 'address',
   initialState,
@@ -78,7 +73,7 @@ const addressSlice = createSlice({
       .addCase(fetchAddresses.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.addresses = action.payload;
-        state.error = null; // Очистить ошибку, если запрос успешен
+        state.error = null;
       })
       .addCase(fetchAddresses.rejected, (state, action) => {
         state.status = 'failed';
@@ -86,7 +81,7 @@ const addressSlice = createSlice({
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.addresses.push(action.payload);
-        state.error = null; // Очистить ошибку, если запрос успешен
+        state.error = null;
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to add address.';
@@ -96,14 +91,14 @@ const addressSlice = createSlice({
         if (index !== -1) {
           state.addresses[index] = action.payload;
         }
-        state.error = null; // Очистить ошибку, если запрос успешен
+        state.error = null;
       })
       .addCase(updateAddress.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to update address.';
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.addresses = state.addresses.filter((address) => address.id !== action.payload);
-        state.error = null; // Очистить ошибку, если запрос успешен
+        state.error = null;
       })
       .addCase(deleteAddress.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to delete address.';
@@ -112,6 +107,8 @@ const addressSlice = createSlice({
 });
 
 export default addressSlice.reducer;
+
+
 
 
 

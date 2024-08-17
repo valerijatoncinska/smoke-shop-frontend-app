@@ -1,48 +1,28 @@
-import React, { useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { updateUser, logoutUser, clearError } from "../../store/redux/userSlice"
 import "./UserProfilePage.css"
+
+import { useAppDispatch } from "../../app/hook"
 import {
-  addAddress,
+  Address,
   deleteAddress,
   fetchAddresses,
   updateAddress,
 } from "../../store/redux/addressSlice"
 import axios from "axios"
-import { useAppDispatch } from "../../app/hook"
-
-
-interface Address {
-  id: number;
-  street: string;
-  house: string;
-  postalCode: string;
-  locality: string;
-  region: string;
-  country: string;
-  phone: string;
-}
-
-interface User {
-  id?: number;
-  name: string;
-  email: string;
-  addresses: Address[];
-}
 
 const UserProfilePage: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const user = useSelector((state: RootState) => state.user.user);
-  const addresses = useSelector((state: RootState) => state.address.addresses);
-  const status = useSelector((state: RootState) => state.address.status);
-  const error = useSelector((state: RootState) => state.address.error);
+  const dispatch = useAppDispatch()
+  const user = useSelector((state: RootState) => state.user.user)
 
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editAddress, setEditAddress] = useState<Address | null>(null);
-  const [userData, setUserData] = useState<User | null>(null);
-  const [apiError, setApiError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [editAddress, setEditAddress] = useState<Address | null>(null)
+  const [userAddress, setUserAddress] = useState<Address | null>(null)
+  const [apiError, setApiError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -52,13 +32,10 @@ const UserProfilePage: React.FC = () => {
             Authorization: `Bearer ${user?.accessToken}`,
           },
         });
-
+  
         if (response.status === 200) {
-          const addresses = response.data;
-          setUserData(prevUserData => ({
-            ...prevUserData!,
-            addresses: addresses
-          }));
+          const address = response.data as Address;
+          setUserAddress(prevAddress => prevAddress || address);
         } else {
           setApiError("Failed to fetch user data.");
         }
@@ -66,165 +43,191 @@ const UserProfilePage: React.FC = () => {
         setApiError("Error fetching user data. Please try again later.");
       }
     };
-
-    if (user) {
+  
+    if (user && !userAddress) {
       fetchUserData();
-      dispatch(fetchAddresses());
     }
-  }, [user, dispatch]);
+  }, [user, userAddress]);
 
-  const handleEdit = (address: Address) => {
-    setEditAddress(address);
-    setIsEditing(true);
-  };
+  const handleEdit = () => {
+    setEditAddress(userAddress)
+    setIsEditing(true)
+  }
 
   const handleSave = async () => {
     if (editAddress) {
       try {
-        await dispatch(updateAddress(editAddress));
-        setIsEditing(false);
-        setSuccessMessage("Address updated successfully!");
-      } catch {
-        console.error("Error updating address:", error); 
-        setApiError("Error updating address. Please try again later.");
+        const response = await axios.put(`/api/address/${editAddress.id}`, {
+          name: editAddress.name,
+          street: editAddress.street,
+          house: editAddress.house,
+          postalCode: editAddress.postalCode,
+          locality: editAddress.locality,
+          region: editAddress.region,
+          email: editAddress.email,
+          phone: editAddress.phone,
+        })
+
+        if (response.status === 200) {
+          dispatch(updateAddress(response.data))
+          setUserAddress(response.data)
+          setIsEditing(false)
+          setSuccessMessage("Address updated successfully!")
+        } else {
+          setApiError("Failed to update address.")
+        }
+      } catch (error) {
+        setApiError("Error updating address. Please try again later.")
       }
     }
-  };
+  }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
     setEditAddress(prevAddress =>
-      prevAddress ? { ...prevAddress, [name]: value } : null
-    );
-  };
+      prevAddress ? { ...prevAddress, [name]: value } : null,
+    )
+  }
 
-  const handleDelete = async (addressId: number) => {
+  const handleDelete = async () => {
     try {
-      await dispatch(deleteAddress(addressId));
-      setSuccessMessage("Address deleted successfully!");
-    } catch {
-      console.error("Error deleting address:", error);
-      setApiError("Error deleting address. Please try again later.");
+      if (userAddress) {
+        await dispatch(deleteAddress(userAddress.id))
+        setUserAddress(null)
+        setSuccessMessage("Address deleted successfully!")
+      }
+    } catch (error) {
+      setApiError("Error deleting address. Please try again later.")
     }
-  };
+  }
 
   const handleLogout = async () => {
-    await dispatch(logoutUser());
-  };
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
+    await dispatch(logoutUser())
   }
 
   return (
     <div className="user-profile-page">
-      {(apiError || successMessage) && (
-        <div className="message-container">
-          {apiError && <p className="error-message">{apiError}</p>}
-          {successMessage && <p className="success-message">{successMessage}</p>}
+    {(apiError || successMessage) && (
+      <div className="message-container">
+        {apiError && <p className="error-message">{apiError}</p>}
+        {successMessage && (
+          <p className="success-message">{successMessage}</p>
+        )}
+      </div>
+    )}
+    <h1>My Profile</h1>
+    <div className="profile-container">
+      {isEditing ? (
+        <>
+          <input
+            type="text"
+            name="name"
+            value={editAddress?.name || ""}
+            placeholder="Name"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="email"
+            value={editAddress?.email || ""}
+            placeholder="Email"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="street"
+            value={editAddress?.street || ""}
+            placeholder="Street"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="house"
+            value={editAddress?.house || ""}
+            placeholder="House Number"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="postalCode"
+            value={editAddress?.postalCode || ""}
+            placeholder="Postal Code"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="locality"
+            value={editAddress?.locality || ""}
+            placeholder="Locality"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="region"
+            value={editAddress?.region || ""}
+            placeholder="Region"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="phone"
+            value={editAddress?.phone || ""}
+            placeholder="Phone Number"
+            onChange={handleChange}
+          />
+        </>
+      ) : (
+        <div className="paragraph">
+          <p>Name: {userAddress?.name || "Not available"}</p>
+          <p>Email: {userAddress?.email || "Not available"}</p>
+          <p>Street: {userAddress?.street || "Not available"}</p>
+          <p>House Number: {userAddress?.house || "Not available"}</p>
+          <p>Postal Code: {userAddress?.postalCode || "Not available"}</p>
+          <p>Locality: {userAddress?.locality || "Not available"}</p>
+          <p>Region: {userAddress?.region || "Not available"}</p>
+          <p>Phone Number: {userAddress?.phone || "Not available"}</p>
         </div>
       )}
-      <h1>My Profile</h1>
-      <div className="profile-container">
-        <div className="profile-section">
-          <h2>User Profile</h2>
-          {userData && (
-            <>
-              <p>Name: {userData.name}</p>
-              <p>Email: {userData.email}</p>
-            </>
-          )}
-        </div>
-        <div className="profile-section">
-          <h2>Addresses</h2>
-          {addresses.length > 0 ? (
-            addresses.map(address => (
-              <div key={address.id} className="address-item">
-                {isEditing && address.id === editAddress?.id ? (
-                  <>
-                    <input
-                      type="text"
-                      name="street"
-                      value={editAddress.street || ""}
-                      placeholder="Street"
-                      onChange={handleChange}
-                    />
-                    <input
-                      type="text"
-                      name="house"
-                      value={editAddress.house || ""}
-                      placeholder="House Number"
-                      onChange={handleChange}
-                    />
-                    <input
-                      type="text"
-                      name="postalCode"
-                      value={editAddress.postalCode || ""}
-                      placeholder="Postal Code"
-                      onChange={handleChange}
-                    />
-                    <input
-                      type="text"
-                      name="locality"
-                      value={editAddress.locality || ""}
-                      placeholder="Locality"
-                      onChange={handleChange}
-                    />
-                    <input
-                      type="text"
-                      name="region"
-                      value={editAddress.region || ""}
-                      placeholder="Region"
-                      onChange={handleChange}
-                    />
-                    <input
-                      type="text"
-                      name="country"
-                      value={editAddress.country || ""}
-                      placeholder="Country"
-                      onChange={handleChange}
-                    />
-                    <input
-                      type="text"
-                      name="phone"
-                      value={editAddress.phone || ""}
-                      placeholder="Phone Number"
-                      onChange={handleChange}
-                    />
-                    <button onClick={handleSave}>Save</button>
-                    <button onClick={() => setIsEditing(false)}>Cancel</button>
-                  </>
-                ) : (
-                  <>
-                    <p>Street: {address.street || "N/A"}</p>
-                    <p>House Number: {address.house || "N/A"}</p>
-                    <p>Postal Code: {address.postalCode || "N/A"}</p>
-                    <p>Locality: {address.locality || "N/A"}</p>
-                    <p>Region: {address.region || "N/A"}</p>
-                    <p>Country: {address.country || "N/A"}</p>
-                    <p>Phone Number: {address.phone || "N/A"}</p>
-                    <button onClick={() => handleEdit(address)}>Edit</button>
-                    <button onClick={() => handleDelete(address.id)}>Delete</button>
-                  </>
-                )}
-              </div>
-            ))
-          ) : (
-            <p>No addresses available</p>
-          )}
-        </div>
-      </div>
-      <div className="buttons">
-        <button className="logout" onClick={handleLogout}>
+    </div>
+    <div className="buttons">
+      <div className="left-buttons">
+        <button className="logout logout-button" onClick={handleLogout}>
           Sign out
         </button>
       </div>
+      <div className="right-buttons">
+      {isEditing ? (
+      <>
+        <button className="save save-button" onClick={handleSave}>Save</button>
+        <button className="cancel cancel-button" onClick={() => setIsEditing(false)}>Cancel</button>
+      </>
+    ) : (
+      <>
+        <button className="edit edit-button" onClick={handleEdit}>Edit</button>
+        <button className="delete delete-button" onClick={handleDelete}>Delete</button>
+      </>
+    )}
+      </div>
     </div>
-  );
-};
+  </div>
 
-export default UserProfilePage;
+  )
+}
 
+export default UserProfilePage
+
+
+// {isEditing ? (
+//   <>
+//     <button className="save" onClick={handleSave}>Save</button>
+//     <button className="cancel" onClick={() => setIsEditing(false)}>Cancel</button>
+//   </>
+// ) : (
+//   <>
+//     <button className="edit" onClick={handleEdit}>Edit</button>
+//     <button className="delete" onClick={handleDelete}>Delete</button>
+//   </>
+// )}
 
 // interface User {
 //   id?: string;
