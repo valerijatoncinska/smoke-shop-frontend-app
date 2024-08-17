@@ -23,6 +23,7 @@ const UserProfilePage: React.FC = () => {
   const [apiError, setApiError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -30,23 +31,23 @@ const UserProfilePage: React.FC = () => {
           headers: {
             Authorization: `Bearer ${user?.accessToken}`,
           },
-        })
-
+        });
+  
         if (response.status === 200) {
-          const address = response.data as Address // Прямое присвоение объекта
-          setUserAddress(address)
+          const address = response.data as Address;
+          setUserAddress(prevAddress => prevAddress || address);
         } else {
-          setApiError("Failed to fetch user data.")
+          setApiError("Failed to fetch user data.");
         }
       } catch (error) {
-        setApiError("Error fetching user data. Please try again later.")
+        setApiError("Error fetching user data. Please try again later.");
       }
+    };
+  
+    if (user && !userAddress) {
+      fetchUserData();
     }
-
-    if (user) {
-      fetchUserData()
-    }
-  }, [user])
+  }, [user, userAddress]);
 
   const handleEdit = () => {
     setEditAddress(userAddress)

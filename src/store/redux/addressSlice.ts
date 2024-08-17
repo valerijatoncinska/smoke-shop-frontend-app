@@ -73,7 +73,7 @@ const addressSlice = createSlice({
       .addCase(fetchAddresses.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.addresses = action.payload;
-        state.error = null; // Очистить ошибку при успешном запросе
+        state.error = null;
       })
       .addCase(fetchAddresses.rejected, (state, action) => {
         state.status = 'failed';
@@ -81,7 +81,7 @@ const addressSlice = createSlice({
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.addresses.push(action.payload);
-        state.error = null; // Очистить ошибку при успешном добавлении
+        state.error = null;
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to add address.';
@@ -91,14 +91,14 @@ const addressSlice = createSlice({
         if (index !== -1) {
           state.addresses[index] = action.payload;
         }
-        state.error = null; // Очистить ошибку при успешном обновлении
+        state.error = null;
       })
       .addCase(updateAddress.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to update address.';
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.addresses = state.addresses.filter((address) => address.id !== action.payload);
-        state.error = null; // Очистить ошибку при успешном удалении
+        state.error = null;
       })
       .addCase(deleteAddress.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to delete address.';
