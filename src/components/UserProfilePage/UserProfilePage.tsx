@@ -29,32 +29,61 @@ const UserProfilePage: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!user) {
+      // Если user не загружен или равен null, можно вернуться или обработать этот случай
+      return;
+    }
     const fetchUserData = async () => {
       try {
         console.log("Fetching addresses...");
         const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
         console.log("Fetched addresses:", fetchedAddresses);
-        if (fetchedAddresses) {
-          setUserData(fetchedAddresses);
-        } else {
-          setUserData({
-            name: '',
-            street: '',
-            house: '',
-            postalCode: '',
-            locality: '',
-            region: '',
-            phone: '',
-            email: user?.email || '',
-          });
-        }
+    
+        setUserData(prevUserData => {
+          const defaultData: Address = {
+            email: user.email,
+            name: fetchedAddresses?.name || prevUserData?.name || '',
+            street: fetchedAddresses?.street || prevUserData?.street || '',
+            house: fetchedAddresses?.house || prevUserData?.house || '',
+            postalCode: fetchedAddresses?.postalCode || prevUserData?.postalCode || '',
+            locality: fetchedAddresses?.locality || prevUserData?.locality || '',
+            region: fetchedAddresses?.region || prevUserData?.region || '',
+            phone: fetchedAddresses?.phone || prevUserData?.phone || '',
+            id: fetchedAddresses?.id || prevUserData?.id,
+          };
+          return defaultData;
+        });
       } catch (error) {
         console.log("Error loading address. Please try again later.", error);
+    
+        setUserData({
+          email: user.email,
+          name: '',
+          street: '',
+          house: '',
+          postalCode: '',
+          locality: '',
+          region: '',
+          phone: '',
+          id: undefined,
+        });
       }
     };
   
+    // Инициализация userData с email после загрузки компонента
+    setUserData({
+      email: user.email,
+      name: '',
+      street: '',
+      house: '',
+      postalCode: '',
+      locality: '',
+      region: '',
+      phone: '',
+    });
+  
     fetchUserData();
-  }, [dispatch, user?.email]);
+  }, [dispatch, user]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -65,20 +94,24 @@ const UserProfilePage: React.FC = () => {
       setApiError("Please enter address data.");
       return;
     }
-
+  
     try {
-      console.log("Saving address data:", userData);
+      // Логирование данных перед отправкой для отладки
+      console.log("Preparing to save address data:", userData);
+      
       if (userData.id) {
         await dispatch(updateAddress(userData)).unwrap();
         console.log("Address updated successfully");
         setSuccessMessage("Address updated successfully!");
       } else {
-        await dispatch(addAddress(userData)).unwrap();
+        const { id, ...dataWithoutId } = userData;
+        await dispatch(addAddress(dataWithoutId)).unwrap();
         console.log("Address added successfully");
         setSuccessMessage("Address added successfully!");
       }
       setIsEditing(false);
     } catch (error) {
+      console.log("Error saving address:", error);
       setApiError("Error saving address. Please try again later.");
     }
   };
@@ -129,13 +162,14 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <div className="user-profile-page">
-      {(apiError || successMessage) && (
-        <div className="message-container">
-          {apiError && <p className="error-message">{apiError}</p>}
-          {successMessage && <p className="success-message">{successMessage}</p>}
-        </div>
-      )}
-      <h1>My Profile</h1>
+    {(apiError || successMessage) && (
+      <div className="message-container">
+        {apiError && <p className="error-message">{apiError}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
+      </div>
+    )}
+    <h1>My Profile</h1>
+    {userData ? (
       <div className="profile-container">
         <div className="profile-section">
           {isEditing ? (
@@ -143,7 +177,7 @@ const UserProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="name"
-                value={userData?.name || ""}
+                value={userData.name || ""}
                 placeholder="Name"
                 onChange={handleChange}
                 className="profile-input"
@@ -151,15 +185,15 @@ const UserProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="email"
-                value={userData?.email || ""}
+                value={userData.email}
                 placeholder="Email"
-                onChange={handleChange}
                 className="profile-input"
+                disabled
               />
               <input
                 type="text"
                 name="street"
-                value={userData?.street || ""}
+                value={userData.street || ""}
                 placeholder="Street"
                 onChange={handleChange}
                 className="profile-input"
@@ -167,7 +201,7 @@ const UserProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="house"
-                value={userData?.house || ""}
+                value={userData.house || ""}
                 placeholder="House Number"
                 onChange={handleChange}
                 className="profile-input"
@@ -175,7 +209,7 @@ const UserProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="postalCode"
-                value={userData?.postalCode || ""}
+                value={userData.postalCode || ""}
                 placeholder="Postal Code"
                 onChange={handleChange}
                 className="profile-input"
@@ -183,7 +217,7 @@ const UserProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="locality"
-                value={userData?.locality || ""}
+                value={userData.locality || ""}
                 placeholder="Locality"
                 onChange={handleChange}
                 className="profile-input"
@@ -191,7 +225,7 @@ const UserProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="region"
-                value={userData?.region || ""}
+                value={userData.region || ""}
                 placeholder="Region"
                 onChange={handleChange}
                 className="profile-input"
@@ -199,7 +233,7 @@ const UserProfilePage: React.FC = () => {
               <input
                 type="text"
                 name="phone"
-                value={userData?.phone || ""}
+                value={userData.phone || ""}
                 placeholder="Phone Number"
                 onChange={handleChange}
                 className="profile-input"
@@ -207,50 +241,57 @@ const UserProfilePage: React.FC = () => {
             </>
           ) : (
             <div className="paragraph">
-              <p>Name: {userData?.name || "must be filled out"}</p>
-              <p>Email: {userData?.email}</p>
-              <p>Street: {userData?.street || "must be filled out"}</p>
-              <p>House Number: {userData?.house || "must be filled out"}</p>
-              <p>Postal Code: {userData?.postalCode || "must be filled out"}</p>
-              <p>Locality: {userData?.locality || "must be filled out"}</p>
-              <p>Region: {userData?.region || "must be filled out"}</p>
-              <p>Phone Number: {userData?.phone || "must be filled out"}</p>
+              <p>Name: {userData.name || "must be filled out"}</p>
+              <p>Email: {userData.email}</p>
+              <p>Street: {userData.street || "must be filled out"}</p>
+              <p>House Number: {userData.house || "must be filled out"}</p>
+              <p>Postal Code: {userData.postalCode || "must be filled out"}</p>
+              <p>Locality: {userData.locality || "must be filled out"}</p>
+              <p>Region: {userData.region || "must be filled out"}</p>
+              <p>Phone Number: {userData.phone || "must be filled out"}</p>
             </div>
           )}
         </div>
       </div>
-      <div className="buttons">
-        <div className="left-buttons">
-          <button className="logout logout-button" onClick={handleLogout}>
-            Sign out
-          </button>
-        </div>
-        <div className="right-buttons">
-          {isEditing ? (
-            <>
-              <button className="save save-button" onClick={handleSave}>
-                Save
-              </button>
-              <button
-                className="cancel cancel-button"
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </button>
-            </>
-          ) : (
-            <>
-              <button className="edit edit-button" onClick={handleEdit}>
-                Edit
-              </button>
-              <button className="delete delete-button" onClick={handleDelete}>
-                Delete
-              </button>
-            </>
-          )}
-        </div>
+    ) : (
+      <div className="text-center">
+              <div className="spinner-border text-black" role="status">
+                <span className="visually-hidden">Loading user data...</span>
+              </div>
+            </div>
+    )}
+    <div className="buttons">
+      <div className="left-buttons">
+        <button className="logout logout-button" onClick={handleLogout}>
+          Sign out
+        </button>
+      </div>
+      <div className="right-buttons">
+        {isEditing ? (
+          <>
+            <button className="save save-button" onClick={handleSave}>
+              Save
+            </button>
+            <button
+              className="cancel cancel-button"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="edit edit-button" onClick={handleEdit}>
+              Edit
+            </button>
+            <button className="delete delete-button" onClick={handleDelete}>
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </div>
+  </div>
   );
 };
 
