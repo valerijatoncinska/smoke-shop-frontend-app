@@ -157,7 +157,7 @@
 .message-container {
   margin-bottom: 1.25rem;
   padding: 0.625rem;
-  background-color: rgb(106, 91, 91);
+  background-color: rgb(90, 88, 88);
   border-radius: 0.25rem;
   max-width: 100%;
   box-sizing: border-box;
@@ -165,7 +165,7 @@
 }
 
 .error-message {
-  color: red;
+  color: rgb(238, 65, 65);
   font-size: 0.75rem;
   text-align: center;
   font-family: "Inria Serif", sans-serif;
