@@ -157,7 +157,7 @@
 .message-container {
   margin-bottom: 1.25rem;
   padding: 0.625rem;
-  background-color: rgb(149, 144, 144);
+  background-color: rgb(232, 220, 220);
   border-radius: 0.25rem;
   max-width: 100%;
   box-sizing: border-box;
@@ -166,7 +166,7 @@
 
 .error-message {
   color: rgb(238, 65, 65);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   text-align: center;
   font-family: "Inria Serif", sans-serif;
   margin-bottom: 0.3125rem;
@@ -174,7 +174,7 @@
 
 .success-message {
   color: green;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   text-align: center;
   font-family: "Inria Serif", sans-serif;
   margin-bottom: 0.3125rem;
