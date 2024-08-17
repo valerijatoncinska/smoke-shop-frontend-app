@@ -21,9 +21,7 @@ const UserProfilePage: React.FC = () => {
   const userStatus = useSelector((state: RootState) => state.user.status);
   const userError = useSelector((state: RootState) => state.user.error);
 
-  const addresses = useSelector((state: RootState) => state.address.addresses);
   const addressStatus = useSelector((state: RootState) => state.address.status);
-  const addressError = useSelector((state: RootState) => state.address.error);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [userData, setUserData] = useState<Address | null>(null);
@@ -33,7 +31,9 @@ const UserProfilePage: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        console.log("Fetching addresses...");
         const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
+        console.log("Fetched addresses:", fetchedAddresses);
         if (fetchedAddresses) {
           setUserData(fetchedAddresses);
         } else {
@@ -46,10 +46,10 @@ const UserProfilePage: React.FC = () => {
             region: '',
             phone: '',
             email: user?.email || '',
-          }); // Если данных нет, создать пустой объект с email
+          });
         }
       } catch (error) {
-        setApiError("Error loading address. Please try again later.");
+        console.log("Error loading address. Please try again later.", error);
       }
     };
   
@@ -67,11 +67,14 @@ const UserProfilePage: React.FC = () => {
     }
 
     try {
+      console.log("Saving address data:", userData);
       if (userData.id) {
         await dispatch(updateAddress(userData)).unwrap();
+        console.log("Address updated successfully");
         setSuccessMessage("Address updated successfully!");
       } else {
         await dispatch(addAddress(userData)).unwrap();
+        console.log("Address added successfully");
         setSuccessMessage("Address added successfully!");
       }
       setIsEditing(false);
@@ -93,9 +96,11 @@ const UserProfilePage: React.FC = () => {
 
     try {
       await dispatch(deleteAddress(userData.id)).unwrap();
+      console.log("Address deleted successfully");
       setUserData(null);
       setSuccessMessage("Address deleted successfully!");
     } catch (error) {
+      console.log("Error deleting address:", error);
       setApiError("Error deleting address. Please try again later.");
     }
   };
@@ -120,10 +125,6 @@ const UserProfilePage: React.FC = () => {
         <button onClick={() => dispatch(clearError())}>Clear Error</button>
       </div>
     );
-  }
-
-  if (!userData?.email) {
-    return <div>No user data available</div>;
   }
 
   return (
@@ -207,7 +208,7 @@ const UserProfilePage: React.FC = () => {
           ) : (
             <div className="paragraph">
               <p>Name: {userData?.name || "must be filled out"}</p>
-              <p>Email: {userData.email}</p>
+              <p>Email: {userData?.email}</p>
               <p>Street: {userData?.street || "must be filled out"}</p>
               <p>House Number: {userData?.house || "must be filled out"}</p>
               <p>Postal Code: {userData?.postalCode || "must be filled out"}</p>
