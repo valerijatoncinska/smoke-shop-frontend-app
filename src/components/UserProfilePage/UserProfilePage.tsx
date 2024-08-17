@@ -23,7 +23,16 @@ const UserProfilePage: React.FC = () => {
   const addresses = useSelector((state: RootState) => state.address.addresses);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [userData, setUserData] = useState<Address | null>(addresses[0] || null);
+  const [userData, setUserData] = useState<Address | null>({
+    name: '',
+    street: '',
+    house: '',
+    postalCode: '',
+    locality: '',
+    region: '',
+    phone: '',
+    email: user?.email || '',
+  });
   const [apiError, setApiError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -31,7 +40,10 @@ const UserProfilePage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         await dispatch(fetchAddresses()).unwrap();
-        setUserData(addresses[0] || null);
+        setUserData(addresses[0] || {
+          ...userData,
+          email: user?.email || '',  // Если данные загружены, но нет email, используем email из профиля
+        });
       } catch (error) {
         console.log("Error loading addresses. Please try again later.");
       }
@@ -106,9 +118,10 @@ const UserProfilePage: React.FC = () => {
     );
   }
 
-  if (!userData) {
+  if (!userData?.email) {
     return <div>No user data available</div>;
   }
+
 
   return (
     <div className="user-profile-page">
