@@ -11,6 +11,7 @@ import {
   updateAddress,
 } from "../../store/redux/addressSlice"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 interface Address {
   id?: number
@@ -26,6 +27,8 @@ interface Address {
 
 const UserProfilePage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate();
+  
   const user = useSelector((state: RootState) => state.user.user)
   const status = useSelector((state: RootState) => state.user.status)
   const error = useSelector((state: RootState) => state.user.error)
@@ -38,33 +41,28 @@ const UserProfilePage: React.FC = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!userId) return // Проверка наличия ID
+      if (!userId) return; // Проверка наличия ID
+
       try {
-        const response = await axios.get("/api/address", {
+        const response = await axios.get(`/api/address/${userId}`, {
           headers: {
             Authorization: `Bearer ${user?.accessToken}`,
           },
-        })
+        });
 
         if (response.status === 200) {
-          setUserData({
-            ...response.data,
-            email: user?.email,
-            accessToken: user?.accessToken,
-            refreshToken: user?.refreshToken,
-          })
+          setUserData(response.data);
         } else {
-          console.error("Failed to fetch user data.")
+          setApiError("Failed to fetch user data.");
         }
       } catch (error) {
-        console.error("Error fetching user data:", error)
+        setApiError("Error fetching user data. Please try again later.");
+        console.error("Error fetching user data:", error);
       }
-    }
+    };
 
-    if (user) {
-      fetchUserData()
-    }
-  }, [userId, user])
+    fetchUserData();
+  }, [userId, user]);
 
   useEffect(() => {
     const fetchAddressesData = async () => {
@@ -132,8 +130,13 @@ const UserProfilePage: React.FC = () => {
   }
 
   const handleLogout = async () => {
-    await dispatch(logoutUser())
-  }
+    try {
+      await dispatch(logoutUser()).unwrap();
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to logout:', error);
+    }
+  };
 
   if (status === "loading") {
     return <div>Loading...</div>
