@@ -131,15 +131,15 @@
   font-weight: bold;
   text-align: center;
   font-family: "Inria Serif", sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   margin-bottom: 0.3125rem;
 }
 
 .added-message-container {
   margin-bottom: 1.25rem;
   padding: 0.625rem;
-  background-color: rgb(237, 228, 228);
-  border-radius: 0.25rem;
+  background-color: rgb(141, 135, 135);
+  border-radius: 3px;
   max-width: 100%;
   box-sizing: border-box;
 }

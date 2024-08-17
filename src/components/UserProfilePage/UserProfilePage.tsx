@@ -23,7 +23,6 @@ const UserProfilePage: React.FC = () => {
   const [apiError, setApiError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
-
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -31,23 +30,23 @@ const UserProfilePage: React.FC = () => {
           headers: {
             Authorization: `Bearer ${user?.accessToken}`,
           },
-        });
-  
+        })
+
         if (response.status === 200) {
-          const address = response.data as Address;
-          setUserAddress(prevAddress => prevAddress || address);
+          const address = response.data as Address
+          setUserAddress(prevAddress => prevAddress || address)
         } else {
-          setApiError("Failed to fetch user data.");
+          setApiError("Failed to fetch user data.")
         }
       } catch (error) {
-        setApiError("Error fetching user data. Please try again later.");
+        setApiError("Error fetching user data. Please try again later.")
       }
-    };
-  
-    if (user && !userAddress) {
-      fetchUserData();
     }
-  }, [user, userAddress]);
+
+    if (user && !userAddress) {
+      fetchUserData()
+    }
+  }, [user, userAddress])
 
   const handleEdit = () => {
     setEditAddress(userAddress)
@@ -82,11 +81,19 @@ const UserProfilePage: React.FC = () => {
     }
   }
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target
+  //   setEditAddress(prevAddress =>
+  //     prevAddress ? { ...prevAddress, [name]: value } : null,
+  //   )
+  // }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setEditAddress(prevAddress =>
-      prevAddress ? { ...prevAddress, [name]: value } : null,
-    )
+    setEditAddress(prevAddress => {
+      if (!prevAddress) return null
+      return { ...prevAddress, [name]: value }
+    })
   }
 
   const handleDelete = async () => {
@@ -107,115 +114,124 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <div className="user-profile-page">
-    {(apiError || successMessage) && (
-      <div className="message-container">
-        {apiError && <p className="error-message">{apiError}</p>}
-        {successMessage && (
-          <p className="success-message">{successMessage}</p>
-        )}
-      </div>
-    )}
-    <h1>My Profile</h1>
-    <div className="profile-container">
-      {isEditing ? (
-        <>
-          <input
-            type="text"
-            name="name"
-            value={editAddress?.name || ""}
-            placeholder="Name"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="email"
-            value={editAddress?.email || ""}
-            placeholder="Email"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="street"
-            value={editAddress?.street || ""}
-            placeholder="Street"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="house"
-            value={editAddress?.house || ""}
-            placeholder="House Number"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="postalCode"
-            value={editAddress?.postalCode || ""}
-            placeholder="Postal Code"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="locality"
-            value={editAddress?.locality || ""}
-            placeholder="Locality"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="region"
-            value={editAddress?.region || ""}
-            placeholder="Region"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="phone"
-            value={editAddress?.phone || ""}
-            placeholder="Phone Number"
-            onChange={handleChange}
-          />
-        </>
-      ) : (
-        <div className="paragraph">
-          <p>Name: {userAddress?.name || "Not available"}</p>
-          <p>Email: {userAddress?.email || "Not available"}</p>
-          <p>Street: {userAddress?.street || "Not available"}</p>
-          <p>House Number: {userAddress?.house || "Not available"}</p>
-          <p>Postal Code: {userAddress?.postalCode || "Not available"}</p>
-          <p>Locality: {userAddress?.locality || "Not available"}</p>
-          <p>Region: {userAddress?.region || "Not available"}</p>
-          <p>Phone Number: {userAddress?.phone || "Not available"}</p>
+      {(apiError || successMessage) && (
+        <div className="message-container">
+          {apiError && <p className="error-message">{apiError}</p>}
+          {successMessage && (
+            <p className="success-message">{successMessage}</p>
+          )}
         </div>
       )}
-    </div>
-    <div className="buttons">
-      <div className="left-buttons">
-        <button className="logout logout-button" onClick={handleLogout}>
-          Sign out
-        </button>
+      <h1>My Profile</h1>
+      <div className="profile-container">
+        {isEditing ? (
+          <>
+            <input
+              type="text"
+              name="name"
+              value={editAddress?.name || ""}
+              placeholder="Name"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="email"
+              value={editAddress?.email || user?.email || ""}
+              placeholder="Email"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="street"
+              value={editAddress?.street || ""}
+              placeholder="Street"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="house"
+              value={editAddress?.house || ""}
+              placeholder="House Number"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="postalCode"
+              value={editAddress?.postalCode || ""}
+              placeholder="Postal Code"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="locality"
+              value={editAddress?.locality || ""}
+              placeholder="Locality"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="region"
+              value={editAddress?.region || ""}
+              placeholder="Region"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="phone"
+              value={editAddress?.phone || ""}
+              placeholder="Phone Number"
+              onChange={handleChange}
+            />
+          </>
+        ) : (
+          <div className="paragraph">
+            <p>Name: {userAddress?.name || "Not available"}</p>
+            <p>Email: {userAddress?.email || user?.email || "Not available"}</p>
+            <p>Street: {userAddress?.street || "Not available"}</p>
+            <p>House Number: {userAddress?.house || "Not available"}</p>
+            <p>Postal Code: {userAddress?.postalCode || "Not available"}</p>
+            <p>Locality: {userAddress?.locality || "Not available"}</p>
+            <p>Region: {userAddress?.region || "Not available"}</p>
+            <p>Phone Number: {userAddress?.phone || "Not available"}</p>
+          </div>
+        )}
       </div>
-      <div className="right-buttons">
-      {isEditing ? (
-      <>
-        <button className="save save-button" onClick={handleSave}>Save</button>
-        <button className="cancel cancel-button" onClick={() => setIsEditing(false)}>Cancel</button>
-      </>
-    ) : (
-      <>
-        <button className="edit edit-button" onClick={handleEdit}>Edit</button>
-        <button className="delete delete-button" onClick={handleDelete}>Delete</button>
-      </>
-    )}
+      <div className="buttons">
+        <div className="left-buttons">
+          <button className="logout logout-button" onClick={handleLogout}>
+            Sign out
+          </button>
+        </div>
+        <div className="right-buttons">
+          {isEditing ? (
+            <>
+              <button className="save save-button" onClick={handleSave}>
+                Save
+              </button>
+              <button
+                className="cancel cancel-button"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="edit edit-button" onClick={handleEdit}>
+                Edit
+              </button>
+              <button className="delete delete-button" onClick={handleDelete}>
+                Delete
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
-  </div>
-
   )
 }
 
 export default UserProfilePage
-
 
 // {isEditing ? (
 //   <>
