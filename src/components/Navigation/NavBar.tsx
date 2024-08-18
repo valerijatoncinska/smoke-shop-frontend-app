@@ -44,7 +44,7 @@ const NavBar: React.FC = () => {
                       border: 'none',
                       padding: '0',
                       margin: '0',
-                      fontSize: '15px',
+                      fontSize: '1rem',
                       fontFamily: 'Inria Serif sans-serif',
                       fontWeight: 'bold',
                       cursor: 'pointer',
