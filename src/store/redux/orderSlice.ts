@@ -27,8 +27,8 @@ export const fetchOrders = createAsyncThunk<
   { state: RootState }
 >("products/fetchProducts", async () => {
   try {
-    const response = await axios.get<{ data: Order[] }>("/api/products");
-    return response.data.data;
+    const response = await axios.get<Order[]>("/api/orders");
+    return response.data;
   } catch (error) {
     throw new Error("Failed to fetch products");
   }
