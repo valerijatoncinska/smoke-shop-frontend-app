@@ -18,10 +18,8 @@ const UserProfilePage: React.FC = () => {
   const navigate = useNavigate();
 
   const user = useSelector((state: RootState) => state.user.user);
-  const userStatus = useSelector((state: RootState) => state.user.status);
   const userError = useSelector((state: RootState) => state.user.error);
 
-  const addressStatus = useSelector((state: RootState) => state.address.status);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [userData, setUserData] = useState<Address | null>(null);
@@ -29,54 +27,37 @@ const UserProfilePage: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) {
-      return;
-    }
-  
-    const fetchUserData = async () => {
-      try {
-        console.log("Fetching addresses...");
-        const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
-        console.log("Fetched addresses:", fetchedAddresses);
-    
-        if (fetchedAddresses && fetchedAddresses.length > 0) {
-          // Выбираем последний адрес для отображения
-          const lastAddress = fetchedAddresses[fetchedAddresses.length - 1];
-          setUserData(lastAddress);
-        } else {
-          console.log("No addresses found for the user.");
-          // Если адресов нет, устанавливаем только email
-          setUserData({
-            email: user.email,
-            name: '',
-            street: '',
-            house: '',
-            postalCode: '',
-            locality: '',
-            region: '',
-            phone: '',
-          });
+    if (user) {
+      const fetchUserData = async () => {
+        try {
+          const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
+          
+          if (fetchedAddresses && fetchedAddresses.length > 0) {
+            const lastAddress = fetchedAddresses[fetchedAddresses.length - 1];
+            setUserData({
+              ...lastAddress,
+              email: user.email, // Устанавливаем email из user
+            });
+          } else {
+            setUserData({
+              email: user.email,
+              name: '',
+              street: '',
+              house: '',
+              postalCode: '',
+              locality: '',
+              region: '',
+              phone: '',
+            });
+          }
+        } catch (error) {
+          console.log("Error loading address. Please try again later.", error);
+          setApiError("Error loading user data. Please try again later.");
         }
+      };
   
-      } catch (error) {
-        console.log("Error loading address. Please try again later.", error);
-        setApiError("Error loading user data. Please try again later.");
-      }
-    };
-  
-    // Инициализация userData с email после загрузки компонента
-    setUserData({
-      email: user.email,
-      name: '',
-      street: '',
-      house: '',
-      postalCode: '',
-      locality: '',
-      region: '',
-      phone: '',
-    });
-  
-    fetchUserData();
+      fetchUserData();
+    }
   }, [dispatch, user]);
 
   const handleEdit = () => {
