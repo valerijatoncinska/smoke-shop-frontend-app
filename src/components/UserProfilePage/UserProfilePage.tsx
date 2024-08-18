@@ -8,6 +8,7 @@ import {
   addAddress,
   Address,
   deleteAddress,
+  fetchAddressById,
   fetchAddresses,
   updateAddress,
 } from "../../store/redux/addressSlice"
@@ -31,11 +32,11 @@ const UserProfilePage: React.FC = () => {
       const fetchUserData = async () => {
         try {
           const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
-          
           if (fetchedAddresses && fetchedAddresses.length > 0) {
             const lastAddress = fetchedAddresses[fetchedAddresses.length - 1];
+            const addressById = await dispatch(fetchAddressById(lastAddress.id)).unwrap();
             setUserData({
-              ...lastAddress,
+              ...addressById,
               email: user.email, // Устанавливаем email из user
             });
           } else {

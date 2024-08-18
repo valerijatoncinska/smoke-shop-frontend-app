@@ -63,6 +63,15 @@ export const deleteAddress = createAsyncThunk('address/deleteAddress', async (id
   }
 });
 
+export const fetchAddressById = createAsyncThunk('address/fetchAddressById', async (id: number) => {
+  try {
+    const response = await axios.get(`/api/address/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to load address.');
+  }
+});
+
 const addressSlice = createSlice({
   name: 'address',
   initialState,
@@ -108,6 +117,18 @@ const addressSlice = createSlice({
       })
       .addCase(deleteAddress.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to delete address.';
+      })
+      .addCase(fetchAddressById.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchAddressById.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.addresses = [action.payload];
+        state.error = null;
+      })
+      .addCase(fetchAddressById.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || 'Failed to load address.';
       });
   },
 });
