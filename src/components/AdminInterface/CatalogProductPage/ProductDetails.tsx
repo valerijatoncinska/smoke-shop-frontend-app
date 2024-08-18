@@ -76,7 +76,6 @@ const ProductDetails: FC = () => {
   const navigate = useNavigate()
   const adminProducts = adminProductsFetch.filter(product => product.id === +id)
   const [initialProduct, setInitialProduct] = useState(adminProducts[0])
-  // const initialProduct = adminProducts[0]
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [productTitle, setProductTitle] = useState<string>(
     adminProducts[0].title,
@@ -106,10 +105,10 @@ const ProductDetails: FC = () => {
       price: productPrice,
       quantity: productQuantity,
       active: false,
-      // description: productDescription,
-      // characteristics: productCharacteristics,
+      description: productDescription,
+      characteristics: productCharacteristics,
     }
-
+  
     axios
       .put(`/api/products/${id}`, data)
       .then(response => {
@@ -122,17 +121,18 @@ const ProductDetails: FC = () => {
   }
 
   const handleSaveProduct = () => {
-    // const token = Cookies.get("ACCESS_TOKEN")
     const data = {
       // id: +id,
       title: productTitle,
       price: productPrice,
       quantity: productQuantity,
       active: productActive,
-      // description: productDescription,
-      // characteristics: productCharacteristics,
+      description: productDescription,
+      characteristics: productCharacteristics,
     }
-    // console.log(token)
+
+    console.log(data);
+    
 
     axios
       .put(`/api/products/${id}`, data)
@@ -143,6 +143,8 @@ const ProductDetails: FC = () => {
           title: productTitle,
           price: productPrice,
           quantity: productQuantity,
+          description: productDescription,
+          characteristics: productCharacteristics
         })
       })
       .catch(error => {
@@ -168,6 +170,8 @@ const ProductDetails: FC = () => {
       price: productPrice,
       quantity: productQuantity,
       active: true,
+      description: productDescription,
+      characteristics: productCharacteristics,
     }
 
     axios
