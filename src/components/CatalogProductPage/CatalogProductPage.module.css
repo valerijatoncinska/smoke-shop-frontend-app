@@ -123,11 +123,11 @@
 
 .cardContainer {
   display: flex;
-  flex-wrap: wrap; /* Позволяет карточкам переноситься на новую строку */
-  gap: 20px; /* Отступ между карточками */
-  justify-content: space-between; /* Равномерное распределение карточек */
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 6%;
   margin-top: 20px;
-  padding: 0 10px; /* Немного отступов по бокам контейнера для равномерности */
+  padding: 0 10px;
 }
 
 /* Нижний блок страницы */
@@ -254,9 +254,9 @@
   /* Контейнер для поиска */
   .searchContainer {
     display: flex;
-    align-items: center; /* Вертикальное центрирование элементов */
+    align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 85%;
     margin-bottom: 40px;
     position: relative;
   }
@@ -264,23 +264,23 @@
   /* Строка поиска */
   .searchInput {
     display: flex;
-    align-items: center; /* Вертикальное центрирование элементов */
-    width: calc(100% - 90px); /* Уменьшаем ширину на размер кнопки Go Home и отступ */
-    margin-right: 10px; /* Отступ справа для кнопки Go Home */
+    align-items: center;
+    width: calc(100% - 90px);
+    margin-right: 10px; 
   }
 
   /* Поле ввода в строке поиска */
   .searchInput input {
-    width: 80%; /* Уменьшаем ширину поля ввода */
-    font-size: 0.6rem; /* Уменьшаем размер шрифта */
-    padding: 6px; /* Увеличиваем внутренние отступы */
-    box-sizing: border-box; /* Учитываем padding в ширину */
+    width: 80%; 
+    font-size: 0.6rem; 
+    padding: 6px;
+    box-sizing: border-box; 
   }
 
   /* Кнопка поиска */
   .searchInput button {
     width: 20%;
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     padding: 6px 10px;
     margin-left: 0;
   }
@@ -290,14 +290,15 @@
     position: absolute;
     top: 50%;
     right: 0; 
+    left: 100%;
     transform: translateY(-50%);
     background-color: rgba(179, 168, 162, 0.1);
     color: #fff;
     border: none;
     border-radius: 10px;
-    font-size: 0.3rem;
-    width: 45px;
-    height: 20px;
+    font-size: 0.2rem;
+    width: 40px;
+    height: 18px;
     padding: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
