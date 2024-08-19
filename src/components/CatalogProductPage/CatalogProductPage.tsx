@@ -92,7 +92,7 @@ const CatalogProductPage: React.FC = () => {
         {status === "success" && (
           <div className={styles.cardContainer}>
             {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
-              filteredProducts.map((product, index) => (
+              filteredProducts.map((product) => (
                 <ProductCardPage key={product.id} product={product} />
               ))
             ) : (

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import styles from "./HomePage.module.css"
 import { useSelector } from "react-redux"
 import { RootState } from "store/store"
