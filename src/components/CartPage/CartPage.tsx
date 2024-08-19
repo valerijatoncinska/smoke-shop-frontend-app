@@ -14,6 +14,7 @@ import {
 } from "../../store/redux/cartSlice"
 import { useNavigate } from "react-router-dom"
 import "./CartPage.css"
+import { tobaccoImages } from "../../constans/tobaccoImg";
 
 const CartPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
@@ -76,10 +77,18 @@ const CartPage: React.FC = () => {
     navigate("/")
   }
 
+
   return (
     <div className="cart-page">
       <header className="cart-header">
         <h1 className="title">Your Cart</h1>
+        <button
+            type="button"
+            className="goHomeButton"
+            onClick={handleGoHome}
+          >
+            Go to Home
+          </button>
       </header>
       <div className="cart-items-container">
         {cartItems.map(item => (
