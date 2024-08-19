@@ -82,18 +82,21 @@ const addressSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAddresses.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchAddresses.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.addresses = action.payload;
-        state.error = null;
-      })
-      .addCase(fetchAddresses.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Failed to load addresses.';
-      })
+    .addCase(fetchAddresses.pending, (state) => {
+      console.log('fetchAddresses.pending');
+      state.status = 'loading';
+    })
+    .addCase(fetchAddresses.fulfilled, (state, action) => {
+      console.log('fetchAddresses.fulfilled');
+      state.status = 'succeeded';
+      state.addresses = action.payload;
+      state.error = null;
+    })
+    .addCase(fetchAddresses.rejected, (state, action) => {
+      console.log('fetchAddresses.rejected');
+      state.status = 'failed';
+      state.error = action.error.message || 'Failed to load addresses.';
+    })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.addresses.push(action.payload);
         state.error = null;
@@ -119,14 +122,17 @@ const addressSlice = createSlice({
         state.error = action.error.message || 'Failed to delete address.';
       })
       .addCase(fetchAddressById.pending, (state) => {
+        console.log('fetchAddressById.pending');
         state.status = 'loading';
       })
       .addCase(fetchAddressById.fulfilled, (state, action) => {
+        console.log('fetchAddressById.fulfilled');
         state.status = 'succeeded';
         state.addresses = [action.payload];
         state.error = null;
       })
       .addCase(fetchAddressById.rejected, (state, action) => {
+        console.log('fetchAddressById.rejected');
         state.status = 'failed';
         state.error = action.error.message || 'Failed to load address.';
       });
