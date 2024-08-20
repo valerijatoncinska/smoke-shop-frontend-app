@@ -13,6 +13,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
   const [title, setTitle] = useState("")
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
+  const [description, setDescription] = useState("")
+  const [characteristics, setCharacteristics] = useState("")
   const dispatch = useDispatch()
   const { isAdded } = useSelector((state: RootState) => state.addNewProduct)
 
@@ -24,6 +26,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
       price: +price,
       quantity: +quantity,
       active: true,
+      description: description,
+      characteristics: characteristics,
     }
     axios
       .post(`/api/products`, data)
@@ -40,6 +44,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
     setTitle("")
     setPrice("")
     setQuantity("")
+    setDescription("")
+    setCharacteristics("")
 
     dispatch(setIsAddedFalse()) // связь с AdminInterfaceCatalogProductPage
   }
@@ -48,6 +54,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
     setTitle("")
     setPrice("")
     setQuantity("")
+    setDescription("")
+    setCharacteristics("")
 
     dispatch(setIsAddedFalse())
   }
@@ -86,6 +94,26 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
             type="number"
             value={quantity}
             onChange={e => setQuantity(e.target.value)}
+          />
+        </label>
+
+        <label className="form-label">
+          Description:
+          <input
+          className="form-control"
+            type="text"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+          />
+        </label>
+
+        <label className="form-label">
+          Characteristics:
+          <input
+          className="form-control"
+            type="text"
+            value={characteristics}
+            onChange={e => setCharacteristics(e.target.value)}
           />
         </label>
       </div>
