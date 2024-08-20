@@ -206,7 +206,7 @@ const ProductDetails: FC = () => {
         <div className="tableContainer">
           <div className="d-flex">
             <div className="leftColumn">
-              <div className="squareOne">{adminProducts[0].image}</div>
+              <div className="squareOne"><img src={adminProducts[0].imgUrl} alt="product_image"></img></div>
               <div className="squareTwo"></div>
             </div>
             <div className="rightColumn ms-5">
@@ -273,7 +273,7 @@ const ProductDetails: FC = () => {
         <div className="tableContainer">
           <div className="d-flex">
             <div className="leftColumn">
-              <div className="squareOne">{adminProducts[0].image}</div>
+              <div className="squareOne"><img src={adminProducts[0].imgUrl} alt="product_image" /></div>
               <div className="squareTwo"></div>
             </div>
             <div className="rightColumn ms-5">
