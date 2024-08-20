@@ -26,37 +26,39 @@ const UserProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<Address | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
+      setLoading(true);
       if (user) {
         try {
           const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
-          let addressData;
+          console.log('Fetched Addresses:', fetchedAddresses);
   
-          if (fetchedAddresses && fetchedAddresses.length > 0) {
-            const lastAddress = fetchedAddresses[fetchedAddresses.length - 1];
-            addressData = await dispatch(fetchAddressById(lastAddress.id)).unwrap();
-          } else {
-            addressData = {
-              email: user.email,
-              name: '',
-              street: '',
-              house: '',
-              postalCode: '',
-              locality: '',
-              region: '',
-              phone: '',
-            };
-          }
+          const addressData = (fetchedAddresses && fetchedAddresses.length > 0)
+            ? await dispatch(fetchAddressById(fetchedAddresses[fetchedAddresses.length - 1].id)).unwrap()
+            : {
+                email: user.email,
+                name: '',
+                street: '',
+                house: '',
+                postalCode: '',
+                locality: '',
+                region: '',
+                phone: '',
+              };
   
           setUserData({
             ...addressData,
             email: user.email,
           });
+  
         } catch (error) {
           console.error("Error loading user data:", error);
           setApiError("Error loading user data. Please try again later.");
+        } finally {
+          setLoading(false);
         }
       }
     };
