@@ -9,6 +9,7 @@ import {
   updateCartItem,
 } from "../../store/redux/cartSlice"
 import "./ProductPage.css"
+import { tobaccoImages } from "../../constans/tobaccoImg"
 
 interface Product {
   id: string
@@ -61,6 +62,10 @@ const ProductPage: React.FC = () => {
     }, 3000)
   }
 
+  const productImage = product?.id
+    ? tobaccoImages[parseInt(product.id) - 1] // Получаем изображение по ID
+    : undefined;
+
   const increaseQuantity = () => {
     if (product && quantity < product.quantity) {
       setQuantity(prevQuantity => prevQuantity + 1)
@@ -98,13 +103,18 @@ const ProductPage: React.FC = () => {
       {/* Use Link for navigation */}
       <div className="product-container">
         <div className="product-image-section">
-          <div className="main-image-placeholder" />
+        {productImage ? (
+            <img src={productImage} alt={product.title} className="product-main-image" />
+          ) : (
+            <div className="noImagePlaceholder">No Image Available</div>
+          )}
+          {/* <div className="main-image-placeholder" />
           <div className="thumbnail-images-placeholder">
             <div className="thumbnail-placeholder" />
             <div className="thumbnail-placeholder" />
             <div className="thumbnail-placeholder" />
             <div className="thumbnail-placeholder" />
-          </div>
+          </div> */}
         </div>
         <div className="product-details-section">
           <h1>{product.title}</h1>
@@ -140,3 +150,4 @@ const ProductPage: React.FC = () => {
 }
 
 export default ProductPage
+

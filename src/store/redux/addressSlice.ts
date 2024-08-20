@@ -28,7 +28,8 @@ const initialState: AddressState = {
 export const fetchAddresses = createAsyncThunk('address/fetchAddresses', async () => {
   try {
     const response = await axios.get('/api/address');
-    return response.data;
+    console.log('Server response:', response.data);
+    return response.data.addresses;
   } catch (error) {
     throw new Error('Failed to load addresses.');
   }
@@ -83,59 +84,54 @@ const addressSlice = createSlice({
   extraReducers: (builder) => {
     builder
     .addCase(fetchAddresses.pending, (state) => {
-      console.log('fetchAddresses.pending');
       state.status = 'loading';
     })
     .addCase(fetchAddresses.fulfilled, (state, action) => {
-      console.log('fetchAddresses.fulfilled');
+      console.log('Redux store update:', action.payload); 
       state.status = 'succeeded';
       state.addresses = action.payload;
       state.error = null;
     })
     .addCase(fetchAddresses.rejected, (state, action) => {
-      console.log('fetchAddresses.rejected');
       state.status = 'failed';
       state.error = action.error.message || 'Failed to load addresses.';
     })
-      .addCase(addAddress.fulfilled, (state, action) => {
-        state.addresses.push(action.payload);
-        state.error = null;
-      })
-      .addCase(addAddress.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to add address.';
-      })
-      .addCase(updateAddress.fulfilled, (state, action) => {
-        const index = state.addresses.findIndex(address => address.id === action.payload.id);
-        if (index !== -1) {
-          state.addresses[index] = action.payload;
-        }
-        state.error = null;
-      })
-      .addCase(updateAddress.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to update address.';
-      })
-      .addCase(deleteAddress.fulfilled, (state, action) => {
-        state.addresses = state.addresses.filter(address => address.id !== action.payload);
-        state.error = null;
-      })
-      .addCase(deleteAddress.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to delete address.';
-      })
-      .addCase(fetchAddressById.pending, (state) => {
-        console.log('fetchAddressById.pending');
-        state.status = 'loading';
-      })
-      .addCase(fetchAddressById.fulfilled, (state, action) => {
-        console.log('fetchAddressById.fulfilled');
-        state.status = 'succeeded';
-        state.addresses = [action.payload];
-        state.error = null;
-      })
-      .addCase(fetchAddressById.rejected, (state, action) => {
-        console.log('fetchAddressById.rejected');
-        state.status = 'failed';
-        state.error = action.error.message || 'Failed to load address.';
-      });
+    .addCase(addAddress.fulfilled, (state, action) => {
+      state.addresses.push(action.payload);
+      state.error = null;
+    })
+    .addCase(addAddress.rejected, (state, action) => {
+      state.error = action.error.message || 'Failed to add address.';
+    })
+    .addCase(updateAddress.fulfilled, (state, action) => {
+      const index = state.addresses.findIndex(address => address.id === action.payload.id);
+      if (index !== -1) {
+        state.addresses[index] = action.payload;
+      }
+      state.error = null;
+    })
+    .addCase(updateAddress.rejected, (state, action) => {
+      state.error = action.error.message || 'Failed to update address.';
+    })
+    .addCase(deleteAddress.fulfilled, (state, action) => {
+      state.addresses = state.addresses.filter(address => address.id !== action.payload);
+      state.error = null;
+    })
+    .addCase(deleteAddress.rejected, (state, action) => {
+      state.error = action.error.message || 'Failed to delete address.';
+    })
+    .addCase(fetchAddressById.pending, (state) => {
+      state.status = 'loading';
+    })
+    .addCase(fetchAddressById.fulfilled, (state, action) => {
+      state.status = 'succeeded';
+      state.addresses = [action.payload];
+      state.error = null;
+    })
+    .addCase(fetchAddressById.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message || 'Failed to load address.';
+    });
   },
 });
 
