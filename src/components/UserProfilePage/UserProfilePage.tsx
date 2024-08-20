@@ -177,138 +177,140 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <div className="user-profile-page">
-    <h1>My Profile</h1>
-    {userData ? (
-      <>
-        {(apiError || successMessage) && (
-          <div className="message-container">
-            {apiError && <p className="error-message">{apiError}</p>}
-            {successMessage && <p className="success-message">{successMessage}</p>}
-          </div>
-        )}
-        <div className="profile-container">
-          <div className="profile-section">
-            {isEditing ? (
-              <>
-                <input
-                  type="text"
-                  name="name"
-                  value={userData.name || ""}
-                  placeholder="Name"
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-                <input
-                  type="text"
-                  name="email"
-                  value={userData.email}
-                  placeholder="Email"
-                  className="profile-input"
-                  disabled
-                />
-                <input
-                  type="text"
-                  name="street"
-                  value={userData.street || ""}
-                  placeholder="Street"
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-                <input
-                  type="text"
-                  name="house"
-                  value={userData.house || ""}
-                  placeholder="House Number"
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-                <input
-                  type="text"
-                  name="postalCode"
-                  value={userData.postalCode || ""}
-                  placeholder="Postal Code"
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-                <input
-                  type="text"
-                  name="locality"
-                  value={userData.locality || ""}
-                  placeholder="Locality"
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-                <input
-                  type="text"
-                  name="region"
-                  value={userData.region || ""}
-                  placeholder="Region"
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-                <input
-                  type="text"
-                  name="phone"
-                  value={userData.phone || ""}
-                  placeholder="Phone Number"
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-              </>
-            ) : (
-              <div className="paragraph">
-                <p>Name: {userData.name || "must be filled out"}</p>
-                <p>Email: {userData.email}</p>
-                <p>Street: {userData.street || "must be filled out"}</p>
-                <p>House Number: {userData.house || "must be filled out"}</p>
-                <p>Postal Code: {userData.postalCode || "must be filled out"}</p>
-                <p>Locality: {userData.locality || "must be filled out"}</p>
-                <p>Region: {userData.region || "must be filled out"}</p>
-                <p>Phone Number: {userData.phone || "must be filled out"}</p>
-              </div>
-            )}
-          </div>
+  <h1>My Profile</h1>
+  {loading ? (
+    <div className="spinner-container">
+      <div className="spinner-border text-black" role="status">
+        <span className="visually-hidden">Loading user data...</span>
+      </div>
+    </div>
+  ) : userData ? (
+    <>
+      {(apiError || successMessage) && (
+        <div className="message-container">
+          {apiError && <p className="error-message">{apiError}</p>}
+          {successMessage && <p className="success-message">{successMessage}</p>}
         </div>
-        <div className="buttons">
-          <div className="left-buttons">
-            <button className="logout logout-button" onClick={handleLogout}>
-              Sign out
-            </button>
-          </div>
-          <div className="right-buttons">
-            {isEditing ? (
-              <>
-                <button className="save save-button" onClick={handleSave}>
-                  Save
-                </button>
-                <button
-                  className="cancel cancel-button"
-                  onClick={() => setIsEditing(false)}
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <>
-                <button className="edit edit-button" onClick={handleEdit}>
-                  Edit
-                </button>
-                <button className="delete delete-button" onClick={handleDelete}>
-                  Delete
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </>
-    ) : (
-      <div className="spinner-container">
-        <div className="spinner-border text-black" role="status">
-          <span className="visually-hidden">Loading user data...</span>
+      )}
+      <div className="profile-container">
+        <div className="profile-section">
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                name="name"
+                value={userData.name || ""}
+                placeholder="Name"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="email"
+                value={userData.email}
+                placeholder="Email"
+                className="profile-input"
+                disabled
+              />
+              <input
+                type="text"
+                name="street"
+                value={userData.street || ""}
+                placeholder="Street"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="house"
+                value={userData.house || ""}
+                placeholder="House Number"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="postalCode"
+                value={userData.postalCode || ""}
+                placeholder="Postal Code"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="locality"
+                value={userData.locality || ""}
+                placeholder="Locality"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="region"
+                value={userData.region || ""}
+                placeholder="Region"
+                onChange={handleChange}
+                className="profile-input"
+              />
+              <input
+                type="text"
+                name="phone"
+                value={userData.phone || ""}
+                placeholder="Phone Number"
+                onChange={handleChange}
+                className="profile-input"
+              />
+            </>
+          ) : (
+            <div className="paragraph">
+              <p>Name: {userData.name || "must be filled out"}</p>
+              <p>Email: {userData.email}</p>
+              <p>Street: {userData.street || "must be filled out"}</p>
+              <p>House Number: {userData.house || "must be filled out"}</p>
+              <p>Postal Code: {userData.postalCode || "must be filled out"}</p>
+              <p>Locality: {userData.locality || "must be filled out"}</p>
+              <p>Region: {userData.region || "must be filled out"}</p>
+              <p>Phone Number: {userData.phone || "must be filled out"}</p>
+            </div>
+          )}
         </div>
       </div>
-    )}
-  </div>
+      <div className="buttons">
+        <div className="left-buttons">
+          <button className="logout logout-button" onClick={handleLogout}>
+            Sign out
+          </button>
+        </div>
+        <div className="right-buttons">
+          {isEditing ? (
+            <>
+              <button className="save save-button" onClick={handleSave}>
+                Save
+              </button>
+              <button
+                className="cancel cancel-button"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="edit edit-button" onClick={handleEdit}>
+                Edit
+              </button>
+              <button className="delete delete-button" onClick={handleDelete}>
+                Delete
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  ) : (
+    <div className="error-message">No user data available.</div>
+  )}
+</div>
   );
 };
 
