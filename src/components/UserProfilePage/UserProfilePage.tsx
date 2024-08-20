@@ -166,6 +166,10 @@ const UserProfilePage: React.FC = () => {
       </div>
     );
   }
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   
 
   return (
