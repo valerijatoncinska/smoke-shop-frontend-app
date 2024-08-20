@@ -26,8 +26,8 @@ const ProductPage: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1) // Initial quantity set to 1
 
   const [showAddedMessage, setShowAddedMessage] = useState<boolean>(false) // Состояние для отображения сообщения
-  const [showLoginMessage, setShowLoginMessage] = useState<boolean>(false);
-  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const [showLoginMessage, setShowLoginMessage] = useState<boolean>(false)
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
 
   const { id } = useParams<{ id: string }>()
   const dispatch: AppDispatch = useDispatch()
@@ -58,24 +58,24 @@ const ProductPage: React.FC = () => {
   const handleAddToCart = (productId: number) => {
     if (!isLoggedIn) {
       // Показывать сообщение о входе, если пользователь не вошел в систему
-      setShowLoginMessage(true);
+      setShowLoginMessage(true)
       setTimeout(() => {
-        setShowLoginMessage(false);
-      }, 3000);
-      return;
+        setShowLoginMessage(false)
+      }, 3000)
+      return
     }
 
-    dispatch(addItemToCart(productId));
-    setShowAddedMessage(true);
+    dispatch(addItemToCart(productId))
+    setShowAddedMessage(true)
 
     setTimeout(() => {
-      setShowAddedMessage(false);
-    }, 3000);
-  };
+      setShowAddedMessage(false)
+    }, 3000)
+  }
 
   const productImage = product?.id
     ? tobaccoImages[parseInt(product.id) - 1] // Получаем изображение по ID
-    : undefined;
+    : undefined
 
   const increaseQuantity = () => {
     if (product && quantity < product.quantity) {
@@ -121,18 +121,15 @@ const ProductPage: React.FC = () => {
       {/* Use Link for navigation */}
       <div className="product-container">
         <div className="product-image-section">
-        {productImage ? (
-            <img src={productImage} alt={product.title} className="product-main-image" />
+          {productImage ? (
+            <img
+              src={productImage}
+              alt={product.title}
+              className="product-main-image"
+            />
           ) : (
             <div className="noImagePlaceholder">No Image Available</div>
           )}
-          {/* <div className="main-image-placeholder" />
-          <div className="thumbnail-images-placeholder">
-            <div className="thumbnail-placeholder" />
-            <div className="thumbnail-placeholder" />
-            <div className="thumbnail-placeholder" />
-            <div className="thumbnail-placeholder" />
-          </div> */}
         </div>
         <div className="product-details-section">
           <h1>{product.title}</h1>
@@ -157,7 +154,7 @@ const ProductPage: React.FC = () => {
           </div>
           <div className="product-characteristics">
             <h2>Characteristics</h2>
-            <p>Stock: {product.quantity}</p>
+            <p>Stock: {product.active ? product.quantity : 0}</p>  {/* Если продукт архивирован, отображаем 0 */}
             <p>Status: {product.active ? "Available" : "Unavailable"}</p>
           </div>
         </div>
@@ -169,3 +166,12 @@ const ProductPage: React.FC = () => {
 
 export default ProductPage
 
+{
+  /* <div className="main-image-placeholder" />
+          <div className="thumbnail-images-placeholder">
+            <div className="thumbnail-placeholder" />
+            <div className="thumbnail-placeholder" />
+            <div className="thumbnail-placeholder" />
+            <div className="thumbnail-placeholder" />
+          </div> */
+}

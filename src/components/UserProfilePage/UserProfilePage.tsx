@@ -60,7 +60,7 @@ const UserProfilePage: React.FC = () => {
 
         setUserData({
           ...addressData,
-          email: user.email,
+          email: user.email
         });
 
         console.log('User data set:', addressData);
@@ -81,6 +81,8 @@ const UserProfilePage: React.FC = () => {
       setLoading(false);
     }
   }, [dispatch, user]);
+
+
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -152,7 +154,7 @@ const UserProfilePage: React.FC = () => {
           postalCode: '',
           locality: '',
           region: '',
-          phone: '',
+          phone: ''
         });
       }
   

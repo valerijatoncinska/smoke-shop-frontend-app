@@ -1,4 +1,126 @@
-.orderContainer {
+/* Фон изображения, которое занимает весь экран */
+.backgroundImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Основной контейнер для выравнивания и центрирования контента */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-attachment: fixed;
+  margin-top: 3%;
+  margin-bottom: 3%;
+  padding: 0 1rem; 
+  z-index: 1;
+  text-align: center;
+}
+
+/* Контейнер для детализации заказа */
+.detailsContainer {
+  position: relative; 
+  width: 95%;
+  max-width: 1450px;
+  padding: 20px;
+  background-color: #181716;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  min-height: 700px;
+  flex: 1;
+  color: #ffffff;
+  font-family: "Inria Serif", sans-serif;
+  font-weight: bold;
+  box-sizing: border-box; 
+}
+
+/* Заголовок страницы */
+.pageHeader {
+  margin-top: 1%;
+  margin-bottom: 6%;
+  font-size: 2rem;
+  color: #f8f8f8;
+  font-family: "Inria Serif", sans-serif;
+  font-weight: bold;
+}
+
+/* Контейнер для даты и общей суммы */
+.orderInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  font-family: "Inria Serif", sans-serif;
+  font-weight: bold;
+}
+
+/* Стили для даты и общей суммы */
+.date,
+.total {
+  text-align: left;
+  font-family: "Inria Serif", sans-serif;
+  font-weight: bold;
+}
+
+/* Контейнер для списка продуктов с прокруткой */
+.cartItemsContainer {
+  background-color: #181716;
+  border: 2px solid #fffefc;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  height: 700px;
+  overflow-y: auto;
+  box-sizing: border-box; 
+}
+
+/* Список продуктов */
+.productsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: #ffffff;
+  font-family: "Inria Serif", sans-serif;
+  font-weight: bold;
+  text-align: left;
+}
+
+.separator {
+  border-bottom: 2px solid #e0e0e0;
+  margin: 20px 0;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.comeBack {
+  position: absolute; 
+  top: 20px; 
+  right: 20px; 
+  height: 40px;
+  width: 130px;
+  background-color: rgba(179, 168, 162, 0.1);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: "Inria Serif", sans-serif;
+  font-weight: bold;
+}
+
+.comeBack:hover {
+  background-color: #774136;
+}
+
+
+/* .orderContainer {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -38,4 +160,4 @@
     font-size: 20px;
     font-weight: bold;
     text-align: right;
-}
+} */
