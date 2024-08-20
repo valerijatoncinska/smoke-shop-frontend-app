@@ -30,6 +30,7 @@ const UserProfilePage: React.FC = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      console.log('Setting loading to true');
       setLoading(true);
       if (user) {
         try {
@@ -53,6 +54,7 @@ const UserProfilePage: React.FC = () => {
             ...addressData,
             email: user.email,
           });
+          console.log('User data set:', addressData);
   
         } catch (error) {
           console.error("Error loading user data:", error);
@@ -64,6 +66,7 @@ const UserProfilePage: React.FC = () => {
     };
   
     fetchUserData();
+    console.log('Current user data:', userData);
   }, [dispatch, user]);
 
   const handleEdit = () => {
@@ -167,9 +170,9 @@ const UserProfilePage: React.FC = () => {
     );
   }
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
   
 
   return (

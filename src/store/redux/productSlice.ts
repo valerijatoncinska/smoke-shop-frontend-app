@@ -60,7 +60,7 @@ const productSlice = createSlice({
     filterProductsByName(state, action: PayloadAction<string>) {
       const query = action.payload.toLowerCase();
       state.filteredProducts = state.products.filter(product =>
-        product.title.toLowerCase().includes(query)
+        product.title.toLowerCase().startsWith(query)
       );
     },
     resetFilter(state) {
