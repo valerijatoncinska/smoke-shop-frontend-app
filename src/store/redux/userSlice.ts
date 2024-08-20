@@ -29,7 +29,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem("user") || "null"),
   isLoggedIn: Boolean(localStorage.getItem("isLoggedIn")),
   status: "idle",
   error: undefined,
@@ -191,7 +191,8 @@ const userSlice = createSlice({
         state.status = "success"
         state.user = action.payload
         state.isLoggedIn = true
-        localStorage.setItem("isLoggedIn", JSON.stringify(true))
+        localStorage.setItem("isLoggedIn", JSON.stringify(true));
+        localStorage.setItem("user", JSON.stringify(action.payload)); 
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "error"
@@ -226,6 +227,7 @@ const userSlice = createSlice({
         state.user = null
         state.isLoggedIn = false
         localStorage.setItem("isLoggedIn", "")
+        localStorage.removeItem("user");
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.status = "error"
