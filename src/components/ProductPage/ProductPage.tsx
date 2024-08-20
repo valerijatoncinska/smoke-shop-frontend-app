@@ -26,6 +26,8 @@ const ProductPage: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1) // Initial quantity set to 1
 
   const [showAddedMessage, setShowAddedMessage] = useState<boolean>(false) // Состояние для отображения сообщения
+  const [showLoginMessage, setShowLoginMessage] = useState<boolean>(false);
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
   const { id } = useParams<{ id: string }>()
   const dispatch: AppDispatch = useDispatch()
@@ -54,13 +56,22 @@ const ProductPage: React.FC = () => {
   }, [id])
 
   const handleAddToCart = (productId: number) => {
-    dispatch(addItemToCart(productId))
-    setShowAddedMessage(true)
+    if (!isLoggedIn) {
+      // Показывать сообщение о входе, если пользователь не вошел в систему
+      setShowLoginMessage(true);
+      setTimeout(() => {
+        setShowLoginMessage(false);
+      }, 3000);
+      return;
+    }
+
+    dispatch(addItemToCart(productId));
+    setShowAddedMessage(true);
 
     setTimeout(() => {
-      setShowAddedMessage(false) // Скрыть сообщение через 3 секунды
-    }, 3000)
-  }
+      setShowAddedMessage(false);
+    }, 3000);
+  };
 
   const productImage = product?.id
     ? tobaccoImages[parseInt(product.id) - 1] // Получаем изображение по ID
@@ -95,6 +106,13 @@ const ProductPage: React.FC = () => {
       {showAddedMessage && (
         <div className="added-message-container">
           <div className="added-message">Product added to cart!</div>
+        </div>
+      )}
+      {showLoginMessage && (
+        <div className="added-message-container">
+          <div className="added-message">
+            Please register or log in to your account to add items to your cart.
+          </div>
         </div>
       )}
       <Link to="/catalog" className="back-link">
