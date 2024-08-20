@@ -32,11 +32,12 @@ const UserProfilePage: React.FC = () => {
     const fetchUserData = async () => {
       console.log('Setting loading to true');
       setLoading(true);
+      console.log('Current user data:', userData);
       if (user) {
         try {
           const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
           console.log('Fetched Addresses:', fetchedAddresses);
-  
+
           const addressData = (fetchedAddresses && fetchedAddresses.length > 0)
             ? await dispatch(fetchAddressById(fetchedAddresses[fetchedAddresses.length - 1].id)).unwrap()
             : {
@@ -49,24 +50,28 @@ const UserProfilePage: React.FC = () => {
                 region: '',
                 phone: '',
               };
-  
+
           setUserData({
             ...addressData,
             email: user.email,
           });
+
           console.log('User data set:', addressData);
-  
+
         } catch (error) {
           console.error("Error loading user data:", error);
           setApiError("Error loading user data. Please try again later.");
         } finally {
           setLoading(false);
+          console.log('Setting loading to false');
         }
+      } else {
+        setLoading(false);
+        console.log('No user found, setting loading to false');
       }
     };
-  
+
     fetchUserData();
-    console.log('Current user data:', userData);
   }, [dispatch, user]);
 
   const handleEdit = () => {
