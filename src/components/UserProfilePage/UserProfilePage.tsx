@@ -30,50 +30,57 @@ const UserProfilePage: React.FC = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log('Setting loading to true');
+      console.log('Setting loading to true'); 
       setLoading(true);
-      console.log('Current user data:', userData);
-      if (user) {
-        try {
-          const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
-          console.log('Fetched Addresses:', fetchedAddresses);
+      console.log('Current user data:', userData); 
 
-          const addressData = (fetchedAddresses && fetchedAddresses.length > 0)
-            ? await dispatch(fetchAddressById(fetchedAddresses[fetchedAddresses.length - 1].id)).unwrap()
-            : {
-                email: user.email,
-                name: '',
-                street: '',
-                house: '',
-                postalCode: '',
-                locality: '',
-                region: '',
-                phone: '',
-              };
-
-          setUserData({
-            ...addressData,
-            email: user.email,
-          });
-
-          console.log('User data set:', addressData);
-
-        } catch (error) {
-          console.error("Error loading user data:", error);
-          setApiError("Error loading user data. Please try again later.");
-        } finally {
-          setLoading(false);
-          console.log('Setting loading to false');
-        }
-      } else {
-        setLoading(false);
+      if (!user) {
+        // Если пользовательские данные отсутствуют, не продолжать загрузку адресов
         console.log('No user found, setting loading to false');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
+        console.log('Fetched Addresses:', fetchedAddresses);
+
+        const addressData = (fetchedAddresses && fetchedAddresses.length > 0)
+          ? await dispatch(fetchAddressById(fetchedAddresses[fetchedAddresses.length - 1].id)).unwrap()
+          : {
+              email: user.email,
+              name: '',
+              street: '',
+              house: '',
+              postalCode: '',
+              locality: '',
+              region: '',
+              phone: '',
+            };
+
+        setUserData({
+          ...addressData,
+          email: user.email,
+        });
+
+        console.log('User data set:', addressData);
+
+      } catch (error) {
+        console.error("Error loading user data:", error);
+        setApiError("Error loading user data. Please try again later.");
+      } finally {
+        setLoading(false); 
+        console.log('Setting loading to false');
       }
     };
 
-    fetchUserData();
+    if (user) {
+      fetchUserData();
+    } else {
+      console.log('No user found, setting loading to false');
+      setLoading(false);
+    }
   }, [dispatch, user]);
-
   const handleEdit = () => {
     setIsEditing(true);
   };
