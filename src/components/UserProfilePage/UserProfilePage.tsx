@@ -134,18 +134,17 @@ const UserProfilePage: React.FC = () => {
   
     try {
       // Логирование перед удалением
-      console.log("Attempting to delete address with ID:", userData.id);
-  
-      await dispatch(deleteAddress(userData.id)).unwrap();
-      console.log("Address deleted successfully");
-  
-      // Очистка состояния или установка нового адреса после удаления
+      console.log("Attempting to delete all addresses for the user.");
+
       const fetchedAddresses = await dispatch(fetchAddresses()).unwrap();
-      if (fetchedAddresses.length > 0) {
-        // Если остались другие адреса, выбираем последний
-        setUserData(fetchedAddresses[fetchedAddresses.length - 1]);
-      } else {
-        // Если больше нет адресов, очищаем поля
+  
+      for (const address of fetchedAddresses) {
+       await dispatch(deleteAddress(userData.id)).unwrap(); 
+       console.log(`Address with ID: ${address.id} deleted successfully`);
+      }
+      
+      console.log("Address deleted successfully");
+
         setUserData({
           email: user.email,
           name: '',
@@ -156,9 +155,8 @@ const UserProfilePage: React.FC = () => {
           region: '',
           phone: ''
         });
-      }
   
-      setSuccessMessage("Address deleted successfully!");
+        setSuccessMessage("All addresses deleted successfully!");
     } catch (error) {
       console.log("Error deleting address:", error);
       setApiError("Error deleting address. Please try again later.");

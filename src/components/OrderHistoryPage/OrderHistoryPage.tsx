@@ -15,6 +15,7 @@ interface Order {
 const OrderHistoryPage: React.FC = () => {
     const dispatch = useAppDispatch();
     const orderHistory = useSelector((state: RootState) => state.orderHistory.history);
+    const loading = useSelector((state: RootState) => state.orderHistory.loading);
     const navigate = useNavigate();
   
     useEffect(() => {
@@ -31,41 +32,51 @@ const OrderHistoryPage: React.FC = () => {
   
     return (
       <div className={styles.container}>
-        <img
-          src="/img/unsplash_PzXqG8f2rrE.jpg"
-          alt="Main Background"
-          className={styles.backgroundImage}
-        />
-        <div className={styles.historyContainer}>
-          <button
-            type="button"
-            className={styles.goHomeButton}
-            onClick={handleGoHome}
-          >
-            Go to Home
-          </button>
-          <h1 className={styles.pageHeader}>History of Orders</h1>
-          {orderHistory.length > 0 ? (
-            <ul className={styles.historyList}>
-              {orderHistory.map(order => (
-                <li key={order.id} className={styles.historyItem}>
-                  <h3>Order #{order.id}</h3>
-                  <p>Date: {new Date(order.date).toLocaleDateString()}</p>
-                  <p>Total Price: ${order.total.toFixed(2)}</p>
-                  <button
-                    className={styles.viewDetailsButton}
-                    onClick={() => handleViewDetails(order.id)}
-                  >
-                    View Details
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No orders found.</p>
-          )}
+      <img
+        src="/img/unsplash_PzXqG8f2rrE.jpg"
+        alt="Main Background"
+        className={styles.backgroundImage}
+      />
+      <div className={styles.historyContainer}>
+        <button
+          type="button"
+          className={styles.goHomeButton}
+          onClick={handleGoHome}
+        >
+          Go to Home
+        </button>
+        <h1 className={styles.pageHeader}>History of Orders</h1>
+        {loading ? (
+          <div className="text-center">
+          <div className="spinner-border text-white" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
+        ) : (
+          <>
+            {orderHistory.length > 0 ? (
+              <ul className={styles.historyList}>
+                {orderHistory.map((order) => (
+                  <li key={order.id} className={styles.historyItem}>
+                    <h3>Order #{order.id}</h3>
+                    <p>Date: {new Date(order.date).toLocaleDateString()}</p>
+                    <p>Total Price: ${order.total.toFixed(2)}</p>
+                    <button
+                      className={styles.viewDetailsButton}
+                      onClick={() => handleViewDetails(order.id)}
+                    >
+                      View Details
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Your order is empty.</p>
+            )}
+          </>
+        )}
       </div>
+    </div>
     );
   };
   

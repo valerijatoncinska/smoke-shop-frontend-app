@@ -12,6 +12,7 @@ interface Product {
   price: number;
   total: number;
   quantity: number;
+  imgUrl: string;
 }
 
 interface OrderDetails {
@@ -55,12 +56,26 @@ const orderHistorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.history = action.payload;
-      })
-      .addCase(fetchOrderDetails.fulfilled, (state, action) => {
-        state.orderDetails = action.payload;
-      });
+    .addCase(fetchOrders.pending, (state) => {
+      state.loading = true; // Устанавливаем состояние загрузки
+    })
+    .addCase(fetchOrders.fulfilled, (state, action) => {
+      state.history = action.payload;
+      state.loading = false; // Отключаем состояние загрузки
+    })
+    .addCase(fetchOrders.rejected, (state) => {
+      state.loading = false; // Отключаем состояние загрузки при ошибке
+    })
+    .addCase(fetchOrderDetails.pending, (state) => {
+      state.loading = true; // Устанавливаем состояние загрузки
+    })
+    .addCase(fetchOrderDetails.fulfilled, (state, action) => {
+      state.orderDetails = action.payload;
+      state.loading = false; // Отключаем состояние загрузки
+    })
+    .addCase(fetchOrderDetails.rejected, (state) => {
+      state.loading = false; // Отключаем состояние загрузки при ошибке
+    });
   }
 });
 

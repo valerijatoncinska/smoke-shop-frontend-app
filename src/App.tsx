@@ -47,10 +47,10 @@ const App: React.FC = () => {
           <Route path="/auth/register" element={<RegisterPage />} />
           <Route path="/author/account-activate/:uuid" element={<AccountActivation />} />
           <Route path="/catalog" element={<CatalogProductPage />} />
-          <Route path="/orders" element={<OrderPage />} />
+          <Route path="/orders/:orderId" element={<OrderPage />} />
           {/* <Route path="/products/new" element={<AddProductForm />} /> */}
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/products/edit/:orderId" element={<EditProductPage />} />
+          <Route path="/products/edit/:id" element={<EditProductPage />} />
           <Route path="/order-history" element={<OrderHistoryPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:id" element={<ProductPage />} />

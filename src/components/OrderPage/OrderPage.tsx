@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import OrderItem from './OrderItem';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hook';
 import { useSelector } from 'react-redux';
@@ -51,9 +50,16 @@ const OrderPage: React.FC = () => {
           <ul className={styles.productsList}>
             {orderDetails.products.map(product => (
               <li key={product.id} className={styles.productItem}>
-                <span className={styles.productTitle}>{product.title}</span>
-                <span className={styles.productQuantity}>Quantity: {product.quantity}</span>
-                <span className={styles.productPrice}>Price: ${product.price.toFixed(2)}</span>
+                <img
+                  src={product.imgUrl}
+                  alt={product.title}
+                  className={styles.productImage}
+                />
+                <div className={styles.productDetails}>
+                  <span className={styles.productTitle}>{product.title}</span>
+                  <span className={styles.productQuantity}>Quantity: {product.quantity}</span>
+                  <span className={styles.productPrice}>Price: ${product.price.toFixed(2)}</span>
+                </div>
               </li>
             ))}
           </ul>

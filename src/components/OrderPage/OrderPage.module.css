@@ -119,6 +119,24 @@
   background-color: #774136;
 }
 
+.productItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.productImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+}
+
 
 /* .orderContainer {
     max-width: 800px;
