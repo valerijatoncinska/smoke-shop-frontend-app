@@ -15,16 +15,12 @@ const ProductCardPage: React.FC<ProductCardPageProps> = ({ product }) => {
     navigate(`/products/${product.id}`)
   }
 
-  const productImage =
-    product.id > 0 && product.id <= tobaccoImages.length
-      ? tobaccoImages[product.id - 1]
-      : undefined
 
   return (
     <div className={styles.card}>
       <div className={styles.cardImage}>
-        {productImage ? (
-          <img src={productImage} alt={product.title} />
+        {product.imgUrl ? (
+          <img src={product.imgUrl} alt={product.title} />
         ) : (
           <div className={styles.noImagePlaceholder}>No Image Available</div>
         )}

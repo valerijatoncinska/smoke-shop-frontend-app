@@ -17,6 +17,9 @@ interface Product {
   price: number
   quantity: number
   active: boolean
+  description: string
+  characteristics: string
+  imgUrl: string
 }
 
 const ProductPage: React.FC = () => {
@@ -73,10 +76,6 @@ const ProductPage: React.FC = () => {
     }, 3000)
   }
 
-  const productImage = product?.id
-    ? tobaccoImages[parseInt(product.id) - 1] // Получаем изображение по ID
-    : undefined
-
   const increaseQuantity = () => {
     if (product && quantity < product.quantity) {
       setQuantity(prevQuantity => prevQuantity + 1)
@@ -121,9 +120,9 @@ const ProductPage: React.FC = () => {
       {/* Use Link for navigation */}
       <div className="product-container">
         <div className="product-image-section">
-          {productImage ? (
+          {product.imgUrl ? (
             <img
-              src={productImage}
+              src={product.imgUrl}
               alt={product.title}
               className="product-main-image"
             />
@@ -133,12 +132,10 @@ const ProductPage: React.FC = () => {
         </div>
         <div className="product-details-section">
           <h1>{product.title}</h1>
+          <p>Stock: {product.active ? product.quantity : 0}</p>{" "}
+          {/* Если продукт архивирован, отображаем 0 */}
+          <p>Status: {product.active ? "Available" : "Unavailable"}</p>
           <div className="product-price">Price: {product.price}€</div>
-          {/*           <div className="product-quantity">
-            <button onClick={decreaseQuantity}>-</button>
-            <input type="number" value={quantity} readOnly />
-            <button onClick={increaseQuantity}>+</button>
-          </div> */}
           <button
             onClick={() => handleAddToCart(+product.id)}
             className="add-to-basket-button"
@@ -147,15 +144,11 @@ const ProductPage: React.FC = () => {
           </button>
           <div className="product-description">
             <h2>Description</h2>
-            <p>
-              This is a placeholder description for the product "{product.title}
-              ".
-            </p>
+            <p>{product.description}</p>
           </div>
           <div className="product-characteristics">
             <h2>Characteristics</h2>
-            <p>Stock: {product.active ? product.quantity : 0}</p>  {/* Если продукт архивирован, отображаем 0 */}
-            <p>Status: {product.active ? "Available" : "Unavailable"}</p>
+            <p>{product.characteristics}</p>
           </div>
         </div>
       </div>
@@ -173,5 +166,13 @@ export default ProductPage
             <div className="thumbnail-placeholder" />
             <div className="thumbnail-placeholder" />
             <div className="thumbnail-placeholder" />
+          </div> */
+}
+
+{
+  /*           <div className="product-quantity">
+            <button onClick={decreaseQuantity}>-</button>
+            <input type="number" value={quantity} readOnly />
+            <button onClick={increaseQuantity}>+</button>
           </div> */
 }
