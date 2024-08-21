@@ -95,18 +95,15 @@ const AllOrdersPage = () => {
 
   const dispatch: AppDispatch = useDispatch()
   const { orders } = useSelector((state: RootState) => state.order)
+  // const status = useSelector((state: RootState) => state.user.status)
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
   })
 
   // useEffect(() => {
   //   dispatch(fetchOrders())
   // }, [])
-  // const status = useSelector((state: RootState) => state.user.status)
-  // const dispatch = useAppDispatch();
-
-  // useEffect(() => {dispatch(fetchOrders())}, [])
 
   const totalQuantity = orders.reduce((sum, order) => sum + order.quantity, 0)
   const totalCost = orders.reduce(
@@ -128,9 +125,10 @@ const AllOrdersPage = () => {
             <h5>Total cost</h5>
           </div>
           <div className="data">
-            {orders.map(order => (
-              <OrderComponent key={order.id} order={order} />
-            ))}
+            {status === "success" &&
+              orders.map(order => (
+                <OrderComponent key={order.id} order={order} />
+              ))}
           </div>
         </table>
         <div className="order-summary">

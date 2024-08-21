@@ -1,8 +1,13 @@
 import { NavLink } from "react-router-dom"
 import "./Navigation.css"
 import axios from "axios"
+import { AppDispatch } from "store/store"
+import { useDispatch } from "react-redux"
+import { logoutUser } from "../../../store/redux/userSlice"
 
 const Navigation = () => {
+
+  const dispatch: AppDispatch = useDispatch()
   return (
     <nav className="vertical-navbar">
       <h4 className="text-center mt-4">Hello, Admin :)</h4>
@@ -22,15 +27,17 @@ const Navigation = () => {
             Archived Products
           </NavLink>
         </li>
-        {/* <li className="nav-item">
+        <li className="nav-item">
           <NavLink className="nav-link" to="/admin/view-orders">
             View Orders
           </NavLink>
-        </li> */}
+        </li>
       </ul>
       <NavLink to="/auth/login">
         <button
-          onClick={() => axios.get("/api/author/logout")}
+          onClick={() => {axios.get("/api/author/logout")
+            dispatch(logoutUser())
+          }}
           className="button ms-3"
         >
           Sign out
