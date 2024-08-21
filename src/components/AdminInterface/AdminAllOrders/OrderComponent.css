@@ -16,14 +16,14 @@
   margin-left: 460px;
 }
 
-.d-flex p {
-  width: 5%; /* Установите ширину для каждого параграфа */
+.table p {
+  width: 5%; 
   display: inline-block;
   text-align: center;
 }
 
 .date {
-  width: 25%; /* Например, дата может занимать больше места */
+  width: 25%; 
 }
 
 .quantity {

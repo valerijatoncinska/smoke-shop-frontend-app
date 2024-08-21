@@ -33,7 +33,7 @@ const OrderComponent: FC<IProps> = ({ order: { date, total, userId } }) => {
         </div>
       )}
       {status === "success" && (
-        <div className="d-flex">
+        <div className="table d-flex justify-content-between">
           <p className="email mx-0">{filteredUser.email}</p>
           <p className="date mx-0">{new Date(date).toLocaleDateString()}</p>
           <p className="quantity mx-0">1</p>
