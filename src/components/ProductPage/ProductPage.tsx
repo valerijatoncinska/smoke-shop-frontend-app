@@ -109,6 +109,13 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
+      {loading && (
+        <div className="text-center">
+        <div className="spinner-border text-white" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      )}
       {showAddedMessage && (
         <div className="added-message-container">
           <div className="added-message">Product added to cart!</div>
