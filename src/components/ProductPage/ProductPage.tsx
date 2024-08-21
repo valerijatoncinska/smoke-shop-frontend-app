@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import Cookies from "js-cookie"
 import { AppDispatch, RootState } from "../../store/store"
 import {
   addItemToCart,
@@ -9,7 +8,6 @@ import {
   updateCartItem,
 } from "../../store/redux/cartSlice"
 import "./ProductPage.css"
-import { tobaccoImages } from "../../constans/tobaccoImg"
 
 interface Product {
   id: string
@@ -30,6 +28,8 @@ const ProductPage: React.FC = () => {
 
   const [showAddedMessage, setShowAddedMessage] = useState<boolean>(false) // Состояние для отображения сообщения
   const [showLoginMessage, setShowLoginMessage] = useState<boolean>(false)
+  const [showInactiveMessage, setShowInactiveMessage] = useState<boolean>(false)
+
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
 
   const { id } = useParams<{ id: string }>()
@@ -68,9 +68,16 @@ const ProductPage: React.FC = () => {
       return
     }
 
+    if(!product || !product.active || product.quantity === 0) {
+      setShowInactiveMessage(true)
+      setTimeout(() => {
+        setShowInactiveMessage(false)
+      }, 3000)
+      return
+    }
+
     dispatch(addItemToCart(productId))
     setShowAddedMessage(true)
-
     setTimeout(() => {
       setShowAddedMessage(false)
     }, 3000)
@@ -111,6 +118,13 @@ const ProductPage: React.FC = () => {
         <div className="added-message-container">
           <div className="added-message">
             Please register or log in to your account to add items to your cart.
+          </div>
+        </div>
+      )}
+      {showInactiveMessage && (
+        <div className="added-message-container">
+          <div className="added-message">
+            This product is no longer available and cannot be added to the cart.
           </div>
         </div>
       )}
