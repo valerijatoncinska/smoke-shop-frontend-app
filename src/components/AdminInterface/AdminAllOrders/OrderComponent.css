@@ -15,3 +15,21 @@
 .total{
   margin-left: 460px;
 }
+
+.d-flex p {
+  width: 5%; /* Установите ширину для каждого параграфа */
+  display: inline-block;
+  text-align: center;
+}
+
+.date {
+  width: 25%; /* Например, дата может занимать больше места */
+}
+
+.quantity {
+  width: 25%;
+}
+
+.total {
+  width: 25%;
+}

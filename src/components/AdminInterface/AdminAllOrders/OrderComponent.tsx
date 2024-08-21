@@ -14,8 +14,7 @@ const OrderComponent: FC<IProps> = ({ order: { date, total, userId } }) => {
   const { users } = useSelector((state: RootState) => state.usersForAdmin)
   const status = useSelector((state: RootState) => state.usersForAdmin.status)
 
-  console.log(date);
-  
+  console.log(date)
 
   useEffect(() => {
     dispatch(fetchAdminUsers())
@@ -26,14 +25,22 @@ const OrderComponent: FC<IProps> = ({ order: { date, total, userId } }) => {
 
   return (
     <>
-      {status === "success" && (
-        <div className="d-flex">
-          <p>{filteredUser.email}</p>
-          <p className="date">{new Date(date).toLocaleDateString()}</p>
-          <p className="quantity">1</p>
-          <p className="total">{total} €</p>
+      {status === "loading" && (
+        <div className="text-center">
+          <div className="spinner-border text-white" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       )}
+      {status === "success" && (
+        <div className="d-flex">
+          <p className="email mx-0">{filteredUser.email}</p>
+          <p className="date mx-0">{new Date(date).toLocaleDateString()}</p>
+          <p className="quantity mx-0">1</p>
+          <p className="total mx-0">{total} €</p>
+        </div>
+      )}
+      {status === "error" && <>Error!</>}
     </>
   )
 }
