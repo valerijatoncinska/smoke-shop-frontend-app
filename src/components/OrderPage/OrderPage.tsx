@@ -10,6 +10,7 @@ const OrderPage: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const dispatch = useAppDispatch();
   const orderDetails = useSelector((state: RootState) => state.orderHistory.orderDetails);
+  const loading = useSelector((state: RootState) => state.orderHistory.loading);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,9 +23,6 @@ const OrderPage: React.FC = () => {
     navigate("/order-history");
   };
 
-  if (!orderDetails) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <div className={styles.container}>
@@ -41,29 +39,40 @@ const OrderPage: React.FC = () => {
         >
           Come back
         </button>
-        <h1 className={styles.pageHeader}>Order #{orderDetails.data.id}</h1>
-        <div className={styles.orderInfo}>
-          <p className={styles.date}>Date: {new Date(orderDetails.data.date).toLocaleDateString()}</p>
-          <p className={styles.total}>Total Price: ${orderDetails.data.total.toFixed(2)}</p>
-        </div>
-        <div className={styles.cartItemsContainer}>
-          <ul className={styles.productsList}>
-            {orderDetails.products.map(product => (
-              <li key={product.id} className={styles.productItem}>
-                <img
-                  src={product.imgUrl}
-                  alt={product.title}
-                  className={styles.productImage}
-                />
-                <div className={styles.productDetails}>
-                  <span className={styles.productTitle}>{product.title}</span>
-                  <span className={styles.productQuantity}>Quantity: {product.quantity}</span>
-                  <span className={styles.productPrice}>Price: ${product.price.toFixed(2)}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <h1 className={styles.pageHeader}>Order #{orderDetails?.data?.id}</h1>
+        {loading && (
+          <div className="text-center">
+            <div className="spinner-border text-white" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        {!loading && orderDetails && (
+          <>
+            <div className={styles.orderInfo}>
+              <p className={styles.date}>Date: {new Date(orderDetails.data.date).toLocaleDateString()}</p>
+              <p className={styles.total}>Total Price: ${orderDetails.data.total.toFixed(2)}</p>
+            </div>
+            <div className={styles.cartItemsContainer}>
+              <ul className={styles.productsList}>
+                {orderDetails.products.map(product => (
+                  <li key={product.id} className={styles.productItem}>
+                    <img
+                      src={product.imgUrl}
+                      alt={product.title}
+                      className={styles.productImage}
+                    />
+                    <div className={styles.productDetails}>
+                      <span className={styles.productTitle}>{product.title}</span>
+                      <span className={styles.productQuantity}>Quantity: {product.quantity}</span>
+                      <span className={styles.productPrice}>Price: ${product.price.toFixed(2)}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -103,24 +112,6 @@ export default OrderPage;
 //               ))}
 //           </ul>
 //       </div>
-//   );
-// };
-
-// export default OrderPage;
-
-// const OrderPage: React.FC = () => {
-//   const orders = [
-//     { id: 1, product: 'Product A', quantity: 2, price: 30 },
-//     { id: 2, product: 'Product B', quantity: 1, price: 20 },
-//   ];
-
-//   return (
-//     <div>
-//       <h1>Order Page</h1>
-//       {orders.map(order => (
-//         <OrderItem key={order.id} {...order} />
-//       ))}
-//     </div>
 //   );
 // };
 

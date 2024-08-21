@@ -38,8 +38,98 @@ const CartPage: React.FC = () => {
   }
   const handleAddItemToCart = (item: CartItem) => {
     dispatch(updateCartItem({ type: "plus", id: item.id }))
+  }
 
-    /* const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
+  const handleRemoveOneItemFromCart = (item: CartItem) => {
+    dispatch(updateCartItem({ type: "minus", id: item.id }))
+  }
+
+  const handleClearCart = () => {
+    dispatch(clearCart())
+    dispatch(clearCartReducer())
+  }
+
+  const handleGoHome = () => {
+    navigate("/")
+  }
+
+  return (
+    <div className="cart-page">
+    <header className="cart-header">
+      <h1 className="title">Your Cart</h1>
+      <button type="button" className="goHomeButton" onClick={handleGoHome}>
+        Go to Home
+      </button>
+      {loading && (
+        <div className="text-center">
+          <div className="spinner-border text-white" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
+    </header>
+    
+    {!loading && (
+      <>
+        <div className="cart-items-container">
+          {cartItems.map(item => (
+            <div key={item.id} className="cart-item">
+              {/* Контейнер для изображения товара */}
+              <div className="item-image-container">
+                <div className="item-image"></div>
+              </div>
+              {/* Детали товара */}
+              <div className="item-details">
+                <span className="item-title">{item.title}</span>
+                <span className="item-price">${item.totalPrice.toFixed(2)}</span>
+              </div>
+              {/* Контроллер количества товара */}
+              <div className="quantity-control">
+                <button onClick={() => handleRemoveOneItemFromCart(item)}>
+                  -
+                </button>
+                <span>{item.quantity}</span>
+                <button onClick={() => handleAddItemToCart(item)}>+</button>
+              </div>
+              {/* Кнопка удаления товара из корзины */}
+              <button
+                onClick={() => dispatch(deleteCartItem(item.id))}
+                className="delete-button"
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+          {/* Кнопка для очистки корзины */}
+          <button onClick={handleClearCart} className="clear-cart-button">
+            Clear Cart
+          </button>
+        </div>
+        <footer className="cart-footer">
+          {/* Отображение общей суммы корзины */}
+          <span>
+            Total Price: $
+            {cartItems
+              .reduce((total, item) => total + item.totalPrice, 0)
+              .toFixed(2)}
+          </span>
+          {/* Кнопка для перехода к оплате */}
+          <button
+            onClick={handleProceedToPayment}
+            className="proceed-to-payment-button"
+          >
+            Proceed to Payment
+          </button>
+        </footer>
+      </>
+    )}
+  </div>
+  )
+}
+
+export default CartPage
+
+/* const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
         if (existingItem) {
             // Если товар уже есть в корзине, обновляем его количество и общую стоимость
             dispatch(updateCartItem({ 
@@ -57,90 +147,4 @@ const CartPage: React.FC = () => {
                 stock: item.stock || 0,               // stock обязательное поле
                 productId: item.productId || 'Unknown Product ID' // productId обязательное поле
             })); */
-    // }
-  }
-
-  const handleRemoveOneItemFromCart = (item: CartItem) => {
-    dispatch(updateCartItem({ type: "minus", id: item.id }))
-  }
-  if (loading) {
-    return <div>Loading...</div>
-  }
-
-  const handleClearCart = () => {
-    dispatch(clearCart())
-    dispatch(clearCartReducer())
-  }
-
-  const handleGoHome = () => {
-    navigate("/")
-  }
-
-
-  return (
-    <div className="cart-page">
-      <header className="cart-header">
-        <h1 className="title">Your Cart</h1>
-        <button
-            type="button"
-            className="goHomeButton"
-            onClick={handleGoHome}
-          >
-            Go to Home
-          </button>
-      </header>
-      <div className="cart-items-container">
-        {cartItems.map(item => (
-          <div key={item.id} className="cart-item">
-            {/* Контейнер для изображения товара */}
-            <div className="item-image-container">
-              <div className="item-image"></div>
-            </div>
-            {/* Детали товара */}
-            <div className="item-details">
-              <span className="item-title">{item.title}</span>
-              <span className="item-price">${item.totalPrice.toFixed(2)}</span>
-            </div>
-            {/* Контроллер количества товара */}
-            <div className="quantity-control">
-              <button onClick={() => handleRemoveOneItemFromCart(item)}>
-                -
-              </button>
-              <span>{item.quantity}</span>
-              <button onClick={() => handleAddItemToCart(item)}>+</button>
-            </div>
-            {/* Кнопка удаления товара из корзины */}
-            <button
-              onClick={() => dispatch(deleteCartItem(item.id))}
-              className="delete-button"
-            >
-              Delete
-            </button>
-          </div>
-        ))}
-        {/* Кнопка для очистки корзины */}
-        <button onClick={handleClearCart} className="clear-cart-button">
-          Clear Cart
-        </button>
-      </div>
-      <footer className="cart-footer">
-        {/* Отображение общей суммы корзины */}
-        <span>
-          Total Price: $
-          {cartItems
-            .reduce((total, item) => total + item.totalPrice, 0)
-            .toFixed(2)}
-        </span>
-        {/* Кнопка для перехода к оплате */}
-        <button
-          onClick={handleProceedToPayment}
-          className="proceed-to-payment-button"
-        >
-          Proceed to Payment
-        </button>
-      </footer>
-    </div>
-  )
-}
-
-export default CartPage
+// }
