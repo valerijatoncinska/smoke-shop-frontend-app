@@ -65,10 +65,10 @@ const PaymentPage: React.FC = () => {
             />
           </label>
         </div>
-        <div className="buttons">
-          <button type="submit" className="pay-button">Pay</button>
+        <div className="buttons mt-4">
+          <button type="submit" className="pay-button" onClick={() => navigate("/order-history")}>Pay</button>
           <button type="button" className="paypal-button">PayPal</button>
-          <button type="button" className="gpay-button">GPay</button>
+          {/* <button type="button" className="gpay-button">GPay</button> */}
         </div>
       </form>
     </div>

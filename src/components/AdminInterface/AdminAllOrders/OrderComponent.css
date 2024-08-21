@@ -2,3 +2,16 @@
   background-color: transparent; /* Прозрачный фон для параграфов */
   color: white;
 }
+
+.date{
+  margin-left: 310px;
+  margin-right: 420px;
+}
+
+.quantity{
+  margin-left: 500px;
+}
+
+.total{
+  margin-left: 460px;
+}

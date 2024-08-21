@@ -6,6 +6,8 @@ import orderHistoryReducer from './redux/orderHistorySlice';
 import addNewProductReducer from './redux/openAddProductFormSlice';
 import cartReducer from './redux/cartSlice';
 import addressReducer from './redux/addressSlice';
+import userSliceForAdminReducer from './redux/userSliceForAdmin';
+import adminOrderSliceReducer from './redux/adminOrderSlice';
 
 const store = configureStore({
   reducer: {
@@ -15,7 +17,9 @@ const store = configureStore({
     orderHistory: orderHistoryReducer,
     addNewProduct: addNewProductReducer,
     cart: cartReducer,
-    address: addressReducer
+    address: addressReducer,
+    usersForAdmin: userSliceForAdminReducer,
+    adminOrderSlice: adminOrderSliceReducer
   },
 });
 

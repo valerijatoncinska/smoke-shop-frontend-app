@@ -1,115 +1,29 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./AllOrdersPage.css"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../../store/store"
 import OrderComponent from "./OrderComponent"
-import { useAppDispatch } from "../../../app/hook"
-import { fetchOrders } from "../../../store/redux/orderSlice"
+import { fetchAdminOrders } from "../../../store/redux/adminOrderSlice"
 
 const AllOrdersPage = () => {
-  // const orders = [
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     date: new Date(),
-  //     status: "OK",
-  //     quantity: 20,
-  //     price: 200,
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-  //   {
-  //     id: 1,
-  //     product: "First Order",
-  //     quantity: 20,
-  //     price: 200,
-  //     date: new Date(),
-  //     status: "OK",
-  //   },
-
-  //   // Add more orders as needed
-  // ]
-
   const dispatch: AppDispatch = useDispatch()
-  const { orders } = useSelector((state: RootState) => state.order)
-  // const status = useSelector((state: RootState) => state.user.status)
+  const { adminOrders } = useSelector(
+    (state: RootState) => state.adminOrderSlice,
+  )
+  const status = useSelector((state: RootState) => state.adminOrderSlice.status)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   })
 
-  // useEffect(() => {
-  //   dispatch(fetchOrders())
-  // }, [])
+  useEffect(() => {
+    dispatch(fetchAdminOrders())
+    
+  }, [])
 
-  const totalQuantity = orders.reduce((sum, order) => sum + order.quantity, 0)
-  const totalCost = orders.reduce(
-    (sum, order) => sum + order.quantity * order.price,
-    0,
-  )
+  // const totalQuantity = adminOrders.reduce((sum, order) => sum + order.quantity, 0)
+  const totalCost = adminOrders.reduce((sum, order) => sum + order.total, 0)
 
   return (
     <div className="order-table-container p-5">
@@ -117,26 +31,34 @@ const AllOrdersPage = () => {
         <h2 className="text-center mb-5">View orders</h2>
         <table className="table">
           <div className="text d-flex justify-content-between mb-4">
-            <h5>Product name</h5>
+            <h5>User Email</h5>
             <h5>Date</h5>
-            <h5>Order status</h5>
-            <h5>Price</h5>
             <h5>Total quantity</h5>
             <h5>Total cost</h5>
           </div>
+
           <div className="data">
+            {status === "loading" && (
+              <div className="text-center">
+                <div className="spinner-border text-white" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            )}
             {status === "success" &&
-              orders.map(order => (
+              adminOrders.map(order => (
                 <OrderComponent key={order.id} order={order} />
               ))}
+
+            {status === "error" && <>Error!</>}
           </div>
         </table>
         <div className="order-summary">
           <p>
-            Total quantity: <span>{totalQuantity}</span>
+            Total quantity: <span className="ms-4">{adminOrders.length}</span>
           </p>
           <p>
-            Total cost: <span>{totalCost} €</span>
+            Total cost: <span className="ms-4">{totalCost} €</span>
           </p>
         </div>
       </div>
