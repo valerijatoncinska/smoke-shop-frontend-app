@@ -8,7 +8,7 @@ export interface Product {
   price: number
   quantity?: number
   active?: boolean
-  imgUrl: string
+  imgUrl?: string
   description?: string,
   characteristics?: string
 }

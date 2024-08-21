@@ -14,7 +14,6 @@ import {
 } from "../../store/redux/cartSlice"
 import { useNavigate } from "react-router-dom"
 import "./CartPage.css"
-import { tobaccoImages } from "../../constans/tobaccoImg";
 
 const CartPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
